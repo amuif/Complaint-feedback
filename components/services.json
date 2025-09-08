@@ -1,0 +1,843 @@
+{
+  "services": {
+    "1": {
+      "title": {
+        "en": "Urban Freight Vehicle Movement Permit",
+        "am": "በከተማ ውስጥ ለሚንቀሳቀሱ የጭነት ተሽከርካሪዎች መንቀሳቀሻ ፈቃድ መስጠት",
+        "om": "Hayyama Sochii Konkolaata Fe'iinsaa Magaalaa Keessaa"
+      },
+      "description": {
+        "en": "Permit for freight vehicles operating within the city",
+        "am": "በከተማ ውስጥ ለሚንቀሳቀሱ የጭነት ተሽከርካሪዎች ፈቃድ",
+        "om": "Hayyama konkolaata fe'iinsaa magaalaa keessa socho'aniif"
+      },
+      "requirements": {
+        "en": [
+          "Application form",
+          "Libre (ownership document)",
+          "Business license",
+          "Applicant ID/representation",
+          "Written agreement between owner and applicant institution",
+          "Service fee"
+        ],
+        "am": [
+          "ማመልከቻ",
+          "ሊብሬ (የባለቤትነት ደብተር)",
+          "ንግድ ፈቃድ",
+          "የፈቃድ የጠያቂው ፋይዳ መታወቂያ /ውክልና",
+          "ባለንብረቱ ከፈቃድ ጠያቂው ተቋም /ድርጅት ጋር የገባው ውልና የተጻፈ ደብዳቤ",
+          "የአገልግሎት ክፍያ"
+        ],
+        "om": [
+          "Unka iyyannoo",
+          "Libre (kitaaba abbummaa)",
+          "Hayyama daldalaa",
+          "Eenyummaa/bakka bu'insa gaafataa",
+          "Waliigaltee barreeffame abbaa fi dhaabbata gaafataa",
+          "Kaffaltii tajaajilaa"
+        ]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": {
+          "private_heavy_under_10_days": "1000 ETB",
+          "private_heavy_1_month": "4000 ETB",
+          "private_heavy_3_months": "10000 ETB",
+          "private_heavy_6_months": "15000 ETB",
+          "government_heavy_under_10_days": "300 ETB",
+          "government_heavy_1_month": "1000 ETB",
+          "government_heavy_3_months": "2000 ETB",
+          "government_heavy_6_months": "3000 ETB",
+          "bread_delivery_6_months": "1000 ETB"
+        },
+        "am": {
+          "ለግል_ከባድ_መኪና_ከ10_ቀን_በታች": "1000 ብር",
+          "ለግል_ከባድ_መኪና_ለ1_ወር": "4000 ብር",
+          "ለግል_ከባድ_መኪና_ለ3_ወር": "10000 ብር",
+          "ለግል_ከባድ_መኪና_ለ6_ወር": "15000 ብር",
+          "የመንግስት_መኪና_ከባድ_ከ10_ቀን_በታች": "300 ብር",
+          "የመንግስት_መኪና_ከባድ_ለ1_ወር": "1000 ብር",
+          "የመንግስት_መኪና_ከባድ_ለ3_ወር": "2000 ብር",
+          "የመንግስት_መኪና_ከባድ_ለ6_ወር": "3000 ብር",
+          "የሸገር_ዳቦ_የምገባ_ለ6_ወር": "1000 ብር"
+        },
+        "om": {
+          "dhuunfaa_ulfaataa_guyyaa_10_gadi": "1000 ETB",
+          "dhuunfaa_ulfaataa_ji'a_1": "4000 ETB",
+          "dhuunfaa_ulfaataa_ji'a_3": "10000 ETB",
+          "dhuunfaa_ulfaataa_ji'a_6": "15000 ETB",
+          "mootummaa_ulfaataa_guyyaa_10_gadi": "300 ETB",
+          "mootummaa_ulfaataa_ji'a_1": "1000 ETB",
+          "mootummaa_ulfaataa_ji'a_3": "2000 ETB",
+          "mootummaa_ulfaataa_ji'a_6": "3000 ETB",
+          "daabboo_geessuu_ji'a_6": "1000 ETB"
+        }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማእከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "0.5 hours",
+        "quality": "100%"
+      }
+    },
+    "2": {
+      "title": {
+        "en": "Urban Freight Vehicle Movement Permit Renewal",
+        "am": "በከተማ ውስጥ ለሚንቀሳቀሱ የጭነት ተሽከርካሪዎች መንቀሳቀሻ ፈቃድ እድሳት መስጠት",
+        "om": "Haaromsa Hayyama Sochii Konkolaata Fe'iinsaa Magaalaa Keessaa"
+      },
+      "description": {
+        "en": "Renewal of permits for freight vehicles operating within the city",
+        "am": "በከተማ ውስጥ ለሚንቀሳቀሱ የጭነት ተሽከርካሪዎች መንቀሳቀሻ ፈቃድ እድሳት",
+        "om": "Haaromsa hayyama konkolaata fe'iinsaa magaalaa keessa socho'aniif"
+      },
+      "requirements": {
+        "en": [
+          "Application",
+          "Return of previous movement permit",
+          "Letter",
+          "Service fee: For private heavy vehicles under 10 days 1000 ETB, for 1 month 4000 ETB, for 3 months 10000 ETB, for 6 months 15000 ETB; For government heavy vehicles under 10 days 300 ETB, for 1 month 1000 ETB, for 3 months 2000 ETB, for 6 months 3000 ETB; For bread delivery vehicles engaged in work for 6 months 1000 ETB"
+        ],
+        "am": [
+          "ማመልከቻ፤",
+          "የቀድሞውን መንቀሳቀሻ ፈቃድ መመለስ ፣",
+          "ደብዳቤ፤",
+          "የአገልግሎት ክፍያ ለግል ከባድ መኪና መንቀሳቀሻ ከ10 ቀን በታች 1000 ፣ ለ1 ወር 4000 ፣ ለ3 ወር 10000 ብር ፣ ለ6 ወር 15000 ብር) ፣ የመንግስት መኪና ከባድ ከአስር ቀን በታች የሚሰጥ 300 ፣ለአንድ ወር የሚሰጥ 1000 ፣ ለሶስት ወር የሚሰጥ 2000 ፣ ለ6ወር የሚሰጥ 3000 የሸገር ዳቦ የምገባ ስራ ላይ የተሰማሩ ተሽከርካሪዎች ለ6ወር 1000 ብር"
+        ],
+        "om": [
+          "Unka iyyannoo",
+          "Deebisuu hayyama sochii duraa",
+          "Xalayaa",
+          "Kaffaltii tajaajilaa: Konkolaata ulfaataa dhuunfaa guyyaa 10 gadi 1000 ETB, ji'a 1 4000 ETB, ji'a 3 10000 ETB, ji'a 6 15000 ETB; Konkolaata ulfaataa mootummaa guyyaa 10 gadi 300 ETB, ji'a 1 1000 ETB, ji'a 3 2000 ETB, ji'a 6 3000 ETB; Konkolaata daabboo geessuu hojii irra jiran ji'a 6 1000 ETB"
+        ]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": {
+          "private_heavy_under_10_days": "1000 ETB",
+          "private_heavy_1_month": "4000 ETB",
+          "private_heavy_3_months": "10000 ETB",
+          "private_heavy_6_months": "15000 ETB",
+          "government_heavy_under_10_days": "300 ETB",
+          "government_heavy_1_month": "1000 ETB",
+          "government_heavy_3_months": "2000 ETB",
+          "government_heavy_6_months": "3000 ETB",
+          "bread_delivery_6_months": "1000 ETB"
+        },
+        "am": {
+          "ለግል_ከባድ_መኪና_ከ10_ቀን_በታች": "1000 ብር",
+          "ለግል_ከባድ_መኪና_ለ1_ወር": "4000 ብር",
+          "ለግል_ከባድ_መኪና_ለ3_ወር": "10000 ብር",
+          "ለግል_ከባድ_መኪና_ለ6_ወር": "15000 ብር",
+          "የመንግስት_መኪና_ከባድ_ከ10_ቀን_በታች": "300 ብር",
+          "የመንግስት_መኪና_ከባድ_ለ1_ወር": "1000 ብር",
+          "የመንግስት_መኪና_ከባድ_ለ3_ወር": "2000 ብር",
+          "የመንግስት_መኪና_ከባድ_ለ6_ወር": "3000 ብር",
+          "የሸገር_ዳቦ_የምገባ_ለ6_ወር": "1000 ብር"
+        },
+        "om": {
+          "dhuunfaa_ulfaataa_guyyaa_10_gadi": "1000 ETB",
+          "dhuunfaa_ulfaataa_ji'a_1": "4000 ETB",
+          "dhuunfaa_ulfaataa_ji'a_3": "10000 ETB",
+          "dhuunfaa_ulfaataa_ji'a_6": "15000 ETB",
+          "mootummaa_ulfaataa_guyyaa_10_gadi": "300 ETB",
+          "mootummaa_ulfaataa_ji'a_1": "1000 ETB",
+          "mootummaa_ulfaataa_ji'a_3": "2000 ETB",
+          "mootummaa_ulfaataa_ji'a_6": "3000 ETB",
+          "daabboo_geessuu_ji'a_6": "1000 ETB"
+        }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማእከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "0.5 hours",
+        "quality": "100%"
+      }
+    },
+    "3": {
+      "title": {
+        "en": "Foreign Country/Embassy Accident-Free Certificate",
+        "am": "ለውጭ ሀገር/ለኤምባሲ አደጋ አለማድረሱን ማረጋገጫ መስጠት",
+        "om": "Waraqaa Mirkaneessaa Balaa Hin Taasifne Biyya Alaa/Embaasiitiif"
+      },
+      "description": {
+        "en": "Certificate confirming no accidents for foreign countries or embassies",
+        "am": "ለውጭ ሀገር ወይም ኤምባሲ አደጋ አለማድረሱን የሚያረጋግጥ ሰርተፊኬት",
+        "om": "Waraqaa balaa hin taasifne biyya alaa ykn embaasiitiif mirkaneessu"
+      },
+      "requirements": {
+        "en": [
+          "Application supervised by department head",
+          "Driving license copy",
+          "Passport copy",
+          "Service fee 1000 ETB",
+          "ID card"
+        ],
+        "am": [
+          "በስራ ክፍሉ ኃላፊ የተመራ ማመልከቻ",
+          "መንጃ ፈቃድ ኮፒ",
+          "ፓስፖርት ኮፒ",
+          "የአገልግሎት ክፍያ 1000 ብር",
+          "ፋይዳ መታወቂያ"
+        ],
+        "om": [
+          "Iyyannoo hogganaa kutaa hojiitin geggeeffame",
+          "Koppii waraqaa konkolaachisaa",
+          "Koppii paaspoortii",
+          "Kaffaltii tajaajilaa 1000 ETB",
+          "Eenyummaa"
+        ]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": { "service": "1000 ETB" },
+        "am": { "አገልግሎት": "1000 ብር" },
+        "om": { "tajaajila": "1000 ETB" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "0.5 hours",
+        "quality": "100%"
+      }
+    },
+    "4": {
+      "title": {
+        "en": "Driving License Point Record and Suspension Service",
+        "am": "የመንጃ ፈቃድ የነጥብ ሪከርድና እግድ አገልግሎት",
+        "om": "Tajaajila Galmee Qabxii fi Ittisaa Waraqaa Konkolaachisaa"
+      },
+      "description": {
+        "en": "Comprehensive driving license point tracking and suspension services",
+        "am": "ሁሉንም የመንጃ ፈቃድ የነጥብ ክትትል እና እግድ አገልግሎቶች",
+        "om": "Tajaajiloota hordoffii qabxii fi ittisaa waraqaa konkolaachisaa walitti qabaman"
+      },
+      "requirements": {
+        "en": ["Valid driving license", "ID card", "Application form"],
+        "am": ["ትክክለኛ የመንጃ ፈቃድ", "ፋይዳ መታወቂያ", "ማመልከቻ ቅጽ"],
+        "om": ["Waraqaa konkolaachisaa sirrii", "Eenyummaa", "Unka iyyannoo"]
+      },
+      "timeline": {
+        "en": "Varies by sub-service",
+        "am": "በንዑስ አገልግሎት ይለያያል",
+        "om": "Akka tajaajila xiqqaatti garaagarummaa qaba"
+      },
+      "fee": {
+        "en": { "service": "Varies by sub-service" },
+        "am": { "አገልግሎት": "በንዑስ አገልግሎት ይለያያል" },
+        "om": { "tajaajila": "Akka tajaajila xiqqaatti garaagarummaa qaba" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "Varies by sub-service",
+        "quality": "100%"
+      }
+    },
+    "4.1": {
+      "title": {
+        "en": "Lost Plate Investigation",
+        "am": "የጠፋ ሰሌዳ ማጣራት",
+        "om": "Qorannoo Gabatee Bade"
+      },
+      "description": {
+        "en": "Investigation service for lost license plates",
+        "am": "ለጠፉ የቁጥር ሰሌዳዎችን የምርመራ አገልግሎት",
+        "om": "Tajaajila qorannoo gabatee lakkoofsa badaniif"
+      },
+      "requirements": {
+        "en": [
+          "Letter from Driver Vehicle License and Control Authority",
+          "Service fee 300 ETB",
+          "ID card"
+        ],
+        "am": ["ከአሽከርካሪ ተሸከርካሪ ፈቃድና ቁጥጥር ባለስልጣን የተፃፈ ደብዳቤ", "አገልግሎት ክፍያ 300 ብር", "ፋይዳ መታወቂያ"],
+        "om": [
+          "Xalayaa Aangoo To'annoo Hayyamaa Konkolaachisaa fi Konkolaataatii",
+          "Kaffaltii tajaajilaa 300 ETB",
+          "Eenyummaa"
+        ]
+      },
+      "timeline": {
+        "en": "72 hours",
+        "am": "72 ሰዓት",
+        "om": "Sa'aatii 72"
+      },
+      "fee": {
+        "en": { "service": "300 ETB" },
+        "am": { "አገልግሎት": "300 ብር" },
+        "om": { "tajaajila": "300 ETB" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "72 hours",
+        "quality": "100%"
+      }
+    },
+    "4.2": {
+      "title": {
+        "en": "Traffic Information Dissemination",
+        "am": "የትራፊክ መረጃዎችን ማሰራጨት",
+        "om": "Babal'isuu Odeeffannoo Tiraafikii"
+      },
+      "description": {
+        "en": "Service for disseminating traffic information",
+        "am": "የትራፊክ መረጃዎችን ለማሰራጨት አገልግሎት",
+        "om": "Tajaajila odeeffannoo tiraafikii babal'isuuf"
+      },
+      "requirements": {
+        "en": ["Request letter/application", "Confirmation of approval by relevant authority"],
+        "am": ["መጠየቂያ ደብዳቤ/ማመልከቻ", "በሚመለከተው በባለይ ሃላፊ መጽደቁን ማረጋገጥ"],
+        "om": ["Xalayaa gaafii/iyyannoo", "Mirkaneessuu fudhatama hogganaa dhimmi isaa ilaalu"]
+      },
+      "timeline": {
+        "en": "70 hours",
+        "am": "70 ሰዓት",
+        "om": "Sa'aatii 70"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "70 hours",
+        "quality": "100%"
+      }
+    },
+    "4.3": {
+      "title": {
+        "en": "Accident-Causing Drivers License Suspension Service",
+        "am": "አደጋ ያደረሱ አሽከርካሪዎች መንጃ ፍቃድ እግድ አገልግሎት መስጠት",
+        "om": "Tajaajila Ittisaa Waraqaa Konkolaachisaa Ooftuuwwan Balaa Taasisan"
+      },
+      "description": {
+        "en": "License suspension service for drivers who caused accidents",
+        "am": "አደጋ ያደረሱ አሽከርካሪዎች የመንጃ ፈቃድ እግድ አገልግሎት",
+        "om": "Tajaajila ittisaa waraqaa konkolaachisaa ooftuuwwan balaa taasisaniif"
+      },
+      "requirements": {
+        "en": ["Accident report", "Driver's license", "ID card"],
+        "am": ["የአደጋ ሪፖርት", "የመንጃ ፈቃድ", "ፋይዳ መታወቂያ"],
+        "om": ["Gabaasa balaa", "Waraqaa konkolaachisaa", "Eenyummaa"]
+      },
+      "timeline": {
+        "en": "Immediate processing",
+        "am": "ወዲያውኑ ሂደት",
+        "om": "Adeemsa battalumatti"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "Same day",
+        "quality": "100%"
+      }
+    },
+    "4.4": {
+      "title": {
+        "en": "Sending for Refresher Training to Driver Vehicle License and Control Authority",
+        "am": "የተሃድሶ ስልጠና እንዲወስድ ለማድረግ ወደ አሽከርካሪ ተሸከርካሪ ፈቃድና ቁጥጥር ባለስልጣን መላክ",
+        "om": "Erguu Gara Aangoo To'annoo Hayyamaa Konkolaachisaa fi Konkolaataatiif Leenjii Haaromsaa Akka Fudhatu"
+      },
+      "description": {
+        "en": "Service to send drivers for refresher training",
+        "am": "አሽከርካሪዎችን ለተሃድሶ ስልጠና የመላክ አገልግሎት",
+        "om": "Tajaajila ooftuuwwan leenjii haaromsaaf erguu"
+      },
+      "requirements": {
+        "en": ["Application", "Driving license sent from police", "ID card"],
+        "am": ["ማመልከቻ", "መንጃ ፈቃድ ከፖሊስ መላክ", "ፋይዳ መታወቂያ"],
+        "om": ["Iyyannoo", "Waraqaa konkolaachisaa poolisiitii ergame", "Eenyummaa"]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "0.5 hours",
+        "quality": "100%"
+      }
+    },
+    "4.5": {
+      "title": {
+        "en": "Driver Competency for Drivers Who Completed Suspension Period",
+        "am": "የእገዳ ጊዜያቸዉን ላጠናቀቁ አሽከርካሪዎች የአሽከርካሪ ብቃት",
+        "om": "Dandeettii Ooftuu Ooftuuwwan Yeroo Ittisaa Xumuraniif"
+      },
+      "description": {
+        "en": "Competency assessment for drivers who completed their suspension period",
+        "am": "የእገዳ ጊዜያቸውን ላጠናቀቁ አሽከርካሪዎች የብቃት ግምገማ",
+        "om": "Madaallii dandeettii ooftuuwwan yeroo ittisaa isaanii xumuraniif"
+      },
+      "requirements": {
+        "en": [
+          "Application",
+          "Letter from Driver Vehicle License and Control Authority confirming training completion"
+        ],
+        "am": ["ማመልከቻ", "ከአሽከርካሪ ተሸከርካሪ ፈቃድና ቁጥጥር ባለስልጣን ስልጠና ስለማጠናቀቃቸው የተላከ ደብዳቤ"],
+        "om": [
+          "Iyyannoo",
+          "Xalayaa Aangoo To'annoo Hayyamaa Konkolaachisaa fi Konkolaataatii leenjii xumuruu isaanii mirkaneessu"
+        ]
+      },
+      "timeline": {
+        "en": "9.27 hours",
+        "am": "9.27 ሰዓት",
+        "om": "Sa'aatii 9.27"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "9.27 hours",
+        "quality": "100%"
+      }
+    },
+    "5": {
+      "title": {
+        "en": "New Motorcycle Movement Permit Service (E-bike)",
+        "am": "አዲስ የሞተር ብስክሌት መንቀሳቀሻ ፈቃድ አገልግሎት (ኢ.ባይክ)",
+        "om": "Tajaajila Hayyama Sochii Biskileetii Mootoraa Haaraa (E-bike)"
+      },
+      "description": {
+        "en": "Permit service for new motorcycles and e-bikes with special authorization",
+        "am": "በልዩ ፈቃድ ለአዲስ ሞተር ብስክሌቶች እና ኢ-ባይክ ፈቃድ አገልግሎት",
+        "om": "Tajaajila hayyama biskileetii mootoraa fi e-bike haaraa hayyama addaatiin"
+      },
+      "requirements": {
+        "en": [
+          "Service provided only when Addis Ababa Transport Bureau permits in writing for special reasons",
+          "Service request letter must be brought"
+        ],
+        "am": [
+          "በልዩ ምክንያት የአዲስ አበባ ትራንስፖርት ቢሮ በጽሁፍ ሲፈቅድ የሚሰጥ አገልግሎት ሆኖ",
+          "የአገልግሎት መጠየቂያ ደብዳቤ ማምጣት ይኖርበታል"
+        ],
+        "om": [
+          "Tajaajila sababa addaatiin Biiroo Geejjibaa Finfinnee barreeffamaan yeroo hayyamu qofa kennamu",
+          "Xalayaa gaafii tajaajilaa fiduu qaba"
+        ]
+      },
+      "timeline": {
+        "en": "2 hours",
+        "am": "2 ሰዓት",
+        "om": "Sa'aatii 2"
+      },
+      "fee": {
+        "en": { "service": "As per authorization" },
+        "am": { "አገልግሎት": "እንደ ፈቃዱ" },
+        "om": { "tajaajila": "Akka hayyamaatti" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "2 hours",
+        "quality": "100%"
+      }
+    },
+    "6": {
+      "title": {
+        "en": "Controlling Dedicated Lanes for Public Transport and Ambulances",
+        "am": "ለብዘሁን ትራንስፖርት እና አምቡላንስ የተለዩ መንገዶችን ቁጥጥር ማድረግ",
+        "om": "To'annoo Daandii Addaa Geejjiba Uummataa fi Ambuulaansiif"
+      },
+      "description": {
+        "en": "Control and management of dedicated lanes for public transport and emergency vehicles",
+        "am": "ለህዝብ ትራንስፖርት እና የአደጋ ጊዜ ተሽከርካሪዎች የተለዩ መንገዶች ቁጥጥር እና አስተዳደር",
+        "om": "To'annoo fi bulchiinsa daandii addaa geejjiba uummataa fi konkolaata yeroo balaa addaatiif"
+      },
+      "requirements": {
+        "en": [
+          "Usage and implementation manual preparation",
+          "Use based on regulations and guidelines"
+        ],
+        "am": ["የአጠቃቀምና አፈፃፀም ማንዋል መዘጋጀት", "ደንብና መመሪያን መሰረት አድርጎ መጠቀም"],
+        "om": [
+          "Qophii maanuwalii itti fayyadamaa fi hojiirra oolchuu",
+          "Seera fi qajeelfama irratti hundaa'uun itti fayyadamuu"
+        ]
+      },
+      "timeline": {
+        "en": "8 hours",
+        "am": "8 ሰዓት",
+        "om": "Sa'aatii 8"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "8 hours",
+        "quality": "100%"
+      }
+    },
+    "7": {
+      "title": {
+        "en": "Handling Infrastructure Requests from Community and Other Bodies",
+        "am": "ከህብረተሰቡ እና ከሌሎች አካላት የሚቀርቡ የመሠረተ ልማት ጥቄዎችን ማስተናገድ",
+        "om": "Qabachuu Gaafii Bu'uura Misoomaa Hawaasaa fi Qaamolee Biroo"
+      },
+      "description": {
+        "en": "Service for handling infrastructure development requests from community and other organizations",
+        "am": "ከማህበረሰብ እና ሌሎች ድርጅቶች የመሠረተ ልማት ልማት ጥያቄዎችን ለማስተናገድ አገልግሎት",
+        "om": "Tajaajila gaafii misoomaa bu'uura misoomaa hawaasaa fi dhaabbilee biroo qabachuuf"
+      },
+      "requirements": {
+        "en": ["ID card", "Application form"],
+        "am": ["ፋይዳ መታወቂያ", "ማመልከቻ"],
+        "om": ["Eenyummaa", "Iyyannoo"]
+      },
+      "timeline": {
+        "en": "1378 hours",
+        "am": "1378 ሰዓት",
+        "om": "Sa'aatii 1378"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "1378 hours",
+        "quality": "100%"
+      }
+    },
+    "7.1": {
+      "title": {
+        "en": "Handling Sign Installation Requests",
+        "am": "የምልክት ተከላ ጥያቄን ማስተናገድ",
+        "om": "Qabachuu Gaafii Dhaabbii Mallattoo"
+      },
+      "description": {
+        "en": "Service for handling traffic sign installation requests",
+        "am": "የትራፊክ ምልክት መትከል ጥያቄዎችን ለማስተናገድ አገልግሎት",
+        "om": "Tajaajila gaafii dhaabbii mallattoo tiraafikii qabachuuf"
+      },
+      "requirements": {
+        "en": ["ID card", "Application"],
+        "am": ["ፋይዳ መታወቂያ", "ማመልከቻ"],
+        "om": ["Eenyummaa", "Iyyannoo"]
+      },
+      "timeline": {
+        "en": "18 hours",
+        "am": "18 ሰዓት",
+        "om": "Sa'aatii 18"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "18 hours",
+        "quality": "100%"
+      }
+    },
+    "7.2": {
+      "title": {
+        "en": "Handling Paint Marking Requests",
+        "am": "የቀለም ቅብ ይቀባልን ጥያቄን ማስናገድ",
+        "om": "Qabachuu Gaafii Mallattoo Halluu"
+      },
+      "description": {
+        "en": "Service for handling road paint marking requests",
+        "am": "የመንገድ ቀለም ምልክት ጥያቄዎችን ለማስተናገድ አገልግሎት",
+        "om": "Tajaajila gaafii mallattoo halluu daandii qabachuuf"
+      },
+      "requirements": {
+        "en": ["ID card", "Application"],
+        "am": ["ፋይዳ መታወቂ", "ማመልከቻ"],
+        "om": ["Eenyummaa", "Iyyannoo"]
+      },
+      "timeline": {
+        "en": "880 hours",
+        "am": "880 ሰዓት",
+        "om": "Sa'aatii 880"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "880 hours",
+        "quality": "100%"
+      }
+    },
+    "7.3": {
+      "title": {
+        "en": "Handling Speed Bump Requests",
+        "am": "የፍጥነት መገደቢያ ጉብታ ጥያቄን ማስናገድ",
+        "om": "Qabachuu Gaafii Gufuu Ittisuuf Saffisaa"
+      },
+      "description": {
+        "en": "Service for handling speed bump installation requests",
+        "am": "የፍጥነት መገደቢያ ጉብታ መትከል ጥያቄዎችን ለማስተናገድ አገልግሎት",
+        "om": "Tajaajila gaafii dhaabbii gufuu ittisuuf saffisaa qabachuuf"
+      },
+      "requirements": {
+        "en": ["ID card", "Application"],
+        "am": ["ፋይዳ መታወቂ", "ማመልከቻ"],
+        "om": ["Eenyummaa", "Iyyannoo"]
+      },
+      "timeline": {
+        "en": "480 hours",
+        "am": "480 ሰዓት",
+        "om": "Sa'aatii 480"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "480 hours",
+        "quality": "100%"
+      }
+    },
+    "8": {
+      "title": {
+        "en": "Preparing and Forwarding Vehicle Accident Victims Compensation Claims",
+        "am": "የተሸከርካሪ አደጋ ተጎጅዎች የካሳ ክፍያ መጠየቂያ ማዘጋጀት እና ማስተላለፍ",
+        "om": "Qopheessuu fi Dabarsuu Gaafii Beenyaa Miidhama Balaa Konkolaataa"
+      },
+      "description": {
+        "en": "Service for preparing and forwarding compensation claims for vehicle accident victims",
+        "am": "ለተሽከርካሪ አደጋ ተጎጂዎች እና ቤተሰቦችቸው የካሳ ክፍያ ጥያቄዎችን ለማስተናገድ አገልግሎት",
+        "om": "Tajaajila gaafii beenyaa miidhama balaa konkolaataa qopheessuu fi dabarsuu"
+      },
+      "requirements": {
+        "en": ["Official request", "Valid documentation", "Supporting evidence"],
+        "am": ["ይፋዊ ጥያቄ", "ትክክለኛ ሰነድ", "ተደጋፊ ማስረጃ"],
+        "om": ["Gaafii ofiishaala", "Waraqaa sirrii", "Ragaa deeggaraa"]
+      },
+      "timeline": {
+        "en": "Varies by case type",
+        "am": "በጉዳይ አይነት ይለያያል",
+        "om": "Akka gosa dhimmaatti garaagarummaa qaba"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "Varies by case",
+        "quality": "100%"
+      }
+    },
+    "8.1": {
+      "title": {
+        "en": "Making Hit-and-Run Vehicle Accident Victims/Victim Families Complete Damage Compensation Claim Documents",
+        "am": "ገጭቶ ባመለጠ ተሽከርካሪ አደጋ ተጎጂዎች/የተጎጂ ቤተሰቦች የጉዳት ካሳ ክፍያ መጠየቂያ ሰነዶችን እንዲያሟሉ ማድረግ",
+        "om": "Godhuu Akka Miidhaman Balaa Konkolaata Baqatee Dhaqe/Maatiin Miidhame Waraqaalee Gaafii Beenyaa Miidhama Guutuu"
+      },
+      "description": {
+        "en": "Service to help hit-and-run accident victims and their families complete compensation claim documents",
+        "am": "ገጭቶ ባመለጠ አደጋ ተጎጂዎች እና ቤተሰቦቻቸው የካሳ ክፍያ ሰነዶችን እንዲያሟሉ ለመርዳት አገልግሎት",
+        "om": "Tajaajila miidhaman balaa baqatee dhaqeetii fi maatii isaanii waraqaalee gaafii beenyaa akka guutan gargaaruuf"
+      },
+      "requirements": {
+        "en": [
+          "For Physical Injury: Signed accident report form, Original police report, List of compensation claimants with ID copies, Original medical expenses and doctor's orders, Medical certificate for treatment period, Medical board evidence, Victim's age proof and ID copy, Victim's income proof, Other evidence and receipts",
+          "For Death: Signed accident report form, List of compensation claimants with ID copies, Original police report, Original medical expenses and doctor's evidence, Court decision on legal heirs, Autopsy evidence, Deceased's age proof and ID copy, Deceased's income proof, Other evidence and receipts",
+          "For Property Damage: Signed accident report form, Original police report, List of compensation claimants with ID copies, Original defense accident report, Original survey report, Property ownership proof (Libre), Other evidence and receipts"
+        ],
+        "am": [
+          "ለአካል ጉዳት፡ የአደጋ ማሳወቂያ ቅጽ (የተፈረመ)፣ የፖሊስ ሪፖርት/ ዋናው/፣ የካሳ ጤያቂው/ዎች ዝርዝር /ፋይዳ የመታወቂያ (ኮፒ)፣ የሕክምና ወጭና የሐኪም ትእዛዝ (ዋናው)፣ የሜዲካል ቦርድ ማስረጃ(ዋናው)፣ የተጎጂው እድሜ ማስረጃና መታወቂያ(ኮፒ)፣ የተጎጂው የገቢ መጠን ማስረጃ(ዋናው)፣ እና ሌሎች ማስረጃዎችና ደረሰኞች( ዋናው)",
+          "ለሞት፡የአደጋ ማሳወቂያ ቅጽ (የተፈረመ)፣ የካሳ ጤያቂው/ዎች ዝርዝር /ፋይዳ የመታወቂያ ወረቀት(ኮፒ)፣ የፖሊስ ሪፖርት(ዋናው)፣ የሕክምና ወጭና የሐኪም ትእዛዝና ማስረጃ (ዋናው)፣ የሕጋዊ ወራሾች የፍርድ ቤት ውሳኔ(ዋናው)፣ የአስክሬን ምርመራ ማስረጃ(ዋናው)፣ የማቹ እድሜ ማስረጃና መታወቂያ(ኮፒ)፣ የማቹ የገቢ መጠን ማስረጃ(ዋናው) እና ሌሎች ማስረጃዎችና ደረሰኞች( ዋናው)",
+          "ለንብረት ጉዳት፡ የአደጋ ማሳወቂያ ቅጽ (የተፈረመ)፤ የፖሊስ ሪፖርት /ዋናው/፤ የካሳ ጤያቂው/ዎች ዝርዝር /የፋይዳ መታወቂያ ወረቀት(ኮፒ)፤ የንብረቱ ባለቤት ማረጋገጫ ሊብሬ (ዋናው) እና ሌሎች ማስረጃዎችና ደረሰኞች( ዋናው)"
+        ],
+        "om": [
+          "Miidhama Qaamaa: Unka gabaasa balaa mallattaa'e, Gabaasa poolisii jalqabaa, Tarree gaafattoota beenyaa eenyummaa waliin, Baasii yaalaa fi ajaja hakiimaa jalqabaa, Ragaa hakiimaa yeroo yaalaa, Ragaa boordii yaalaa, Ragaa umurii fi eenyummaa miidhame, Ragaa galii miidhame, Ragaalee fi waraqaalee biroo",
+          "Du'aaf: Unka gabaasa balaa mallattaa'e, Tarree gaafattoota beenyaa eenyummaa waliin, Gabaasa poolisii jalqabaa, Baasii yaalaa fi ragaa hakiimaa, Murtii mana murtii dhaaltoota seeraa, Ragaa qorannoo reefuu, Ragaa umurii fi eenyummaa du'e, Ragaa galii du'e, Ragaalee fi waraqaalee biroo",
+          "Miidhama Qabeenya: Unka gabaasa balaa mallattaa'e, Gabaasa poolisii jalqabaa, Tarree gaafattoota beenyaa eenyummaa waliin, Gabaasa balaa eegumsaa jalqabaa, Gabaasa qorannoo jalqabaa, Ragaa abbummaa qabeenya (Libre), Ragaalee fi waraqaalee biroo"
+        ]
+      },
+      "timeline": {
+        "en": "56 hours",
+        "am": "56 ሰዓት",
+        "om": "Sa'aatii 56"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "56 hours",
+        "quality": "100%"
+      }
+    },
+    "8.2": {
+      "title": {
+        "en": "Forwarding Hit-and-Run Vehicle Accident Victims/Victim Families Damage Compensation Documents for Payment",
+        "am": "ገጭቶ ባመለጠ ተሽከርካሪ አደጋ ተጎጂዎች/የተጎጂ ቤተሰቦች የጉዳት ካሳ ሰነዶችን ለክፍያ ማስተላለፍ",
+        "om": "Dabarsuu Waraqaalee Beenyaa Miidhama Miidhaman Balaa Konkolaata Baqatee Dhaqe/Maatii Miidhame Kaffaltiidhaf"
+      },
+      "description": {
+        "en": "Service to forward completed compensation documents for hit-and-run accident victims to payment processing",
+        "am": "ለገጭቶ ባመለጠ አደጋ ተጎጂዎች የተሟሉ የካሳ ሰነዶችን ለክፍያ ሂደት ለማስተላለፍ አገልግሎት",
+        "om": "Tajaajila waraqaalee beenyaa guutaman miidhaman balaa baqatee dhaqeef gara adeemsa kaffaltii dabarsuu"
+      },
+      "requirements": {
+        "en": [
+          "Complete all required documents from clients",
+          "Create Excel summary if there are expenses",
+          "Make copies of completed information",
+          "Get supervisor approval",
+          "Submit to Road Safety and Insurance Fund Service"
+        ],
+        "am": [
+          "ከተገልጋይ የሚጠበቁ ሁሉንም አስፈላጊ ሰነዶችን ማሟላት",
+          "የወጣ ወጪ ካለ በኤክስኤል ማጠቃለያ መስራት",
+          "የተሟሉ መረጃዎችን ኮፒ ማድረግ",
+          "ለሃላፊ ማስፈረም",
+          "ለመንገድ ደህንነት እና መድን ፈንድ አገልግሎት አስፈርሞ መስጠት"
+        ],
+        "om": [
+          "Waraqaalee barbaachisoo hunda maamiltoota irraa guutuu",
+          "Yoo baasiin jiraate gabaabduu Excel tolchuu",
+          "Odeeffannoo guutame koppii gochuu",
+          "Fudhatama hogganaa argachuu",
+          "Tajaajila Faandii Nageenyaa Daandii fi Inshuraansiitiif kennuu"
+        ]
+      },
+      "timeline": {
+        "en": "2 hours",
+        "am": "2 ሰዓት",
+        "om": "Sa'aatii 2"
+      },
+      "fee": {
+        "en": { "service": "Free" },
+        "am": { "አገልግሎት": "ነፃ" },
+        "om": { "tajaajila": "Bilisaa" }
+      },
+      "place": {
+        "en": "Central Office",
+        "am": "በማዕከል",
+        "om": "Waajjira Giddugaleessa"
+      },
+      "mode": "In-person",
+      "standard": {
+        "time": "2 hours",
+        "quality": "100%"
+      }
+    }
+  }
+}
