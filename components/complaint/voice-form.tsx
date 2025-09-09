@@ -95,7 +95,7 @@ const VoiceForm = () => {
 
       // Extract the data from the API response
       if (response && typeof response === 'object' && 'data' in response) {
-        setSectorLeaders(response.data || []);
+        setSectorLeaders(response || []);
       } else if (Array.isArray(response)) {
         setSectorLeaders(response);
       } else {

@@ -46,7 +46,7 @@ export default function FeedbackPage() {
       const response = await apiClient.getSectorLeaders();
       console.log(response);
       // Provide a fallback empty array in case response.data is undefined
-      setSectorLeaders(response.data || []);
+      setSectorLeaders(response || []);
     } catch (error) {
       console.error('Failed to load sector leaders:', error);
       setSectorLeaders([]);
