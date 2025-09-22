@@ -63,10 +63,11 @@ export default function DirectorsMenuPage() {
                   </Avatar>
                 </div>
                 <CardContent className="text-center">
-                  <h2 className="text-lg font-semibold">{emp[`name_${language}`]}</h2>
-                  <p className="text-sm text-gray-600">{emp[`appointed_person_${language}`]}</p>
-                  <p className="text-sm text-gray-500">
-                    {/* {t('employees.office')} {emp.officeNumber} */}
+                  <p className="text-lg font-semibold">{emp[`appointed_person_${language}`]}</p>
+
+                  <h2 className=" text-gray-600 font-semibold">{emp[`name_${language}`]}</h2>
+                  <p className="text-sm ">
+                    {t('employees.office')} {emp.office_number}
                   </p>
                   <Button variant="link" size="sm" onClick={() => handleMemberClick(emp.id)}>
                     Members

@@ -1,4 +1,4 @@
-import { Calendar, FileText, Mic } from 'lucide-react';
+import { Calendar, FileText, Mic, Paperclip, X } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import {
   Select,
@@ -47,6 +47,32 @@ const TextForm = () => {
   const [loadingSubcities, setLoadingSubcities] = useState(false);
   const [selectedSectorLeaderName, setSelectedSectorLeaderName] = useState('');
   const [subcities, setSubcities] = useState<Subcities[]>([]);
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
+
+  const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setAttachment(file);
+    // Set the value as File | null | undefined
+    setValue('attachment', file, { shouldValidate: true });
+
+    // Create preview for image files
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setAttachmentPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setAttachmentPreview(null);
+    }
+  };
+  // Remove attachment
+  const removeAttachment = () => {
+    setAttachment(null);
+    setAttachmentPreview(null);
+    setValue('attachment', undefined, { shouldValidate: true }); // Set to undefined
+  };
 
   const loadSectorLeaders = async () => {
     if (sectorLeaders.length > 0) return;
@@ -189,22 +215,25 @@ const TextForm = () => {
     const [subcity_id, subcity_name] = data.subcity_id.split('|');
 
     try {
-      const complaintData: ComplaintData = {
-        complaint_name: data.complainantName,
-        phone_number: data.phone,
-        subcity_id: subcity_id,
-        woreda: data.woreda,
-        complaint_description: data.complaintDetails,
-        desired_action: data.actionRequired,
-        sector_id: sector_id,
-        division_id: directors_id,
-        department_id: team_id,
-        employee_id: employee_id,
-        voice_note: audioUrl,
-        complaint_source: 'public_complaint',
-      };
+      const formData = new FormData();
 
-      const response = await apiClient.submitComplaint(complaintData);
+      formData.append('complaint_name', data.complainantName);
+      formData.append('phone_number', data.phone);
+      formData.append('subcity_id', subcity_id.toString());
+      formData.append('woreda', data.woreda);
+      formData.append('complaint_description', data.complaintDetails);
+      formData.append('desired_action', data.actionRequired);
+      formData.append('sector_id', sector_id.toString());
+      formData.append('division_id', directors_id.toString());
+      formData.append('department_id', team_id.toString());
+      formData.append('employee_id', employee_id.toString());
+      formData.append('complaint_source', 'public_complaint');
+
+      if (attachment) {
+        formData.append('attachment', attachment);
+      }
+
+      const response = await apiClient.submitComplaint(formData);
 
       if (response.success) {
         handleApiSuccess(
@@ -252,6 +281,7 @@ const TextForm = () => {
       office: '',
       actionRequired: '',
       complaintDate: '',
+      attachment: null,
       voice_file_path: '',
     },
     mode: 'onChange',
@@ -568,6 +598,48 @@ const TextForm = () => {
               <p className="text-xs text-muted-foreground">
                 {watch('complaintDetails')?.length || 0}/100 {t('complaints.form.characters.used')}
               </p>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="attachment">{t('complaints.form.attachment')}</Label>
+              <div className="flex items-center gap-2">
+                <Label
+                  htmlFor="attachment"
+                  className="flex items-center w-full gap-2 cursor-pointer border rounded-md px-4 py-2 hover:bg-accent"
+                >
+                  <Paperclip className="h-4 w-4" />
+                  {t('complaints.form.chooseFile')}
+                </Label>
+                <Input
+                  id="attachment"
+                  type="file"
+                  className="hidden"
+                  onChange={handleAttachmentChange}
+                  accept="image/*,.pdf,.doc,.docx"
+                />
+                {attachment && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm truncate max-w-xs">{attachment.name}</span>
+                    <Button type="button" variant="ghost" size="sm" onClick={removeAttachment}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+              {attachmentPreview && (
+                <div className="mt-2">
+                  <img
+                    src={attachmentPreview}
+                    alt="Attachment preview"
+                    className="max-w-xs max-h-32 rounded-md"
+                  />
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground">
+                {t('complaints.form.attachmentDescription')}
+              </p>
+              {errors.attachment && (
+                <p className="text-sm text-red-500">{errors.attachment.message}</p>
+              )}
             </div>
 
             {/* Date */}

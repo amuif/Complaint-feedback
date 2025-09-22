@@ -210,6 +210,7 @@ export interface ComplaintData {
   follow_up_required?: boolean;
   follow_up_date?: string | null;
 
+  attachment?: File | null;
   resolved_at?: string | null;
   created_at?: string;
   updated_at?: string;
@@ -229,8 +230,9 @@ export interface voiceComplaintData {
   complaint_date?: string;
   phone_number: string;
   department_id?: string;
-  voice_file_path: string | Blog | null;
+  voice_file_path: string | Blob | null;
   complaint_source: string;
+  attachment?: File | null;
 }
 
 export interface EmployeeApiResponse<T> {

@@ -62,7 +62,7 @@ export default function EmployeesMembersPage() {
                     {emp[`first_name_${language}`] + ' ' + emp[`middle_name_${language}`]}
                   </h2>
                   <p className="text-sm text-gray-600">{emp[`position_${language}`]}</p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm ">
                     {t('employees.office')} {emp.office_number}
                   </p>
                 </CardContent>
