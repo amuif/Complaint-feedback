@@ -74,6 +74,9 @@ export default function ServiceDetailPage() {
     },
   };
 
+  useEffect(() => {
+    console.log(svc);
+  }, [svc]);
   const cards = [
     {
       key: 'requirements' as const,
@@ -177,21 +180,17 @@ export default function ServiceDetailPage() {
           </li>
           <li>
             <strong>{labels[locale].mode}:</strong>{' '}
-            {svc.mode ?? <span className="text-muted-foreground">No mode found.</span>}
+            {svc.mode?.[locale] ?? <span className="text-muted-foreground">No mode found.</span>}
           </li>
           <li>
             <strong>{labels[locale].standardTime}:</strong>{' '}
-            {svc.standard?.time != null ? (
-              svc.standard.time
-            ) : (
+            {svc.standard?.time?.[locale] ?? (
               <span className="text-muted-foreground">No standard time found.</span>
             )}
           </li>
           <li>
             <strong>{labels[locale].standardQuality}:</strong>{' '}
-            {svc.standard?.quality != null ? (
-              svc.standard.quality
-            ) : (
+            {svc.standard?.quality?.[locale] ?? (
               <span className="text-muted-foreground">No standard quality found.</span>
             )}
           </li>
