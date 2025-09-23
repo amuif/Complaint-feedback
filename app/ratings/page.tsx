@@ -550,7 +550,8 @@ export default function RatingsPage() {
                         const id = employee.id;
                         const appointedPerson =
                           employee?.[`first_name_${language}`] +
-                        ' '+  employee?.[`last_name_${language}`];
+                          ' ' +
+                          employee?.[`last_name_${language}`];
                         return (
                           <SelectItem key={employee.id} value={`${id} | ${appointedPerson}`}>
                             {appointedPerson}
