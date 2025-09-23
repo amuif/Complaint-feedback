@@ -66,17 +66,12 @@ class ApiClient {
   }
 
   // Submit Complaint
-  async submitComplaint(
-    complaintData: ComplaintData
-  ): Promise<ApiResponse<{ tracking_code: string }>> {
-    console.log(complaintData);
+  async submitComplaint(formData: FormData): Promise<ApiResponse<{ tracking_code: string }>> {
     try {
       const response = await fetch(`${this.baseUrl}/complaints/submit`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(complaintData),
+
+        body: formData,
       });
 
       const data = await response.json();
@@ -107,6 +102,9 @@ class ApiClient {
       form.append('department_id', String(complaintData.department_id || ''));
       // form.append('team_id', String(complaintData.team_id || ''));
 
+      if (complaintData.attachment) {
+        form.append('attachment', complaintData.attachment);
+      }
       if (complaintData.voice_file_path && typeof complaintData.voice_file_path === 'string') {
         console.log('Fetching blob URL:', complaintData.voice_file_path);
         if (!complaintData.voice_file_path.startsWith('blob:')) {

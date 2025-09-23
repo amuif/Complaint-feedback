@@ -1,4 +1,4 @@
-import { Mic } from 'lucide-react';
+import { Mic, Paperclip, X } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import {
   Select,
@@ -52,6 +52,8 @@ const VoiceForm = () => {
   const [loadingSubcities, setLoadingSubcities] = useState(false);
   const [selectedSectorLeaderName, setSelectedSectorLeaderName] = useState('');
   const [subcities, setSubcities] = useState<Subcities[]>([]);
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
 
   const loadDirectors = async (value: string) => {
     const [id, name] = value.split('|');
@@ -128,6 +130,7 @@ const VoiceForm = () => {
       setLoadingTeamLeaders(false);
     }
   };
+
   const loadEmployees = async (teamLeader: string) => {
     const [id, name] = teamLeader?.split('|');
     console.log(id);
@@ -211,6 +214,7 @@ const VoiceForm = () => {
         employee_id: employee_id,
         voice_file_path: audioUrl,
         complaint_source: 'public_complaint',
+        attachment: attachment ?? null,
       };
 
       const response = await apiClient.submitVoiceComplaint(complaintData);
@@ -230,6 +234,30 @@ const VoiceForm = () => {
       setErrorMessage('Failed to submit complaint. Please try again.');
       handleApiError(error, 'Failed to submit complaint. Please try again.');
     }
+  };
+
+  const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0] || null;
+    setAttachment(file);
+    // Set the value as File | null | undefined
+    setValue('attachment', file, { shouldValidate: true });
+
+    // Create preview for image files
+    if (file && file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setAttachmentPreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setAttachmentPreview(null);
+    }
+  };
+  // Remove attachment
+  const removeAttachment = () => {
+    setAttachment(null);
+    setAttachmentPreview(null);
+    setValue('attachment', undefined, { shouldValidate: true }); // Set to undefined
   };
 
   const {
@@ -257,6 +285,7 @@ const VoiceForm = () => {
       complaintDate: '',
       voice_file_path: '',
       complaint_source: 'public_source',
+      attachment: null,
     },
     mode: 'onChange',
   });
@@ -327,6 +356,49 @@ const VoiceForm = () => {
               setAudioUrl={setAudioUrl}
               setAudioBlob={setAudioBlob}
             />
+            <div className="space-y-2">
+              <Label htmlFor="attachment">{t('complaints.form.attachment')}</Label>
+              <div className="flex items-center gap-2">
+                <Label
+                  htmlFor="attachment"
+                  className="flex items-center w-full gap-2 cursor-pointer border rounded-md px-4 py-2 hover:bg-accent"
+                >
+                  <Paperclip className="h-4 w-4" />
+                  {t('complaints.form.chooseFile')}
+                </Label>
+                <Input
+                  id="attachment"
+                  type="file"
+                  className="hidden"
+                  onChange={handleAttachmentChange}
+                  accept="image/*,.pdf,.doc,.docx"
+                />
+                {attachment && (
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm truncate max-w-xs">{attachment.name}</span>
+                    <Button type="button" variant="ghost" size="sm" onClick={removeAttachment}>
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+              {attachmentPreview && (
+                <div className="mt-2">
+                  <img
+                    src={attachmentPreview}
+                    alt="Attachment preview"
+                    className="max-w-xs max-h-32 rounded-md"
+                  />
+                </div>
+              )}
+              <p className="text-xs text-muted-foreground">
+                {t('complaints.form.attachmentDescription')}
+              </p>
+              {errors.attachment && (
+                <p className="text-sm text-red-500">{errors.attachment.message}</p>
+              )}
+            </div>
+
             <div className="grid grid-cols-1 gap-6 mt-8">
               <div className="space-y-1">
                 <Label htmlFor="subcity">{t('complaints.form.subcity')} *</Label>

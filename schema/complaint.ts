@@ -23,6 +23,28 @@ export const complaintSchema = z.object({
     .max(100, 'Action request cannot exceed 100 characters'),
   complaintDate: z.string().nonempty('Please select a complaint date'),
   voice_file_path: z.string().optional(),
+  attachment: z
+    .instanceof(File)
+    .optional()
+    .nullable()
+    .refine(
+      (file) => !file || file.size <= 5 * 1024 * 1024, // 5MB limit
+      { message: 'File size must be less than 5MB' }
+    )
+    .refine(
+      (file) =>
+        !file ||
+        [
+          'image/jpeg',
+          'image/jpg',
+          'image/png',
+          'image/webp',
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ].includes(file.type),
+      { message: 'Only images, PDFs, and Word documents are allowed' }
+    ),
 });
 
 export const voiceComplaint = z.object({
@@ -40,8 +62,29 @@ export const voiceComplaint = z.object({
   complaintDate: z.string().optional(),
   voice_file_path: z.string(),
   complaint_source: z.string(),
+  attachment: z
+    .instanceof(File)
+    .optional()
+    .nullable()
+    .refine(
+      (file) => !file || file.size <= 5 * 1024 * 1024, // 5MB limit
+      { message: 'File size must be less than 5MB' }
+    )
+    .refine(
+      (file) =>
+        !file ||
+        [
+          'image/jpeg',
+          'image/jpg',
+          'image/png',
+          'image/webp',
+          'application/pdf',
+          'application/msword',
+          'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        ].includes(file.type),
+      { message: 'Only images, PDFs, and Word documents are allowed' }
+    ),
 });
-
 export const trackComplaint = z.object({
   phone_number: z.string().min(10, 'Phone number should be 10 digits'),
 });
