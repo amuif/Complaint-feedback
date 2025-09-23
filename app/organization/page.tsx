@@ -47,9 +47,7 @@ export default function EmployeesPage() {
               <div>
                 <p>{leader.office_number}</p>
               </div>
-              <div className='text-gray-500'>
-                {leader[`name_${language}`]}
-              </div>
+              <div className="text-gray-500">{leader[`name_${language}`]}</div>
               <div className=" flex items-end justify-center">
                 <Button variant="link" onClick={() => handleClick(leader.id)}>
                   Members

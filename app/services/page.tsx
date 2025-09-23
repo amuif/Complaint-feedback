@@ -1,7 +1,6 @@
 'use client';
 
 import type React from 'react';
-
 import { useLanguage } from '@/components/language-provider';
 import { Card } from '@/components/ui/card';
 import { BackNavigation } from '@/components/back-navigation';
