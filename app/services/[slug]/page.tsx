@@ -15,10 +15,8 @@ export default function ServiceDetailPage() {
   const { language } = useLanguage();
   // map "or" to JSON key "om"
   const locale = language === 'af' ? 'om' : language;
-
   const params = useParams();
   const slug = params.slug as string;
-
   const [open, setOpen] = useState<'requirements' | 'timeline-fee' | 'details' | null>(null);
 
   useEffect(() => {
@@ -26,6 +24,11 @@ export default function ServiceDetailPage() {
     window.addEventListener('languageChanged', onLang);
     return () => window.removeEventListener('languageChanged', onLang);
   }, []);
+
+  useEffect(() => {
+    console.log(locale);
+    console.log('language', language);
+  }, [locale, language]);
 
   const svc = (servicesJson.services as Record<string, any>)[slug];
   if (!svc) {
@@ -50,7 +53,30 @@ export default function ServiceDetailPage() {
       </div>
     );
   }
+  const labels = {
+    en: {
+      place: 'Place',
+      mode: 'Mode',
+      standardTime: 'Standard Time',
+      standardQuality: 'Standard Quality',
+    },
+    am: {
+      place: 'ቦታ',
+      mode: 'መንገድ',
+      standardTime: 'መደበኛ ጊዜ',
+      standardQuality: 'መደበኛ ጥራት',
+    },
+    om: {
+      place: 'Bakka',
+      mode: 'Haala',
+      standardTime: 'Yeroo Sirrii',
+      standardQuality: 'Qulqullina Sirrii',
+    },
+  };
 
+  useEffect(() => {
+    console.log(svc);
+  }, [svc]);
   const cards = [
     {
       key: 'requirements' as const,
@@ -149,26 +175,22 @@ export default function ServiceDetailPage() {
       content: (
         <ul className="space-y-2 mt-4">
           <li>
-            <strong>Place:</strong>{' '}
+            <strong>{labels[locale].place}:</strong>{' '}
             {svc.place?.[locale] ?? <span className="text-muted-foreground">No place found.</span>}
           </li>
           <li>
-            <strong>Mode:</strong>{' '}
-            {svc.mode ?? <span className="text-muted-foreground">No mode found.</span>}
+            <strong>{labels[locale].mode}:</strong>{' '}
+            {svc.mode?.[locale] ?? <span className="text-muted-foreground">No mode found.</span>}
           </li>
           <li>
-            <strong>Standard Time:</strong>{' '}
-            {svc.standard?.time != null ? (
-              svc.standard.time
-            ) : (
+            <strong>{labels[locale].standardTime}:</strong>{' '}
+            {svc.standard?.time?.[locale] ?? (
               <span className="text-muted-foreground">No standard time found.</span>
             )}
           </li>
           <li>
-            <strong>Standard Quality:</strong>{' '}
-            {svc.standard?.quality != null ? (
-              svc.standard.quality
-            ) : (
+            <strong>{labels[locale].standardQuality}:</strong>{' '}
+            {svc.standard?.quality?.[locale] ?? (
               <span className="text-muted-foreground">No standard quality found.</span>
             )}
           </li>
@@ -179,10 +201,8 @@ export default function ServiceDetailPage() {
 
   const getRelatedServices = (currentSlug: string) => {
     const allServices = Object.entries(servicesJson.services);
-
     // Check if current service is a parent (like "4", "7", "8")
     const isParent = ['4', '7', '8'].includes(currentSlug);
-
     // Check if current service is a sub-service (like "4.1", "7.2", etc.)
     const isSubService = currentSlug.includes('.');
 

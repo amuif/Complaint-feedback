@@ -58,6 +58,7 @@
           "ለግል ከባድ መኪና ከ10 ቀን በታች": "1000 ብር",
           "ለግል ከባድ መኪና ለ1 ወር": "4000 ብር",
           "ለግል ከባድ መኪና ለ3 ወር": "10000 ብር",
+          "ለግል ከባድ መኪና ለ3 ወር": "10000 ብር",
           "ለግል ከባድ መኪና ለ6 ወር": "15000 ብር",
           "የመንግስት መኪና ከባድ ከ10 ቀን በታች": "300 ብር",
           "የመንግስት መኪና ከባድ ለ1 ወር": "1000 ብር",
@@ -82,10 +83,22 @@
         "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "0.5 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "2": {
@@ -139,6 +152,7 @@
         "am": {
           "ለግል ከባድ መኪና ከ10 ቀን በታች": "1000 ብር",
           "ለግል ከባድ መኪና ለ1 ወር": "4000 ብር",
+          "ለግል ከባድ መኪና ለ1 ወር": "4000 ብር",
           "ለግል ከባድ መኪና ለ3 ወር": "10000 ብር",
           "ለግል ከባድ መኪና ለ6 ወር": "15000 ብር",
           "የመንግስት መኪና ከባድ ከ10 ቀን በታች": "300 ብር",
@@ -156,6 +170,14 @@
           "mootummaa ulfaataa ji'a 1": "1000 ETB",
           "mootummaa ulfaataa ji'a 3": "2000 ETB",
           "mootummaa ulfaataa ji'a 6": "3000 ETB",
+          "daabboo geessuu ji'a 6": "1000 ETB",
+          "dhuunfaa ulfaataa ji'a 1": "4000 ETB",
+          "dhuunfaa ulfaataa ji'a 3": "10000 ETB",
+          "dhuunfaa ulfaataa ji'a 6": "15000 ETB",
+          "mootummaa ulfaataa guyyaa 10 gadi": "300 ETB",
+          "mootummaa ulfaataa ji'a 1": "1000 ETB",
+          "mootummaaulfaataa ji'a 3": "2000 ETB",
+          "mootummaa ulfaataa ji'a 6": "3000 ETB",
           "daabboo geessuu ji'a 6": "1000 ETB"
         }
       },
@@ -164,10 +186,22 @@
         "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "0.5 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "3": {
@@ -216,13 +250,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "0.5 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "4": {
@@ -253,13 +299,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "Varies by sub-service",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "4.1": {
@@ -298,13 +356,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "72 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "4.2": {
@@ -335,13 +405,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "70 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "4.3": {
@@ -372,13 +454,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "Same day",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "4.4": {
@@ -409,13 +503,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "0.5 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "4.5": {
@@ -452,13 +558,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "9.27 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "5": {
@@ -498,13 +616,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "2 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "6": {
@@ -541,13 +671,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "8 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "7": {
@@ -578,13 +720,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "1378 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "7.1": {
@@ -613,15 +767,28 @@
         "am": { "አገልግሎት": "ነፃ" },
         "om": { "tajaajila": "Bilisaa" }
       },
+
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "18 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "7.2": {
@@ -652,13 +819,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "880 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "7.3": {
@@ -689,13 +868,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "480 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "8": {
@@ -726,13 +917,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "Varies by case",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "8.1": {
@@ -775,13 +978,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "56 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     },
     "8.2": {
@@ -830,13 +1045,25 @@
       },
       "place": {
         "en": "Central Office",
-        "am": "በማዕከል",
+        "am": "በማእከል",
         "om": "Waajjira Giddugaleessa"
       },
-      "mode": "In-person",
+      "mode": {
+        "en": "In-person",
+        "am": "በግል",
+        "om": "Nama fuula dura"
+      },
       "standard": {
-        "time": "2 hours",
-        "quality": "100%"
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa’a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
       }
     }
   }
