@@ -21,7 +21,7 @@ import { Input } from '../ui/input';
 import { Director, Employee, Sector, Subcities, TeamLeader } from '@/types/types';
 import { Textarea } from '../ui/textarea';
 import { Calendar } from '@dhis2/ui';
-import { AmharicKeyboard } from '../amharic-keyboard';
+import AmharicKeyboard from '../amharic-keyboard';
 
 type ComplaintFormData = z.infer<typeof complaintSchema>;
 
@@ -299,7 +299,7 @@ const TextForm = () => {
       formData.append('department_id', team_id.toString());
       formData.append('employee_id', employee_id.toString());
       formData.append('complaint_source', 'public_complaint');
-
+      formData.append('complaint_date ', data.complaintDate);
       if (attachment) {
         formData.append('attachment', attachment);
       }
@@ -833,7 +833,7 @@ const TextForm = () => {
                   ? t('feedback.form.hideKeyboard')
                   : t('feedback.form.showKeyboard')}
               </Button>
-              {showAmharicKeyboard && <AmharicKeyboard onCharacterClick={handleAmharicInput} />}
+              {showAmharicKeyboard && <AmharicKeyboard />}
             </div>
             {/* Submit button */}
             <Button

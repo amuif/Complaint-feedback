@@ -441,6 +441,7 @@ const translations = {
     'complaints.title': 'ቅሬታዎች እና አስተያየቶች',
     'complaints.onlyTitle': 'ቅሬታዎን ያስገቡ',
     'complaints.form.chooseFile': 'ፋይል ይምረጡ',
+    'complaints.form.attachment': 'ፋይል ይምረጡ',
     'complaints.form.attachmentDescription': 'አባሪ መግለጫ',
     'complaints.subtitle': 'ቅሬታዎችዎን ያስገቡ ወይም የሚከተሉትን ቅሬታዎች በሚከተል ኮድ ወይም ስልክ ቁጥር ያስተካክሉ',
     'complaints.track.description': 'የቅሬታዎን ሁኔታ ለመፈተሽ የሚከተል ኮድዎን ወይም ስልክ ቁጥርዎን ያስገቡ',
