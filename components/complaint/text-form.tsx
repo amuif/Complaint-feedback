@@ -297,7 +297,7 @@ const TextForm = () => {
       formData.append('department_id', team_id.toString());
       formData.append('employee_id', employee_id.toString());
       formData.append('complaint_source', 'public_complaint');
-      formData.append('complaint_date ', data.complaintDate);
+      formData.append('complaint_date', data.complaintDate);
       if (attachment) {
         formData.append('attachment', attachment);
       }
