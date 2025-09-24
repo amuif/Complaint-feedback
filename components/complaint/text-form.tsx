@@ -52,7 +52,7 @@ const TextForm = () => {
 
   // Calendar states
   const [showCalendar, setShowCalendar] = useState(false);
-  const [calendarType, setCalendarType] = useState<'ethiopic' | 'gregory'>('ethiopic');
+  const [calendarType, setCalendarType] = useState<'am' | 'en' | 'af'>('en');
   const [selectedDateDisplay, setSelectedDateDisplay] = useState('');
 
   const handleDateSelect = (payload: any) => {
@@ -90,9 +90,7 @@ const TextForm = () => {
     // Close calendar
     setShowCalendar(false);
   }; // Toggle between Ethiopian and Gregorian calendars
-  const toggleCalendarType = () => {
-    setCalendarType(calendarType === 'ethiopic' ? 'gregory' : 'ethiopic');
-  };
+
   // Get calendar props based on type
   const getCalendarProps = () => {
     const baseProps = {
@@ -102,7 +100,7 @@ const TextForm = () => {
       locale: language === 'am' ? 'am-ET' : 'en',
     };
 
-    if (calendarType === 'ethiopic') {
+    if (calendarType === 'am') {
       return {
         ...baseProps,
         calendar: 'ethiopic' as const,
@@ -370,7 +368,7 @@ const TextForm = () => {
 
   useEffect(() => {
     if (complaintDate) {
-      if (calendarType === 'ethiopic') {
+      if (calendarType === 'am') {
         const [year, month, day] = complaintDate.split('-');
         const amharicYear = year;
         const amharicMonth = month;
@@ -382,6 +380,11 @@ const TextForm = () => {
       }
     }
   }, [complaintDate, calendarType, language]);
+
+  useEffect(() => {
+    setCalendarType(language);
+  }, [language]);
+
   return (
     <div>
       <Card className="mb-8">
@@ -728,26 +731,6 @@ const TextForm = () => {
               </Label>
 
               <div className="flex flex-col gap-3">
-                {/* Calendar Type Toggle */}
-                <div className="flex gap-2">
-                  <Button
-                    type="button"
-                    variant={calendarType === 'ethiopic' ? 'default' : 'outline'}
-                    onClick={() => setCalendarType('ethiopic')}
-                    size="sm"
-                  >
-                    የኢትዮጵያ ቀን ቆጠራ
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={calendarType === 'gregory' ? 'default' : 'outline'}
-                    onClick={() => setCalendarType('gregory')}
-                    size="sm"
-                  >
-                    Gregorian Calendar
-                  </Button>
-                </div>
-
                 {/* Date Display and Calendar Trigger */}
                 <div className="relative">
                   {/* Hidden input for form registration */}
@@ -756,18 +739,16 @@ const TextForm = () => {
                     type="hidden"
                     {...register('complaintDate', { required: true })}
                   />
-
-                  {/* Display input */}
                   <div className="flex gap-2">
                     <Input
                       value={selectedDateDisplay}
                       readOnly
                       onClick={() => setShowCalendar(!showCalendar)}
                       placeholder={
-                        calendarType === 'ethiopic' ? 'የኢትዮጵያ ቀን ምረጥ' : 'Select Gregorian date'
+                        calendarType === 'am' ? 'የኢትዮጵያ ቀን ምረጥ' : 'Select Gregorian date'
                       }
                       className="cursor-pointer flex-1 font-amharic"
-                      dir={calendarType === 'ethiopic' ? 'ltr' : 'ltr'}
+                      dir={calendarType === 'am' ? 'ltr' : 'ltr'}
                     />
                     <Button
                       type="button"
