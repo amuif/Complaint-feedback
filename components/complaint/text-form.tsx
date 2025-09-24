@@ -1,5 +1,5 @@
-import { Calendar, FileText, Mic, Paperclip, X } from 'lucide-react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
+import { FileText, Paperclip, X, Calendar as CalendarIcon } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import {
   Select,
   SelectContent,
@@ -18,9 +18,9 @@ import { complaintSchema } from '@/schema/complaint';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
-import { ComplaintData, Director, Employee, Sector, Subcities, TeamLeader } from '@/types/types';
+import { Director, Employee, Sector, Subcities, TeamLeader } from '@/types/types';
 import { Textarea } from '../ui/textarea';
-
+import { Calendar } from '@dhis2/ui';
 import { AmharicKeyboard } from '../amharic-keyboard';
 
 type ComplaintFormData = z.infer<typeof complaintSchema>;
@@ -50,6 +50,76 @@ const TextForm = () => {
   const [attachment, setAttachment] = useState<File | null>(null);
   const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
 
+  // Calendar states
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarType, setCalendarType] = useState<'ethiopic' | 'gregory'>('ethiopic');
+  const [selectedDateDisplay, setSelectedDateDisplay] = useState('');
+
+  const handleDateSelect = (payload: any) => {
+    console.log('Selected date payload:', payload);
+
+    // Extract the date from the correct property
+    let dateValue: string;
+
+    if (payload && typeof payload === 'object') {
+      if (payload.calendarDateString) {
+        dateValue = payload.calendarDateString;
+      } else if (payload.value) {
+        dateValue = payload.value;
+      } else if (payload.date) {
+        dateValue = payload.date;
+      } else {
+        console.error('Unexpected payload format:', payload);
+        return;
+      }
+    } else if (typeof payload === 'string') {
+      dateValue = payload;
+    } else {
+      console.error('Invalid payload:', payload);
+      return;
+    }
+
+    console.log('Selected date value:', dateValue);
+
+    // Set the form value
+    setValue('complaintDate', dateValue, { shouldValidate: true });
+
+    // Update display value based on calendar type
+    // updateDateDisplay(dateValue);
+
+    // Close calendar
+    setShowCalendar(false);
+  }; // Toggle between Ethiopian and Gregorian calendars
+  const toggleCalendarType = () => {
+    setCalendarType(calendarType === 'ethiopic' ? 'gregory' : 'ethiopic');
+  };
+  // Get calendar props based on type
+  const getCalendarProps = () => {
+    const baseProps = {
+      onDateSelect: handleDateSelect,
+      onClose: () => setShowCalendar(false),
+      selectedDate: watch('complaintDate'),
+      locale: language === 'am' ? 'am-ET' : 'en',
+    };
+
+    if (calendarType === 'ethiopic') {
+      return {
+        ...baseProps,
+        calendar: 'ethiopic' as const,
+        locale: 'am-ET',
+        numberingSystem: 'ethi',
+        timeZone: 'Africa/Addis_Ababa',
+        weekDayFormat: 'narrow' as const,
+      };
+    } else {
+      return {
+        ...baseProps,
+        calendar: 'gregory' as const,
+        timeZone: 'Africa/Addis_Ababa',
+        weekDayFormat: 'narrow' as const,
+      };
+    }
+  };
   const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setAttachment(file);
@@ -67,6 +137,7 @@ const TextForm = () => {
       setAttachmentPreview(null);
     }
   };
+
   // Remove attachment
   const removeAttachment = () => {
     setAttachment(null);
@@ -242,6 +313,7 @@ const TextForm = () => {
         );
         setAudioUrl(null);
         reset();
+        setSelectedDateDisplay('');
       } else {
         throw new Error(response.message || 'Failed to submit complaint');
       }
@@ -265,7 +337,7 @@ const TextForm = () => {
     setValue,
     watch,
     reset,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
   } = useForm<ComplaintFormData>({
     resolver: zodResolver(complaintSchema),
     defaultValues: {
@@ -289,12 +361,27 @@ const TextForm = () => {
   const sectorLeader = watch('sectorLeader');
   const director = watch('director');
   const teamLeader = watch('teamLeader');
+  const complaintDate = watch('complaintDate');
 
   useEffect(() => {
     loadSectorLeaders();
     loadSubcities();
   }, []);
 
+  useEffect(() => {
+    if (complaintDate) {
+      if (calendarType === 'ethiopic') {
+        const [year, month, day] = complaintDate.split('-');
+        const amharicYear = year;
+        const amharicMonth = month;
+        const amharicDay = day;
+        setSelectedDateDisplay(`${amharicDay}/${amharicMonth}/${amharicYear}`);
+      } else {
+        const date = new Date(complaintDate);
+        setSelectedDateDisplay(date.toLocaleDateString(language === 'am' ? 'am-ET' : 'en-US'));
+      }
+    }
+  }, [complaintDate, calendarType, language]);
   return (
     <div>
       <Card className="mb-8">
@@ -324,7 +411,6 @@ const TextForm = () => {
                 {watch('complainantName')?.length || 0}/50 {t('complaints.form.characters.used')}
               </p>
             </div>
-
             {/* Sub-city and Woreda */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
@@ -374,7 +460,6 @@ const TextForm = () => {
                 </p>
               </div>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="phone">{t('complaints.form.phone')} *</Label>
               <Input
@@ -392,7 +477,6 @@ const TextForm = () => {
                 {watch('phone')?.length || 0}/10 {t('complaints.form.characters.used')}
               </p>
             </div>
-
             {/* Sector Leader - always visible, optional */}
             <div className="space-y-1">
               <Label htmlFor="sectorLeader">{t('complaints.form.sectorLeader')}</Label>
@@ -432,7 +516,6 @@ const TextForm = () => {
                 )}
               />
             </div>
-
             {/* Director - always visible, optional */}
             <div className="space-y-1">
               <Label htmlFor="director">{t('complaints.form.director')}</Label>
@@ -474,7 +557,6 @@ const TextForm = () => {
                 )}
               />
             </div>
-
             {/* Team Leader - always visible, optional */}
             <div className="space-y-1">
               <Label htmlFor="teamLeader">{t('complaints.form.teamLeader')}</Label>
@@ -516,7 +598,6 @@ const TextForm = () => {
                 )}
               />
             </div>
-
             {/* Expertise (Employees) - always visible, optional */}
             <div className="space-y-1">
               <Label htmlFor="employee">{t('complaints.form.expertise')}</Label>
@@ -562,7 +643,6 @@ const TextForm = () => {
                 )}
               />
             </div>
-
             {/* Office number - optional */}
             <div className="space-y-1">
               <Label htmlFor="office">{t('complaints.form.office')}</Label>
@@ -578,7 +658,6 @@ const TextForm = () => {
                 {watch('office')?.length || 0}/20 {t('complaints.form.characters.used')}
               </p>
             </div>
-
             {/* Complaint description */}
             <div className="space-y-1">
               <Label htmlFor="complaintDetails">{t('complaints.form.issueDescription')} *</Label>
@@ -641,24 +720,79 @@ const TextForm = () => {
                 <p className="text-sm text-red-500">{errors.attachment.message}</p>
               )}
             </div>
-
             {/* Date */}
-            <div className="space-y-1">
-              <Label htmlFor="complaintDate" className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
+            <div className="space-y-3">
+              <Label htmlFor="complaintDate" className="flex items-center gap-2 text-base">
+                <CalendarIcon className="h-5 w-5" />
                 {t('complaints.form.date')} *
               </Label>
-              <Input
-                id="complaintDate"
-                type="date"
-                {...register('complaintDate')}
-                lang={language}
-              />
+
+              <div className="flex flex-col gap-3">
+                {/* Calendar Type Toggle */}
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant={calendarType === 'ethiopic' ? 'default' : 'outline'}
+                    onClick={() => setCalendarType('ethiopic')}
+                    size="sm"
+                  >
+                    የኢትዮጵያ ቀን ቆጠራ
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={calendarType === 'gregory' ? 'default' : 'outline'}
+                    onClick={() => setCalendarType('gregory')}
+                    size="sm"
+                  >
+                    Gregorian Calendar
+                  </Button>
+                </div>
+
+                {/* Date Display and Calendar Trigger */}
+                <div className="relative">
+                  {/* Hidden input for form registration */}
+                  <Input
+                    id="complaintDate"
+                    type="hidden"
+                    {...register('complaintDate', { required: true })}
+                  />
+
+                  {/* Display input */}
+                  <div className="flex gap-2">
+                    <Input
+                      value={selectedDateDisplay}
+                      readOnly
+                      onClick={() => setShowCalendar(!showCalendar)}
+                      placeholder={
+                        calendarType === 'ethiopic' ? 'የኢትዮጵያ ቀን ምረጥ' : 'Select Gregorian date'
+                      }
+                      className="cursor-pointer flex-1 font-amharic"
+                      dir={calendarType === 'ethiopic' ? 'ltr' : 'ltr'}
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setShowCalendar(!showCalendar)}
+                      className="whitespace-nowrap"
+                    >
+                      <CalendarIcon className="h-4 w-4 mr-2" />
+                      {showCalendar ? 'Close' : 'Open'} Calendar
+                    </Button>
+                  </div>
+
+                  {/* DHIS2 Calendar */}
+                  {showCalendar && (
+                    <div className="absolute z-50 mt-2  border  rounded-lg shadow-lg">
+                      <Calendar {...getCalendarProps()} />
+                    </div>
+                  )}
+                </div>
+              </div>
+
               {errors.complaintDate && (
                 <p className="text-sm text-red-500">{errors.complaintDate.message}</p>
               )}
-            </div>
-
+            </div>{' '}
             {/* Action required */}
             <div className="space-y-1">
               <Label htmlFor="actionRequired">{t('complaints.form.explanation')} *</Label>
@@ -680,7 +814,6 @@ const TextForm = () => {
                 {watch('actionRequired')?.length || 0}/100 {t('complaints.form.characters.used')}
               </p>
             </div>
-
             {/* Agreement checkbox */}
             <div className="flex items-center space-x-2">
               <input type="checkbox" id="agreement" className="rounded border-gray-300" required />
