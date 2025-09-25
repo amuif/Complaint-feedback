@@ -897,7 +897,7 @@ const TextForm = () => {
 
 export default TextForm;
 
-import * as ethiopianDate from "ethiopian-date";
+import * as ethiopianDate from 'ethiopian-date';
 
 export const convertEthiopianToGregorian = (ethDate: string): string | null => {
   if (!ethDate) return null;
@@ -931,4 +931,3 @@ export const convertEthiopianToGregorian = (ethDate: string): string | null => {
     return null;
   }
 };
-
