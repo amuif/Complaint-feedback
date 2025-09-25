@@ -78,7 +78,6 @@ const TextForm = () => {
     };
   }, [showCalendar]);
   useEffect(() => {
-
     console.log(selectedDateDisplay);
   }, [selectedDateDisplay]);
 
@@ -176,7 +175,6 @@ const TextForm = () => {
     setAttachmentPreview(null);
     setValue('attachment', undefined, { shouldValidate: true }); // Set to undefined
   };
-
 
   const loadSectorLeaders = async () => {
     if (sectorLeaders.length > 0) return;

@@ -26,7 +26,7 @@ class ApiClient {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend.torobingo.com/';
+    this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'https://backend.torobingo.com/api';
   }
 
   // Sector Leaders
