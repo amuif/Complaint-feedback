@@ -873,7 +873,7 @@ const TextForm = () => {
                   ? t('feedback.form.hideKeyboard')
                   : t('feedback.form.showKeyboard')}
               </Button>
-              {showAmharicKeyboard && <AmharicKeyboard />}
+              <div className="">{showAmharicKeyboard && <AmharicKeyboard />}</div>
             </div>
             {/* Submit button */}
             <Button
