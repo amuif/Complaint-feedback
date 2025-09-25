@@ -19,7 +19,7 @@ import {
 } from '@/components/ui/select';
 import { motion } from 'framer-motion';
 import { Star } from 'lucide-react';
-import { AmharicKeyboard } from '@/components/amharic-keyboard';
+import AmharicKeyboard from '@/components/amharic-keyboard';
 import {
   SectorLeader,
   Director,

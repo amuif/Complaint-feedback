@@ -3,21 +3,29 @@ import React, { useState, useRef } from 'react';
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
 
-export default function AmharicKeyboard() {
+interface AmharicKeyboardProps {
+  onCharacterClick?: (char: string) => void;
+}
+
+export default function AmharicKeyboard({ onCharacterClick }: AmharicKeyboardProps) {
   const [input, setInput] = useState('');
   const keyboard = useRef<any>(null);
 
   const handleChange = (input: string) => {
     setInput(input);
+    // Call the callback prop if provided
+    if (onCharacterClick) {
+      onCharacterClick(input);
+    }
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = event.target.value;
     setInput(value);
-    keyboard.current.setInput(value); // keep sync
+    if (keyboard.current) {
+      keyboard.current.setInput(value);
+    }
   };
-
-  // Full Amharic Fidel layout (33 base letters × 7 forms)
 
   const amharicLayout = {
     default: [
@@ -31,6 +39,7 @@ export default function AmharicKeyboard() {
       '{space}',
     ],
   };
+
   return (
     <div className="p-4">
       <textarea
