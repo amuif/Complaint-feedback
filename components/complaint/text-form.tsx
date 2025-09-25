@@ -7,10 +7,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+
 import { handleApiError, handleApiSuccess } from '@/lib/error-handler';
 import apiClient from '@/lib/api';
 import { useLanguage } from '../language-provider';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
@@ -56,6 +57,26 @@ const TextForm = () => {
   const [calendarType, setCalendarType] = useState<'am' | 'en' | 'af'>('en');
   const [selectedDateDisplay, setSelectedDateDisplay] = useState('');
 
+  // Inside your component
+  const calendarRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+        setShowCalendar(false);
+      }
+    };
+
+    if (showCalendar) {
+      document.addEventListener('mousedown', handleClickOutside);
+    } else {
+      document.removeEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showCalendar]);
   useEffect(() => {
     console.log(selectedDateDisplay);
   }, [selectedDateDisplay]);
@@ -794,20 +815,14 @@ const TextForm = () => {
                       className="cursor-pointer flex-1 font-amharic"
                       dir={calendarType === 'am' ? 'ltr' : 'ltr'}
                     />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setShowCalendar(!showCalendar)}
-                      className="whitespace-nowrap"
-                    >
-                      <CalendarIcon className="h-4 w-4 mr-2" />
-                      {showCalendar ? 'Close' : 'Open'} Calendar
-                    </Button>
                   </div>
 
                   {/* DHIS2 Calendar */}
                   {showCalendar && (
-                    <div className="absolute z-50 mt-2  border  rounded-lg shadow-lg">
+                    <div
+                      ref={calendarRef}
+                      className="absolute z-50 mt-2 border rounded-lg shadow-lg bg-white"
+                    >
                       <Calendar {...getCalendarProps()} />
                     </div>
                   )}
@@ -882,71 +897,38 @@ const TextForm = () => {
 
 export default TextForm;
 
+import * as ethiopianDate from "ethiopian-date";
+
 export const convertEthiopianToGregorian = (ethDate: string): string | null => {
   if (!ethDate) return null;
 
-  console.log('Converting Ethiopian date:', ethDate);
+  const parts = ethDate.split('/').map((p) => Number(p));
+  if (parts.length !== 3) return null;
+  const [day, month, year] = parts;
+  if ([day, month, year].some((v) => isNaN(v))) return null;
 
   try {
-    // Ethiopian date format should be dd/mm/yyyy
-    const parts = ethDate.split('/');
-    if (parts.length !== 3) {
-      console.error('Invalid Ethiopian date format. Expected dd/mm/yyyy');
-      return null;
-    }
+    // Note: toGregorian expects (year, month, day)
+    const res = (ethiopianDate as any).toGregorian(year, month, day);
 
-    const [day, month, year] = parts.map(Number);
-
-    // Validate inputs
-    if (
-      isNaN(day) ||
-      isNaN(month) ||
-      isNaN(year) ||
-      day < 1 ||
-      day > 30 ||
-      month < 1 ||
-      month > 13
-    ) {
-      console.error('Invalid Ethiopian date components:', { day, month, year });
-      return null;
-    }
-
-    // CORRECT Ethiopian to Gregorian conversion
-    // Ethiopian New Year is September 11/12 in Gregorian calendar
-    // Ethiopian year is approximately 7-8 years behind Gregorian
-
-    const gregorianYear = year + 8;
-
-    // Month conversion: Ethiopian months start from Meskerem (September)
-    let gregorianMonth = month + 8;
-    let adjustedYear = gregorianYear;
-
-    if (gregorianMonth > 12) {
-      gregorianMonth -= 12;
-      adjustedYear += 1;
-    }
-
-    // Handle Pagume (13th month) - 5 or 6 days
-    let validDay = day;
-    if (month === 13) {
-      // Pagume has only 5 or 6 days
-      const isLeapYear = year % 4 === 3; // Ethiopian leap year pattern
-      validDay = Math.min(day, isLeapYear ? 6 : 5);
+    // The library may return [y,m,d] or { year, month, day }
+    let gYear: number, gMonth: number, gDay: number;
+    if (Array.isArray(res)) {
+      [gYear, gMonth, gDay] = res;
+    } else if (res && typeof res === 'object') {
+      gYear = res.year ?? res[0];
+      gMonth = res.month ?? res[1];
+      gDay = res.day ?? res[2];
     } else {
-      // Regular months have 30 days
-      validDay = Math.min(day, 30);
+      return null;
     }
 
-    // Adjust for Gregorian calendar days in month
-    const daysInGregorianMonth = new Date(adjustedYear, gregorianMonth, 0).getDate();
-    validDay = Math.min(validDay, daysInGregorianMonth);
+    if ([gYear, gMonth, gDay].some((v) => typeof v !== 'number' || isNaN(v))) return null;
 
-    const formattedDate = `${adjustedYear}-${String(gregorianMonth).padStart(2, '0')}-${String(validDay).padStart(2, '0')}`;
-
-    console.log('Converted Ethiopian to Gregorian:', ethDate, '→', formattedDate);
-    return formattedDate;
-  } catch (error) {
-    console.error('Error in Ethiopian date conversion:', error);
+    return `${gYear}-${String(gMonth).padStart(2, '0')}-${String(gDay).padStart(2, '0')}`;
+  } catch (err) {
+    console.error('Ethiopian → Gregorian conversion failed:', err);
     return null;
   }
 };
+
