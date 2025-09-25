@@ -10,7 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import  AmharicKeyboard  from '@/components/amharic-keyboard';
+import AmharicKeyboard from '@/components/amharic-keyboard';
 import { Toaster } from '@/components/ui/toaster';
 import { handleApiError, handleApiSuccess } from '@/lib/error-handler';
 import { BackNavigation } from '@/components/back-navigation';
