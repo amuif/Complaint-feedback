@@ -23,6 +23,7 @@ import { Textarea } from '../ui/textarea';
 import { Calendar } from '@dhis2/ui';
 import AmharicKeyboard from '../amharic-keyboard';
 
+import { toGregorian, toEthiopian } from 'ethiopian-date';
 type ComplaintFormData = z.infer<typeof complaintSchema>;
 
 const TextForm = () => {
@@ -55,6 +56,10 @@ const TextForm = () => {
   const [calendarType, setCalendarType] = useState<'am' | 'en' | 'af'>('en');
   const [selectedDateDisplay, setSelectedDateDisplay] = useState('');
 
+  useEffect(() => {
+    console.log(selectedDateDisplay);
+  }, [selectedDateDisplay]);
+
   const handleDateSelect = (payload: any) => {
     console.log('Selected date payload:', payload);
 
@@ -79,6 +84,13 @@ const TextForm = () => {
       return;
     }
 
+    if (calendarType === 'am') {
+      // Ensure format is dd/mm/yyyy
+      const parts = dateValue.split('-'); // Some calendars may give yyyy-mm-dd
+      if (parts.length === 3) {
+        dateValue = `${parts[2]}/${parts[1]}/${parts[0]}`; // convert yyyy-mm-dd => dd/mm/yyyy
+      }
+    }
     console.log('Selected date value:', dateValue);
 
     // Set the form value
@@ -283,6 +295,16 @@ const TextForm = () => {
     setErrorMessage(null);
     const [subcity_id, subcity_name] = data.subcity_id.split('|');
 
+    let complaintDate = data.complaintDate;
+
+    if (calendarType === 'am') {
+      const converted = convertEthiopianToGregorian(data.complaintDate);
+      if (!converted) {
+        console.error('Failed to convert Ethiopian date:', data.complaintDate);
+      }
+      complaintDate = converted || data.complaintDate;
+    }
+
     try {
       const formData = new FormData();
 
@@ -297,7 +319,8 @@ const TextForm = () => {
       formData.append('department_id', team_id.toString());
       formData.append('employee_id', employee_id.toString());
       formData.append('complaint_source', 'public_complaint');
-      formData.append('complaint_date', data.complaintDate);
+      formData.append('complaint_date', complaintDate);
+
       if (attachment) {
         formData.append('attachment', attachment);
       }
@@ -312,6 +335,7 @@ const TextForm = () => {
         setAudioUrl(null);
         reset();
         setSelectedDateDisplay('');
+        setAttachment(null);
       } else {
         throw new Error(response.message || 'Failed to submit complaint');
       }
@@ -368,19 +392,39 @@ const TextForm = () => {
 
   useEffect(() => {
     if (complaintDate) {
+      console.log('Raw complaintDate:', complaintDate);
+
       if (calendarType === 'am') {
-        const [year, month, day] = complaintDate.split('-');
-        const amharicYear = year;
-        const amharicMonth = month;
-        const amharicDay = day;
-        setSelectedDateDisplay(`${amharicDay}/${amharicMonth}/${amharicYear}`);
+        // Handle Ethiopian date format (dd/mm/yyyy)
+        const parts = complaintDate.split('/');
+        console.log('Ethiopian date parts:', parts);
+
+        if (parts.length === 3) {
+          const [day, month, year] = parts;
+          setSelectedDateDisplay(`${day}/${month}/${year}`);
+        } else {
+          // Fallback if format is unexpected
+          setSelectedDateDisplay(complaintDate);
+        }
       } else {
-        const date = new Date(complaintDate);
-        setSelectedDateDisplay(date.toLocaleDateString(language === 'am' ? 'am-ET' : 'en-US'));
+        // Handle Gregorian date
+        try {
+          const date = new Date(complaintDate);
+          if (!isNaN(date.getTime())) {
+            setSelectedDateDisplay(date.toLocaleDateString(language === 'am' ? 'am-ET' : 'en-US'));
+          } else {
+            // If it's already in display format, use it directly
+            setSelectedDateDisplay(complaintDate);
+          }
+        } catch (error) {
+          console.error('Error formatting date:', error);
+          setSelectedDateDisplay(complaintDate);
+        }
       }
+    } else {
+      setSelectedDateDisplay('');
     }
   }, [complaintDate, calendarType, language]);
-
   useEffect(() => {
     setCalendarType(language);
   }, [language]);
@@ -837,3 +881,72 @@ const TextForm = () => {
 };
 
 export default TextForm;
+
+export const convertEthiopianToGregorian = (ethDate: string): string | null => {
+  if (!ethDate) return null;
+
+  console.log('Converting Ethiopian date:', ethDate);
+
+  try {
+    // Ethiopian date format should be dd/mm/yyyy
+    const parts = ethDate.split('/');
+    if (parts.length !== 3) {
+      console.error('Invalid Ethiopian date format. Expected dd/mm/yyyy');
+      return null;
+    }
+
+    const [day, month, year] = parts.map(Number);
+
+    // Validate inputs
+    if (
+      isNaN(day) ||
+      isNaN(month) ||
+      isNaN(year) ||
+      day < 1 ||
+      day > 30 ||
+      month < 1 ||
+      month > 13
+    ) {
+      console.error('Invalid Ethiopian date components:', { day, month, year });
+      return null;
+    }
+
+    // CORRECT Ethiopian to Gregorian conversion
+    // Ethiopian New Year is September 11/12 in Gregorian calendar
+    // Ethiopian year is approximately 7-8 years behind Gregorian
+
+    const gregorianYear = year + 8;
+
+    // Month conversion: Ethiopian months start from Meskerem (September)
+    let gregorianMonth = month + 8;
+    let adjustedYear = gregorianYear;
+
+    if (gregorianMonth > 12) {
+      gregorianMonth -= 12;
+      adjustedYear += 1;
+    }
+
+    // Handle Pagume (13th month) - 5 or 6 days
+    let validDay = day;
+    if (month === 13) {
+      // Pagume has only 5 or 6 days
+      const isLeapYear = year % 4 === 3; // Ethiopian leap year pattern
+      validDay = Math.min(day, isLeapYear ? 6 : 5);
+    } else {
+      // Regular months have 30 days
+      validDay = Math.min(day, 30);
+    }
+
+    // Adjust for Gregorian calendar days in month
+    const daysInGregorianMonth = new Date(adjustedYear, gregorianMonth, 0).getDate();
+    validDay = Math.min(validDay, daysInGregorianMonth);
+
+    const formattedDate = `${adjustedYear}-${String(gregorianMonth).padStart(2, '0')}-${String(validDay).padStart(2, '0')}`;
+
+    console.log('Converted Ethiopian to Gregorian:', ethDate, '→', formattedDate);
+    return formattedDate;
+  } catch (error) {
+    console.error('Error in Ethiopian date conversion:', error);
+    return null;
+  }
+};
