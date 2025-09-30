@@ -307,7 +307,7 @@ export interface Feedback {
 export interface Rating {
   sector_leader_id: number;
   director_id: number | undefined;
-  team_leader_id: number | undefined;
+  employee_id: number | undefined;
   expert_id: number | undefined;
   overall_rating: number | undefined;
   courtesy: number | undefined;

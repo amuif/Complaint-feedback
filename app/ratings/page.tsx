@@ -275,7 +275,7 @@ export default function RatingsPage() {
         subcity_id: Number(subcity_id.trim()),
         sector_leader_id: Number(sector_id.trim()),
         director_id: getIdFromValue(data.director || ''),
-        team_leader_id: getIdFromValue(data.teamLeader || ''),
+        employee_id: getIdFromValue(data.teamLeader || ''),
         expert_id: getIdFromValue(data.experstise || ''),
         overall_rating: data.overAllRating,
         additional_comments: comments,
