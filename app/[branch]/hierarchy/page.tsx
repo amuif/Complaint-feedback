@@ -13,15 +13,15 @@ export default function EmployeesPage() {
   const router = useRouter();
   const { language, t } = useLanguage();
   const { SectorLeaders } = useOrganization();
-  const pathName = useSubcityName()
+  const pathName = useSubcityName();
 
   function handleClick(id: string) {
     router.push(`/organization/directors/${id}`);
   }
   useEffect(() => {
     console.log(SectorLeaders);
-    console.log(pathName)
-  }, [SectorLeaders,pathName]);
+    console.log(pathName);
+  }, [SectorLeaders, pathName]);
 
   return (
     <div className="container mx-auto py-8">

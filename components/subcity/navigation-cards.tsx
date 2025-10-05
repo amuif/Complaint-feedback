@@ -1,14 +1,7 @@
 'use client';
 
 import { Card } from '@/components/ui/card';
-import {
-  ArrowRight,
-  MessageSquare,
-  MapPin,
-  ThumbsUp,
-  Star,
-  ClipboardCheck,
-} from 'lucide-react';
+import { ArrowRight, MessageSquare, MapPin, ThumbsUp, Star, ClipboardCheck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/components/language-provider';
 import { cn } from '@/lib/utils';
@@ -25,16 +18,16 @@ interface NavigationCard {
 
 export function SubcityNavigationCards() {
   const router = useRouter();
-  const subcity = useSubcityName()
+  const subcity = useSubcityName();
   const { t, language } = useLanguage();
   const [forceUpdate, setForceUpdate] = useState(0);
 
   const suffix = language === 'en' ? '_en' : language === 'am' ? '_am' : '_om';
   const tr = (key: string) => t(`${key}${suffix}`);
 
-  useEffect(()=>{
-    console.log(subcity)
-  },[subcity])
+  useEffect(() => {
+    console.log(subcity);
+  }, [subcity]);
   useEffect(() => {
     const handleLanguageChange = () => {
       setForceUpdate((prev) => prev + 1);
@@ -50,7 +43,7 @@ export function SubcityNavigationCards() {
     {
       titleKey: 'services.title',
       descriptionKey: 'services.subtitle',
-      path:`${subcity}/services`,
+      path: `${subcity}/services`,
       icon: <ClipboardCheck className="h-8 w-8" />,
       color: 'primary',
     },
