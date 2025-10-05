@@ -1,17 +1,14 @@
 import { HeroSection } from '@/components/hero-section';
 import { SubcityNavigationCards } from '@/components/subcity/navigation-cards';
 import { notFound } from 'next/navigation';
-import { useEffect } from 'react';
-// import { ServiceCards } from "@/components/service-cards";
-// import { AboutSection } from "@/components/about-section";
-// import { FeedbackCTA } from "@/components/feedback-cta";
 
 interface SubcityPageProps {
-  params: { branch: string };
+  params: Promise<{ branch: string }>;
 }
 
 export default async function SubcityPage({ params }: SubcityPageProps) {
-  const { branch } = await params;
+  const { branch } = await params; // ✅ now correct!
+
   const validBranches = [
     'addis-ketema',
     'akaki-kaliti',
@@ -25,8 +22,12 @@ export default async function SubcityPage({ params }: SubcityPageProps) {
     'nifas-silk-lafto',
     'yeka',
   ];
-  const valid = validBranches.filter((valid) => valid.toLowerCase() === branch.toLowerCase());
-  if (valid.length === 0) {
+
+  const isValid = validBranches.some(
+    (valid) => valid.toLowerCase() === branch.toLowerCase()
+  );
+
+  if (!isValid) {
     notFound();
   }
 
@@ -34,7 +35,7 @@ export default async function SubcityPage({ params }: SubcityPageProps) {
     <div className="container mx-auto px-4 py-8">
       <HeroSection />
       <SubcityNavigationCards />
-      {/* <AboutSection /> */}
     </div>
   );
 }
+
