@@ -9,7 +9,7 @@ import { motion } from 'framer-motion';
 import { FileText, Clock, CheckCircle2, AlertCircle, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import servicesJson from '../../../components/services.json';
+import servicesJson from '../../../../components/services.json';
 
 export default function ServiceDetailPage() {
   const { language } = useLanguage();

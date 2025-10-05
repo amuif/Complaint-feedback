@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useOrganization } from '@/hooks/use-organization';
 import { PICTURE_URL } from '@/constants/base_url';
 import { useEffect } from 'react';
-import { useSubcityName } from '@/hooks/use-subcity';
+import { useSubcityName } from '@/hooks/use-subcity-name';
 
 export default function EmployeesPage() {
   const router = useRouter();
