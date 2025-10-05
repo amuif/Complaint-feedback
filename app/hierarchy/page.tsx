@@ -7,18 +7,21 @@ import { Button } from '@/components/ui/button';
 import { useOrganization } from '@/hooks/use-organization';
 import { PICTURE_URL } from '@/constants/base_url';
 import { useEffect } from 'react';
+import { useSubcityName } from '@/hooks/use-subcity';
 
 export default function EmployeesPage() {
   const router = useRouter();
   const { language, t } = useLanguage();
   const { SectorLeaders } = useOrganization();
+  const pathName = useSubcityName()
 
   function handleClick(id: string) {
     router.push(`/organization/directors/${id}`);
   }
   useEffect(() => {
     console.log(SectorLeaders);
-  }, [SectorLeaders]);
+    console.log(pathName)
+  }, [SectorLeaders,pathName]);
 
   return (
     <div className="container mx-auto py-8">

@@ -7,13 +7,13 @@ import {
   MapPin,
   ThumbsUp,
   Star,
-  FileCheck,
   ClipboardCheck,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useLanguage } from '@/components/language-provider';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
+import { useSubcityName } from '@/hooks/use-subcity-name';
 
 interface NavigationCard {
   titleKey: string;
@@ -23,14 +23,18 @@ interface NavigationCard {
   color: 'primary' | 'secondary';
 }
 
-export function NavigationCards() {
+export function SubcityNavigationCards() {
   const router = useRouter();
+  const subcity = useSubcityName()
   const { t, language } = useLanguage();
   const [forceUpdate, setForceUpdate] = useState(0);
 
   const suffix = language === 'en' ? '_en' : language === 'am' ? '_am' : '_om';
   const tr = (key: string) => t(`${key}${suffix}`);
 
+  useEffect(()=>{
+    console.log(subcity)
+  },[subcity])
   useEffect(() => {
     const handleLanguageChange = () => {
       setForceUpdate((prev) => prev + 1);
@@ -46,28 +50,28 @@ export function NavigationCards() {
     {
       titleKey: 'services.title',
       descriptionKey: 'services.subtitle',
-      path: '/services',
+      path:`${subcity}/services`,
       icon: <ClipboardCheck className="h-8 w-8" />,
       color: 'primary',
     },
     {
       titleKey: 'complaints',
       descriptionKey: 'navigation.complaintsDesc',
-      path: '/complaints',
+      path: `${subcity}/complaints`,
       icon: <MessageSquare className="h-8 w-8" />,
       color: 'secondary',
     },
     {
       titleKey: 'ratings.title',
       descriptionKey: 'ratings.subtitle',
-      path: '/ratings',
+      path: `${subcity}/ratings`,
       icon: <Star className="h-8 w-8" />,
       color: 'secondary',
     },
     {
       titleKey: 'feedback.title',
       descriptionKey: 'feedback.subtitle',
-      path: '/feedback',
+      path: `${subcity}/feedback`,
       icon: <ThumbsUp className="h-8 w-8" />,
       color: 'primary',
     },
