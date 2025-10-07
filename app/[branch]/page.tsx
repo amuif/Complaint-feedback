@@ -7,7 +7,7 @@ interface SubcityPageProps {
 }
 
 export default async function SubcityPage({ params }: SubcityPageProps) {
-  const { branch } = await params; // ✅ now correct!
+  const { branch } = await params;
 
   const validBranches = [
     'addis-ketema',
@@ -23,9 +23,7 @@ export default async function SubcityPage({ params }: SubcityPageProps) {
     'yeka',
   ];
 
-  const isValid = validBranches.some(
-    (valid) => valid.toLowerCase() === branch.toLowerCase()
-  );
+  const isValid = validBranches.some((valid) => valid.toLowerCase() === branch.toLowerCase());
 
   if (!isValid) {
     notFound();
@@ -38,4 +36,3 @@ export default async function SubcityPage({ params }: SubcityPageProps) {
     </div>
   );
 }
-

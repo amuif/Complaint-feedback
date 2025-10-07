@@ -34,16 +34,38 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/sectors`);
     return handleDataResponse<Sector[]>(response);
   }
+  async getSectorsBySubcity(id: string): Promise<Sector[]> {
+    try {
+      const response = await fetch(`${this.baseUrl}/subcities/${id}`);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch sectors for subcity ${id}`);
+      }
+      return await response.json();
+    } catch (error) {
+      console.error(`Error fetching sectors for subcity ${id}:`, error);
+      throw error;
+    }
+  }
 
   // Directors
   async getDirectorsBySectorLeader(sectorLeaderId: string): Promise<Director[]> {
     const response = await fetch(`${this.baseUrl}/sectors/${sectorLeaderId}/divisions`);
     return handleDataResponse<Director[]>(response);
   }
-
+  async getSubcityDirectors(sectorLeaderId: string): Promise<Director[]> {
+    const response = await fetch(`${this.baseUrl}/sectors/${sectorLeaderId}/divisions`);
+    return handleDataResponse<Director[]>(response);
+  }
   // Team Leaders
   async getTeamLeadersByDirector(directorId: string): Promise<Department[]> {
     const response = await fetch(`${this.baseUrl}/divisions/${directorId}/departments`);
+    return handleDataResponse<Department[]>(response);
+  }
+  async getTeamLeaderSubcityByDirector(
+    directorId: string,
+    subcityId?: string
+  ): Promise<Department[]> {
+    const response = await fetch(`${this.baseUrl}/subcities/${subcityId}/division/${directorId}`);
     return handleDataResponse<Department[]>(response);
   }
 

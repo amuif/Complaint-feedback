@@ -16,7 +16,7 @@ function ComplaintsContent() {
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSecureContext, setIsSecureContext] = useState(true);
-  const [activeTab, setActiveTab] = useState(''); // Set initial state to an empty string
+  const [activeTab, setActiveTab] = useState('');
   const { t, language } = useLanguage();
 
   useEffect(() => {
@@ -87,7 +87,6 @@ function ComplaintsContent() {
           </button>
         </div>
 
-        {/* Show the active form based on the selected tab */}
         {activeTab === 'voice' && <VoiceForm />}
         {activeTab === 'text' && <TextForm />}
         {activeTab === 'track' && <TrackComplaint />}

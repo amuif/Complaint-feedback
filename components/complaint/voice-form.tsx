@@ -15,7 +15,7 @@ import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import z from 'zod';
-import { complaintSchema, voiceComplaint } from '@/schema/complaint';
+import { voiceComplaint } from '@/schema/complaint';
 import { Button } from '../ui/button';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
@@ -27,14 +27,18 @@ import {
   TeamLeader,
   voiceComplaintData,
 } from '@/types/types';
+import { useCurrentSubcity, useSubcityAdmin } from '@/hooks/use-subcity';
+import { useSubcityName } from '@/hooks/use-subcity-name';
 
 type ComplaintFormData = z.infer<typeof voiceComplaint>;
 
 const VoiceForm = () => {
   const { t, language } = useLanguage();
+  const subcity = useSubcityName();
+  const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
+  const currentSub = useCurrentSubcity();
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const [showAmharicKeyboard, setShowAmharicKeyboard] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
@@ -50,10 +54,20 @@ const VoiceForm = () => {
   const [loadingTeamLeaders, setLoadingTeamLeaders] = useState(false);
   const [loadingEmployees, setLoadingEmployees] = useState(false);
   const [loadingSubcities, setLoadingSubcities] = useState(false);
-  const [selectedSectorLeaderName, setSelectedSectorLeaderName] = useState('');
   const [subcities, setSubcities] = useState<Subcities[]>([]);
   const [attachment, setAttachment] = useState<File | null>(null);
   const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
+  //subcity
+  const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
+
+  useEffect(() => {
+    setCurrentSubcity(currentSub);
+    console.log(currentSub);
+  }, [currentSub]);
+
+  useEffect(() => {
+    loadSubcities();
+  }, []);
 
   const loadDirectors = async (value: string) => {
     const [id, name] = value.split('|');
@@ -61,8 +75,13 @@ const VoiceForm = () => {
     setLoadingDirectors(true);
     setErrorMessage(null);
     try {
-      const data = await apiClient.getDirectorsBySectorLeader(id);
-      setDirectors(data || []);
+      if (currentSubcity && subcity) {
+        const data = await apiClient.getSubcityDirectors(id);
+        setDirectors(data || []);
+      } else {
+        const data = await apiClient.getDirectorsBySectorLeader(id);
+        setDirectors(data || []);
+      }
     } catch (error) {
       console.error(`Failed to load directors for sector leader ${id}:`, error);
       setErrorMessage('Failed to load directors. Please try again.');
@@ -71,13 +90,17 @@ const VoiceForm = () => {
       setLoadingDirectors(false);
     }
   };
-
   const loadSubcities = async () => {
     setLoadingSubcities(true);
     setErrorMessage(null);
     try {
-      const response = await apiClient.getSubcities();
-      setSubcities(response || []);
+      console.log(currentSubcity);
+      if (subcity && currentSubcity) {
+        setSubcities([currentSubcity]);
+      } else {
+        const response = await apiClient.getSubcities();
+        setSubcities(response || []);
+      }
     } catch (error) {
       console.error('Failed to load subcities:', error);
       setErrorMessage('Failed to load subcities. Please try again.');
@@ -91,17 +114,17 @@ const VoiceForm = () => {
     if (sectorLeaders.length > 0) return;
     setLoadingSectorLeaders(true);
     setErrorMessage(null);
-    try {
-      const response = await apiClient.getSectorLeaders();
-      console.log(response);
 
-      // Extract the data from the API response
-      if (response && typeof response === 'object' && 'data' in response) {
-        setSectorLeaders(response || []);
-      } else if (Array.isArray(response)) {
+    try {
+      console.log(currentSubcity, subcity);
+      if (currentSubcity && subcity) {
+        console.log('Loading sector leaders for current subcity:', currentSubcity.id);
+        const response = await findCurrentAdmin(currentSubcity.id);
         setSectorLeaders(response);
       } else {
-        setSectorLeaders([]);
+        console.log('Loading all sector leaders');
+        const response = await apiClient.getSectorLeaders();
+        setSectorLeaders(response);
       }
     } catch (error) {
       console.error('Failed to load sector leaders:', error);
@@ -111,7 +134,6 @@ const VoiceForm = () => {
       setLoadingSectorLeaders(false);
     }
   };
-
   const loadTeamLeaders = async (directorId: string) => {
     console.info(directorId);
     const [id, name] = directorId.split('|');
@@ -119,9 +141,16 @@ const VoiceForm = () => {
     setLoadingTeamLeaders(true);
     setErrorMessage(null);
     try {
-      const data = await apiClient.getTeamLeadersByDirector(id);
-      console.log(data);
-      setTeamLeaders(data || []);
+      if (currentSubcity && subcity) {
+        console.log('going dteam sub');
+        const data = await apiClient.getTeamLeaderSubcityByDirector(id, currentSub?.id);
+        console.log(data);
+        setTeamLeaders(data || []);
+      } else {
+        const data = await apiClient.getTeamLeadersByDirector(id);
+        console.log(data);
+        setTeamLeaders(data || []);
+      }
     } catch (error) {
       console.error(`Failed to load team leaders for director ${directorId}:`, error);
       setErrorMessage('Failed to load team leaders. Please try again.');
@@ -293,13 +322,6 @@ const VoiceForm = () => {
   const director = watch('director');
   const teamLeader = watch('teamLeader');
 
-  useEffect(() => {
-    loadSectorLeaders();
-    loadSubcities();
-  }, []);
-  useEffect(() => {
-    console.log('Form errors:', errors);
-  }, [errors]);
   return (
     <div>
       {' '}
@@ -408,7 +430,10 @@ const VoiceForm = () => {
                   render={({ field }) => (
                     <Select
                       value={field.value}
-                      onValueChange={field.onChange}
+                      onValueChange={() => {
+                        field.onChange;
+                        loadSectorLeaders();
+                      }}
                       disabled={loadingSubcities || !subcities || subcities.length === 0}
                     >
                       <SelectTrigger id="subcity">
@@ -419,16 +444,26 @@ const VoiceForm = () => {
                         />
                       </SelectTrigger>
                       <SelectContent>
-                        {subcities?.map((subcity) => {
-                          const id = subcity.id;
-                          const subcityName = subcity?.[`name_${language}`];
-                          return (
-                            <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                              {subcityName}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
+                        {currentSubcity
+                          ? (() => {
+                              const id = currentSubcity.id;
+                              const subcityName = currentSubcity?.[`name_${language}`];
+                              return (
+                                <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                  {subcityName}
+                                </SelectItem>
+                              );
+                            })()
+                          : subcities?.map((subcity) => {
+                              const id = subcity.id;
+                              const subcityName = subcity?.[`name_${language}`];
+                              return (
+                                <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                  {subcityName}
+                                </SelectItem>
+                              );
+                            })}
+                      </SelectContent>{' '}
                     </Select>
                   )}
                 />
@@ -436,7 +471,6 @@ const VoiceForm = () => {
                   <p className="text-sm text-red-500">{errors.subcity_id.message}</p>
                 )}
               </div>{' '}
-              {/* Sector Leader - always visible, optional */}
               <div className="space-y-1">
                 <Label htmlFor="sectorLeader">{t('complaints.form.sectorLeader')}</Label>
                 <Controller
@@ -461,15 +495,24 @@ const VoiceForm = () => {
                         />
                       </SelectTrigger>
                       <SelectContent>
-                        {sectorLeaders.map((sectorLeader, index) => {
-                          const id = sectorLeader.id;
-                          const appointedPerson = sectorLeader[`appointed_person_${language}`];
-                          return (
-                            <SelectItem key={index} value={`${id} | ${appointedPerson}`}>
-                              {appointedPerson}
-                            </SelectItem>
-                          );
-                        })}{' '}
+                        {Array.isArray(sectorLeaders) ? (
+                          sectorLeaders.map((sectorLeader, index) => {
+                            const id = sectorLeader.id;
+                            const appointedPerson = sectorLeader[`appointed_person_${language}`];
+                            return (
+                              <SelectItem key={index} value={`${id} | ${appointedPerson}`}>
+                                {appointedPerson}
+                              </SelectItem>
+                            );
+                          })
+                        ) : (
+                          <SelectItem
+                            key={sectorLeaders.id}
+                            value={`${sectorLeaders.id} | ${sectorLeaders[`appointed_person_${language}`]}`}
+                          >
+                            {sectorLeaders[`appointed_person_${language}`]}
+                          </SelectItem>
+                        )}
                       </SelectContent>
                     </Select>
                   )}
