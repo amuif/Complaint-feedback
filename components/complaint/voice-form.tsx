@@ -1,3 +1,4 @@
+'use client';
 import { Mic, Paperclip, X } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '../ui/card';
 import {
@@ -43,6 +44,7 @@ const VoiceForm = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [sectorLeaders, setSectorLeaders] = useState<Sector[]>([]);
+  const [subcityLeader,setSubcityLeader] = useState<Sector>();
   const [sector_id, setSector_id] = useState<string>('');
   const [directors_id, setDirectors_id] = useState<string>('');
   const [team_id, setTeam_id] = useState<string>('');
@@ -57,7 +59,6 @@ const VoiceForm = () => {
   const [subcities, setSubcities] = useState<Subcities[]>([]);
   const [attachment, setAttachment] = useState<File | null>(null);
   const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
-  //subcity
   const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
 
   useEffect(() => {
@@ -118,11 +119,11 @@ const VoiceForm = () => {
     setErrorMessage(null);
 
     try {
-      console.log(currentSubcity, subcity);
       if (currentSubcity && subcity) {
         console.log('Loading sector leaders for current subcity:', currentSubcity.id);
         const response = await findCurrentAdmin(currentSubcity.id);
-        setSectorLeaders(response);
+        console.log(response);
+        setSubcityLeader(response);
       } else {
         console.log('Loading all sector leaders');
         const response = await apiClient.getSectorLeaders();
@@ -432,8 +433,8 @@ const VoiceForm = () => {
                   render={({ field }) => (
                     <Select
                       value={field.value}
-                      onValueChange={() => {
-                        field.onChange;
+                      onValueChange={(value) => {
+                        field.onChange(value);
                         loadSectorLeaders();
                       }}
                       disabled={loadingSubcities || !subcities || subcities.length === 0}
@@ -498,24 +499,48 @@ const VoiceForm = () => {
                       </SelectTrigger>
                       <SelectContent>
                         {Array.isArray(sectorLeaders) ? (
-                          sectorLeaders.map((sectorLeader, index) => {
-                            const id = sectorLeader.id;
-                            const appointedPerson = sectorLeader[`appointed_person_${language}`];
-                            return (
-                              <SelectItem key={index} value={`${id} | ${appointedPerson}`}>
-                                {appointedPerson}
-                              </SelectItem>
-                            );
-                          })
+                          subcity ? (
+                            (() => {
+                              console.log(subcityLeader);
+                              const firstLeader = subcityLeader;
+
+                              console.log('tehre is not firstLeader');
+                              if (!firstLeader) return null;
+                              console.log('tehre is firstLeader');
+
+                              const id = firstLeader.id;
+                              const appointedPerson = firstLeader[`appointed_person_${language}`];
+                              if (!id || !appointedPerson) return null;
+                              console.log('tehre is id and appointedPerson');
+                              return (
+                                <SelectItem key={id} value={`${id} | ${appointedPerson}`}>
+                                  {appointedPerson}
+                                </SelectItem>
+                              );
+                            })()
+                          ) : (
+                            sectorLeaders
+                              .map((sectorLeader, index) => {
+                                const id = sectorLeader.id;
+                                const appointedPerson =
+                                  sectorLeader[`appointed_person_${language}`];
+                                return (
+                                  <SelectItem
+                                    key={id ?? index}
+                                    value={`${id} | ${appointedPerson}`}
+                                  >
+                                    {appointedPerson}
+                                  </SelectItem>
+                                );
+                              })
+                              .filter(Boolean)
+                          )
                         ) : (
-                          <SelectItem
-                            key={sectorLeaders.id}
-                            value={`${sectorLeaders.id} | ${sectorLeaders[`appointed_person_${language}`]}`}
-                          >
-                            {sectorLeaders[`appointed_person_${language}`]}
+                          <SelectItem disabled value="no-items">
+                            {loadingSectorLeaders ? 'Loading...' : 'No sector leaders found'}
                           </SelectItem>
                         )}
-                      </SelectContent>
+                      </SelectContent>{' '}
                     </Select>
                   )}
                 />

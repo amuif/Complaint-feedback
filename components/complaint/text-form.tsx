@@ -1,3 +1,4 @@
+'use client';
 import { FileText, Paperclip, X, Calendar as CalendarIcon } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import {
@@ -30,11 +31,15 @@ type ComplaintFormData = z.infer<typeof complaintSchema>;
 const TextForm = () => {
   const { t, language } = useLanguage();
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
+  const currentSub = useCurrentSubcity();
+  const subcity = useSubcityName();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [showAmharicKeyboard, setShowAmharicKeyboard] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [sectorLeaders, setSectorLeaders] = useState<Sector[]>([]);
+  const [subcityLeader, setSubcityLeader] = useState<Sector>();
   const [sector_id, setSector_id] = useState<string>('');
   const [directors_id, setDirectors_id] = useState<string>('');
   const [team_id, setTeam_id] = useState<string>('');
@@ -51,7 +56,7 @@ const TextForm = () => {
   const [subcities, setSubcities] = useState<Subcities[]>([]);
   const [attachment, setAttachment] = useState<File | null>(null);
   const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
-
+  const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
   // Calendar states
   const [showCalendar, setShowCalendar] = useState(false);
   const [calendarType, setCalendarType] = useState<'am' | 'en' | 'af'>('en');
@@ -59,6 +64,14 @@ const TextForm = () => {
 
   // Inside your component
   const calendarRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setCurrentSubcity(currentSub);
+  }, [currentSub]);
+
+  useEffect(() => {
+    loadSubcities();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -180,17 +193,17 @@ const TextForm = () => {
     if (sectorLeaders.length > 0) return;
     setLoadingSectorLeaders(true);
     setErrorMessage(null);
-    try {
-      const response = await apiClient.getSectorLeaders();
-      console.log(response);
 
-      // Extract the data from the API response
-      if (response && typeof response === 'object' && 'data' in response) {
-        setSectorLeaders(response || []);
-      } else if (Array.isArray(response)) {
-        setSectorLeaders(response);
+    try {
+      if (currentSubcity && subcity) {
+        console.log('Loading sector leaders for current subcity:', currentSubcity.id);
+        const response = await findCurrentAdmin(currentSubcity.id);
+        console.log(response);
+        setSubcityLeader(response);
       } else {
-        setSectorLeaders([]);
+        console.log('Loading all sector leaders');
+        const response = await apiClient.getSectorLeaders();
+        setSectorLeaders(response);
       }
     } catch (error) {
       console.error('Failed to load sector leaders:', error);
@@ -200,29 +213,21 @@ const TextForm = () => {
       setLoadingSectorLeaders(false);
     }
   };
-  const loadSubcities = async () => {
-    setLoadingSubcities(true);
-    setErrorMessage(null);
-    try {
-      const response = await apiClient.getSubcities();
-      setSubcities(response || []);
-      console.log('subcities', response);
-    } catch (error) {
-      console.error('Failed to load subcities:', error);
-      setErrorMessage('Failed to load subcities. Please try again.');
-      setSubcities([]);
-    } finally {
-      setLoadingSubcities(false);
-    }
-  };
   const loadDirectors = async (value: string) => {
     const [id, name] = value.split('|');
     setSector_id(id);
     setLoadingDirectors(true);
     setErrorMessage(null);
     try {
-      const data = await apiClient.getDirectorsBySectorLeader(id);
-      setDirectors(data || []);
+      if (currentSubcity && subcity) {
+        console.log('going-subcity');
+        const data = await apiClient.getSubcityDirectors(id);
+        console.log(data);
+        setDirectors(data || []);
+      } else {
+        const data = await apiClient.getDirectorsBySectorLeader(id);
+        setDirectors(data || []);
+      }
     } catch (error) {
       console.error(`Failed to load directors for sector leader ${id}:`, error);
       setErrorMessage('Failed to load directors. Please try again.');
@@ -231,7 +236,25 @@ const TextForm = () => {
       setLoadingDirectors(false);
     }
   };
-
+  const loadSubcities = async () => {
+    setLoadingSubcities(true);
+    setErrorMessage(null);
+    try {
+      console.log(currentSubcity);
+      if (subcity && currentSubcity) {
+        setSubcities([currentSubcity]);
+      } else {
+        const response = await apiClient.getSubcities();
+        setSubcities(response || []);
+      }
+    } catch (error) {
+      console.error('Failed to load subcities:', error);
+      setErrorMessage('Failed to load subcities. Please try again.');
+      setSubcities([]);
+    } finally {
+      setLoadingSubcities(false);
+    }
+  };
   const loadTeamLeaders = async (directorId: string) => {
     console.info(directorId);
     const [id, name] = directorId.split('|');
@@ -239,9 +262,16 @@ const TextForm = () => {
     setLoadingTeamLeaders(true);
     setErrorMessage(null);
     try {
-      const data = await apiClient.getTeamLeadersByDirector(id);
-      console.log(data);
-      setTeamLeaders(data || []);
+      if (currentSubcity && subcity) {
+        console.log('going dteam sub');
+        const data = await apiClient.getTeamLeaderSubcityByDirector(id, currentSub?.id);
+        console.log(data);
+        setTeamLeaders(data || []);
+      } else {
+        const data = await apiClient.getTeamLeadersByDirector(id);
+        console.log(data);
+        setTeamLeaders(data || []);
+      }
     } catch (error) {
       console.error(`Failed to load team leaders for director ${directorId}:`, error);
       setErrorMessage('Failed to load team leaders. Please try again.');
@@ -250,6 +280,7 @@ const TextForm = () => {
       setLoadingTeamLeaders(false);
     }
   };
+
   const loadEmployees = async (teamLeader: string) => {
     const [id, name] = teamLeader?.split('|');
     console.log(id);
@@ -407,11 +438,6 @@ const TextForm = () => {
   const complaintDate = watch('complaintDate');
 
   useEffect(() => {
-    loadSectorLeaders();
-    loadSubcities();
-  }, []);
-
-  useEffect(() => {
     if (complaintDate) {
       console.log('Raw complaintDate:', complaintDate);
 
@@ -489,7 +515,10 @@ const TextForm = () => {
                   render={({ field }) => (
                     <Select
                       value={field.value}
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        loadSectorLeaders();
+                      }}
                       disabled={loadingSubcities || !subcities || subcities.length === 0}
                     >
                       <SelectTrigger id="subcity">
@@ -502,16 +531,26 @@ const TextForm = () => {
                         />
                       </SelectTrigger>
                       <SelectContent>
-                        {subcities?.map((subcity) => {
-                          const id = subcity.id;
-                          const subcityName = subcity?.[`name_${language}`];
-                          return (
-                            <SelectItem key={id} value={`${id}|${subcityName}`}>
-                              {subcityName}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
+                        {currentSubcity
+                          ? (() => {
+                              const id = currentSubcity.id;
+                              const subcityName = currentSubcity?.[`name_${language}`];
+                              return (
+                                <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                  {subcityName}
+                                </SelectItem>
+                              );
+                            })()
+                          : subcities?.map((subcity) => {
+                              const id = subcity.id;
+                              const subcityName = subcity?.[`name_${language}`];
+                              return (
+                                <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                  {subcityName}
+                                </SelectItem>
+                              );
+                            })}
+                      </SelectContent>{' '}
                     </Select>
                   )}
                 />
@@ -570,16 +609,45 @@ const TextForm = () => {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {sectorLeaders.map((sectorLeader, index) => {
-                        const id = sectorLeader.id;
-                        const appointedPerson = sectorLeader[`appointed_person_${language}`];
-                        return (
-                          <SelectItem key={index} value={`${id}|${appointedPerson}`}>
-                            {appointedPerson}
-                          </SelectItem>
-                        );
-                      })}{' '}
-                    </SelectContent>
+                      {Array.isArray(sectorLeaders) ? (
+                        subcity ? (
+                          (() => {
+                            console.log(subcityLeader);
+                            const firstLeader = subcityLeader;
+
+                            console.log('tehre is not firstLeader');
+                            if (!firstLeader) return null;
+                            console.log('tehre is firstLeader');
+
+                            const id = firstLeader.id;
+                            const appointedPerson = firstLeader[`appointed_person_${language}`];
+                            if (!id || !appointedPerson) return null;
+                            console.log('tehre is id and appointedPerson');
+                            return (
+                              <SelectItem key={id} value={`${id} | ${appointedPerson}`}>
+                                {appointedPerson}
+                              </SelectItem>
+                            );
+                          })()
+                        ) : (
+                          sectorLeaders
+                            .map((sectorLeader, index) => {
+                              const id = sectorLeader.id;
+                              const appointedPerson = sectorLeader[`appointed_person_${language}`];
+                              return (
+                                <SelectItem key={id ?? index} value={`${id} | ${appointedPerson}`}>
+                                  {appointedPerson}
+                                </SelectItem>
+                              );
+                            })
+                            .filter(Boolean)
+                        )
+                      ) : (
+                        <SelectItem disabled value="no-items">
+                          {loadingSectorLeaders ? 'Loading...' : 'No sector leaders found'}
+                        </SelectItem>
+                      )}
+                    </SelectContent>{' '}
                   </Select>
                 )}
               />
@@ -898,6 +966,8 @@ const TextForm = () => {
 export default TextForm;
 
 import * as ethiopianDate from 'ethiopian-date';
+import { useCurrentSubcity, useSubcityAdmin } from '@/hooks/use-subcity';
+import { useSubcityName } from '@/hooks/use-subcity-name';
 
 export const convertEthiopianToGregorian = (ethDate: string): string | null => {
   if (!ethDate) return null;

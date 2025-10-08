@@ -34,7 +34,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/sectors`);
     return handleDataResponse<Sector[]>(response);
   }
-  async getSectorsBySubcity(id: string): Promise<Sector[]> {
+  async getSectorsBySubcity(id: string): Promise<Sector> {
     try {
       const response = await fetch(`${this.baseUrl}/subcities/${id}`);
       if (!response.ok) {
