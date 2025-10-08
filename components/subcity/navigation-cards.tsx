@@ -28,6 +28,7 @@ export function SubcityNavigationCards() {
   useEffect(() => {
     console.log(subcity);
   }, [subcity]);
+
   useEffect(() => {
     const handleLanguageChange = () => {
       setForceUpdate((prev) => prev + 1);
@@ -71,7 +72,7 @@ export function SubcityNavigationCards() {
     {
       titleKey: 'homepage.search.label',
       descriptionKey: 'navigation.employeesDesc',
-      path: '/hierarchy',
+      path: `${subcity}/hierarchy`,
       icon: <MapPin className="h-8 w-8" />,
       color: 'secondary',
     },

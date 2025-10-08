@@ -37,6 +37,7 @@ const translations = {
       'Submit your complaints or track existing ones using your tracking code or phone number',
     'complaints.track.description':
       'Enter your tracking code or phone number to check the status of your complaint',
+    'employees.members': 'members',
     ratings: 'Ratings',
     about: 'About',
     contact: 'Contact',
@@ -449,6 +450,7 @@ const translations = {
     'complaints.subtitle': 'ቅሬታዎችዎን ያስገቡ ወይም የሚከተሉትን ቅሬታዎች በሚከተል ኮድ ወይም ስልክ ቁጥር ያስተካክሉ',
     'complaints.track.description': 'የቅሬታዎን ሁኔታ ለመፈተሽ የሚከተል ኮድዎን ወይም ስልክ ቁጥርዎን ያስገቡ',
     'complaints.track.description1': 'የቅሬታዎን ሁኔታ ለመፈተሽ የሚከተል ኮድዎን ወይም ስልክ ቁጥርዎን ያስገቡ',
+    'employees.members': 'አባላት',
     ratings: 'ደረጃዎች',
     about: 'ስለ እኛ',
     contact: 'ያግኙን',

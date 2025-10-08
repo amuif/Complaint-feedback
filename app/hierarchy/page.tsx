@@ -16,7 +16,7 @@ export default function EmployeesPage() {
   const pathName = useSubcityName();
 
   function handleClick(id: string) {
-    router.push(`/organization/directors/${id}`);
+    router.push(`/organization/hierarchy/${id}`);
   }
   useEffect(() => {
     console.log(SectorLeaders);
@@ -30,7 +30,7 @@ export default function EmployeesPage() {
       {/* Leaders row */}
       <div className="flex items-center justify-center  gap-6 mb-8">
         {SectorLeaders.map((leader) => (
-          <Card key={leader.id} className="w-full py-2 text-center h-64 rounded-lg">
+          <Card key={leader.id} className="w-full py-2 text-center h-72 rounded-lg">
             <CardHeader className="bg-orange-500 h-16" />
             <div className="flex justify-center -mt-10">
               <Avatar className="h-20 w-20 border-4 border-white">
@@ -48,7 +48,7 @@ export default function EmployeesPage() {
             <CardContent>
               <h2 className="text-lg font-semibold">{leader[`appointed_person_${language}`]}</h2>
               <div>
-                <p>{leader.office_number}</p>
+                <p>{leader[`office_location_${language}`]}</p>
               </div>
               <div className="text-gray-500">{leader[`name_${language}`]}</div>
               <div className=" flex items-end justify-center">
