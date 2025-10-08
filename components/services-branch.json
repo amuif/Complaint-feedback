@@ -14,7 +14,13 @@
       "requirements": {
         "en": ["Application", "Business license", "Vehicle Libre", "Service fee", "ID card"],
         "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የተሽከርካሪ ሊብሬ", "የአገልግሎት ክፍያ", "ፋይዳ መታወቂያ"],
-        "om": ["Iyyannoo", "Hayyama daldalaa", "Libre konkolaataa", "Kaffaltii tajaajilaa", "Eenyummaa"]
+        "om": [
+          "Iyyannoo",
+          "Hayyama daldalaa",
+          "Libre konkolaataa",
+          "Kaffaltii tajaajilaa",
+          "Eenyummaa"
+        ]
       },
       "timeline": {
         "en": "0.5 hours",
@@ -61,9 +67,21 @@
         "om": "Hayyama yeroo gabaabaa fe'uu fi buusuu naannoo dhorkameetti"
       },
       "requirements": {
-        "en": ["Application", "Business license", "Vehicle Libre", "Service fee 1000 ETB", "ID card"],
+        "en": [
+          "Application",
+          "Business license",
+          "Vehicle Libre",
+          "Service fee 1000 ETB",
+          "ID card"
+        ],
         "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የተሽከርካሪ ሊብሬ", "የአገልግሎት ክፍያ 1000 ብር", "ፋይዳ መታወቂያ"],
-        "om": ["Iyyannoo", "Hayyama daldalaa", "Libre konkolaataa", "Kaffaltii tajaajilaa 1000 ETB", "Eenyummaa"]
+        "om": [
+          "Iyyannoo",
+          "Hayyama daldalaa",
+          "Libre konkolaataa",
+          "Kaffaltii tajaajilaa 1000 ETB",
+          "Eenyummaa"
+        ]
       },
       "timeline": {
         "en": "0.5 hours",
@@ -110,7 +128,12 @@
         "om": "Hayyama daandii cufuu fi taateewwan daandii irratti gaggeessuuf, meetira iskuweerii guyyaatti kaffalama"
       },
       "requirements": {
-        "en": ["Application", "Business license", "Service fee 2000 ETB per square meter per day", "ID card"],
+        "en": [
+          "Application",
+          "Business license",
+          "Service fee 2000 ETB per square meter per day",
+          "ID card"
+        ],
         "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የአገልግሎት ክፍያ በአንድ ካሬ ሜትር ለአንድ ቀን 2000 ብር", "ፋይዳ መታወቂያ"],
         "om": [
           "Iyyannoo",
@@ -164,7 +187,12 @@
         "om": "Hayyama dheeratee cufuu daandii fi taateewwan hanga guyyaa 10 turuuf"
       },
       "requirements": {
-        "en": ["Application", "Business license", "Service fee 4000 ETB per square meter per day", "ID card"],
+        "en": [
+          "Application",
+          "Business license",
+          "Service fee 4000 ETB per square meter per day",
+          "ID card"
+        ],
         "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የአገልግሎት ክፍያ በአንድ ካሬ ሜትር ለአንድ ቀን 4000 ብር", "ፋይዳ መታወቂያ"],
         "om": [
           "Iyyannoo",
@@ -218,7 +246,12 @@
         "om": "Hayyama yeroo dheeraa cufuu daandii fi taateewwan guyyaa 10 caalan"
       },
       "requirements": {
-        "en": ["Application", "Business license", "Service fee 5000 ETB per square meter per day", "ID card"],
+        "en": [
+          "Application",
+          "Business license",
+          "Service fee 5000 ETB per square meter per day",
+          "ID card"
+        ],
         "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የአገልግሎት ክፍያ በአንድ ካሬ ሜትር ለአንድ ቀን 5000 ብር", "ፋይዳ መታወቂያ"],
         "om": [
           "Iyyannoo",
@@ -274,7 +307,12 @@
       "requirements": {
         "en": ["Application", "Business license", "Service fee 7000 ETB per day", "ID card"],
         "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የአገልግሎት ክፍያ ለአንድ ቀን 7000 ብር", "ፋይዳ መታወቂያ"],
-        "om": ["Iyyannoo", "Hayyama daldalaa", "Kaffaltii tajaajilaa guyyaa tokkoof 7000 ETB", "Eenyummaa"]
+        "om": [
+          "Iyyannoo",
+          "Hayyama daldalaa",
+          "Kaffaltii tajaajilaa guyyaa tokkoof 7000 ETB",
+          "Eenyummaa"
+        ]
       },
       "timeline": {
         "en": "0.5 hours",
@@ -474,7 +512,12 @@
           "Letter from Driver License Authority (for lost license)",
           "Service fee 200 ETB"
         ],
-        "am": ["ፋይዳ መታወቂያ", "መንጃ ፈቃድ (ለእድሳት)", "ከአሽከርካሪ ብቃት ማረጋገጫ ፈቃድ ሰጪ አካል የተጻፈ ደብዳቤ (ለጠፋበት)", "የአገልግሎት ክፍያ 200 ብር"],
+        "am": [
+          "ፋይዳ መታወቂያ",
+          "መንጃ ፈቃድ (ለእድሳት)",
+          "ከአሽከርካሪ ብቃት ማረጋገጫ ፈቃድ ሰጪ አካል የተጻፈ ደብዳቤ (ለጠፋበት)",
+          "የአገልግሎት ክፍያ 200 ብር"
+        ],
         "om": [
           "Eenyummaa",
           "Waraqaa konkolaachisaa (haaromsaaf)",
@@ -974,7 +1017,12 @@
           "Leadership proof",
           "Savings and credit institution savings proof"
         ],
-        "am": ["የታደሰ የንግድ ምዝገባ ማስረጃ", "የአባላት የመተዳደሪያ ውልና ማስረጃ", "የአመራር ማስረጃ", "የብድርና ቁጠባ ተቋም የቁጠባ ማስረጃ"],
+        "am": [
+          "የታደሰ የንግድ ምዝገባ ማስረጃ",
+          "የአባላት የመተዳደሪያ ውልና ማስረጃ",
+          "የአመራር ማስረጃ",
+          "የብድርና ቁጠባ ተቋም የቁጠባ ማስረጃ"
+        ],
         "om": [
           "Ragaa galmee daldalaa haaromfame",
           "Waliigaltee fi ragaa miseensotaa",
