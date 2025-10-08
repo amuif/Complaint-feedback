@@ -83,9 +83,12 @@ export interface Director {
   appointed_person_en: string;
   appointed_person_am: string;
   appointed_person_af: string;
-  office_number: string;
+  office_location_en: string;
+  office_location_am: string;
+  office_location_af: string;
   profile_picture: string;
   created_at: string;
+  subcity: Subcities;
 }
 
 export interface Employee {

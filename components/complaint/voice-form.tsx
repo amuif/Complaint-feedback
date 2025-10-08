@@ -76,7 +76,9 @@ const VoiceForm = () => {
     setErrorMessage(null);
     try {
       if (currentSubcity && subcity) {
+        console.log('going-subcity');
         const data = await apiClient.getSubcityDirectors(id);
+        console.log(data);
         setDirectors(data || []);
       } else {
         const data = await apiClient.getDirectorsBySectorLeader(id);

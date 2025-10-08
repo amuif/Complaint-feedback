@@ -43,7 +43,7 @@ export function useSubcityAdmin() {
 export function useSubcityDirectors() {
   return useMutation({
     mutationFn: async (id: string) => {
-      return await apiClient.getSubcityDirectors(id);
+      return await apiClient.getSubcityDirectors(id.trim());
     },
   });
 }

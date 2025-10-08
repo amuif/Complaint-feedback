@@ -53,8 +53,8 @@ class ApiClient {
     return handleDataResponse<Director[]>(response);
   }
   async getSubcityDirectors(sectorLeaderId: string): Promise<Director[]> {
-    const response = await fetch(`${this.baseUrl}/sectors/${sectorLeaderId}/divisions`);
-    return handleDataResponse<Director[]>(response);
+    const response = await fetch(`${this.baseUrl}/subcities/${sectorLeaderId.trim()}/directors`);
+    return await response.json();
   }
   // Team Leaders
   async getTeamLeadersByDirector(directorId: string): Promise<Department[]> {
@@ -66,7 +66,7 @@ class ApiClient {
     subcityId?: string
   ): Promise<Department[]> {
     const response = await fetch(`${this.baseUrl}/subcities/${subcityId}/division/${directorId}`);
-    return handleDataResponse<Department[]>(response);
+    return await response.json();
   }
 
   // Employees
