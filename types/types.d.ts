@@ -308,10 +308,10 @@ export interface Feedback {
   feedback_text: string;
 }
 export interface Rating {
-  sector_leader_id: number;
+  sector_id: number;
   director_id: number | undefined;
   employee_id: number | undefined;
-  expert_id: number | undefined;
+  department_id: number | undefined;
   overall_rating: number | undefined;
   courtesy: number | undefined;
   punctuality: number | undefined;

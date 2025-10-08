@@ -29,13 +29,6 @@ import {
   Sector,
   Subcities,
 } from '@/types/types';
-import { amare_directors } from '@/hierarchy/Amare.json';
-import { elias_directors } from '@/hierarchy/Elias.json';
-import { hawa_directors } from '@/hierarchy/hawa.json';
-import { kibebew_directors } from '@/hierarchy/kibebew.json';
-import { full_list } from '@/hierarchy/full_list.json';
-import { subcity } from '@/components/sub-city.json';
-import { leaders } from '@/hierarchy/sector_leaders.json';
 import z from 'zod';
 import { ratingSchema } from '@/schema/rating';
 import { Control, Controller, useForm } from 'react-hook-form';
@@ -43,6 +36,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { RatingStars } from '@/components/rating-stars';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { useSubcityName } from '@/hooks/use-subcity-name';
+import { useCurrentSubcity, useSubcityAdmin } from '@/hooks/use-subcity';
 
 type ratingFormData = z.infer<typeof ratingSchema>;
 interface RatingProps {
@@ -89,6 +84,9 @@ export default function RatingsPage() {
     },
     mode: 'onChange',
   });
+  const subcity = useSubcityName();
+  const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
+  const currentSub = useCurrentSubcity();
 
   // Rating states
   const [overallRating, setOverallRating] = useState(0);
@@ -109,6 +107,7 @@ export default function RatingsPage() {
 
   // Hierarchy states
   const [sectorLeaders, setSectorLeaders] = useState<Sector[]>([]);
+  const [subcityLeader, setSubcityLeader] = useState<Sector>();
   const [directors, setDirectors] = useState<Director[]>([]);
   const [teamLeaders, setTeamLeaders] = useState<TeamLeader[]>([]);
   const [experts, setExperts] = useState<Employee[]>([]);
@@ -116,33 +115,79 @@ export default function RatingsPage() {
   const [directors_id, setDirectors_id] = useState<string>('');
   const [team_id, setTeam_id] = useState<string>('');
   const [employee_id, setEmployee_id] = useState<string>('');
+  const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
 
   // Selected values
   const [selectedSectorLeader, setSelectedSectorLeader] = useState<string>('');
   const [selectedDirector, setSelectedDirector] = useState<string>('');
   const [selectedTeamLeader, setSelectedTeamLeader] = useState<string>('');
   const [selectedExpert, setSelectedExpert] = useState<string>('');
+  useEffect(() => {
+    setCurrentSubcity(currentSub);
+  }, [currentSub]);
 
   useEffect(() => {
-    loadSectorLeaders();
     loadSubcities();
   }, []);
+
+  const loadDirectors = async (value: string) => {
+    const [id, name] = value.split('|');
+    setSector_id(id);
+    setLoadingDirectors(true);
+    setErrorMessage(null);
+    try {
+      if (currentSubcity && subcity) {
+        console.log('going-subcity');
+        const data = await apiClient.getSubcityDirectors(id);
+        console.log(data);
+        setDirectors(data || []);
+      } else {
+        const data = await apiClient.getDirectorsBySectorLeader(id);
+        setDirectors(data || []);
+      }
+    } catch (error) {
+      console.error(`Failed to load directors for sector leader ${id}:`, error);
+      setErrorMessage('Failed to load directors. Please try again.');
+      setDirectors([]);
+    } finally {
+      setLoadingDirectors(false);
+    }
+  };
+  const loadSubcities = async () => {
+    setLoadingSubcities(true);
+    setErrorMessage(null);
+    try {
+      console.log(currentSubcity);
+      if (subcity && currentSubcity) {
+        setSubcities([currentSubcity]);
+      } else {
+        const response = await apiClient.getSubcities();
+        setSubcities(response || []);
+      }
+    } catch (error) {
+      console.error('Failed to load subcities:', error);
+      setErrorMessage('Failed to load subcities. Please try again.');
+      setSubcities([]);
+    } finally {
+      setLoadingSubcities(false);
+    }
+  };
 
   const loadSectorLeaders = async () => {
     if (sectorLeaders.length > 0) return;
     setLoadingSectorLeaders(true);
     setErrorMessage(null);
-    try {
-      const response = await apiClient.getSectorLeaders();
-      console.log(response);
 
-      // Extract the data from the API response
-      if (response && typeof response === 'object' && 'data' in response) {
-        setSectorLeaders(response || []);
-      } else if (Array.isArray(response)) {
-        setSectorLeaders(response);
+    try {
+      if (currentSubcity && subcity) {
+        console.log('Loading sector leaders for current subcity:', currentSubcity.id);
+        const response = await findCurrentAdmin(currentSubcity.id);
+        console.log(response);
+        setSubcityLeader(response);
       } else {
-        setSectorLeaders([]);
+        console.log('Loading all sector leaders');
+        const response = await apiClient.getSectorLeaders();
+        setSectorLeaders(response);
       }
     } catch (error) {
       console.error('Failed to load sector leaders:', error);
@@ -152,38 +197,6 @@ export default function RatingsPage() {
       setLoadingSectorLeaders(false);
     }
   };
-
-  const loadSubcities = async () => {
-    setLoadingSubcities(true);
-    setErrorMessage(null);
-    try {
-      const response = await apiClient.getSubcities();
-      setSubcities(response || []);
-    } catch (error) {
-      console.error('Failed to load subcities:', error);
-      setErrorMessage('Failed to load subcities. Please try again.');
-      setSubcities([]);
-    } finally {
-      setLoadingSubcities(false);
-    }
-  };
-  const loadDirectors = async (value: string) => {
-    const [id, name] = value.split('|');
-    setSector_id(id);
-    setLoadingDirectors(true);
-    setErrorMessage(null);
-    try {
-      const data = await apiClient.getDirectorsBySectorLeader(id);
-      setDirectors(data || []);
-    } catch (error) {
-      console.error(`Failed to load directors for sector leader ${id}:`, error);
-      setErrorMessage('Failed to load directors. Please try again.');
-      setDirectors([]);
-    } finally {
-      setLoadingDirectors(false);
-    }
-  };
-
   const loadTeamLeaders = async (directorId: string) => {
     console.info(directorId);
     const [id, name] = directorId.split('|');
@@ -191,9 +204,16 @@ export default function RatingsPage() {
     setLoadingTeamLeaders(true);
     setErrorMessage(null);
     try {
-      const data = await apiClient.getTeamLeadersByDirector(id);
-      console.log(data);
-      setTeamLeaders(data || []);
+      if (currentSubcity && subcity) {
+        console.log('going dteam sub');
+        const data = await apiClient.getTeamLeaderSubcityByDirector(id, currentSub?.id);
+        console.log(data);
+        setTeamLeaders(data || []);
+      } else {
+        const data = await apiClient.getTeamLeadersByDirector(id);
+        console.log(data);
+        setTeamLeaders(data || []);
+      }
     } catch (error) {
       console.error(`Failed to load team leaders for director ${directorId}:`, error);
       setErrorMessage('Failed to load team leaders. Please try again.');
@@ -273,10 +293,10 @@ export default function RatingsPage() {
       const ratingData = {
         full_name: data.full_name,
         subcity_id: Number(subcity_id.trim()),
-        sector_leader_id: Number(sector_id.trim()),
+        sector_id: Number(sector_id.trim()),
         director_id: getIdFromValue(data.director || ''),
-        employee_id: getIdFromValue(data.teamLeader || ''),
-        expert_id: getIdFromValue(data.experstise || ''),
+        department_id: getIdFromValue(data.teamLeader || ''),
+        employee_id: getIdFromValue(data.experstise || ''),
         overall_rating: data.overAllRating,
         additional_comments: comments,
         courtesy: data.courtesy,
@@ -375,7 +395,10 @@ export default function RatingsPage() {
                 render={({ field }) => (
                   <Select
                     value={field.value}
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      loadSectorLeaders();
+                    }}
                     disabled={loadingSubcities || !subcities || subcities.length === 0}
                   >
                     <SelectTrigger id="subcity">
@@ -386,16 +409,26 @@ export default function RatingsPage() {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {subcities?.map((subcity) => {
-                        const id = subcity.id;
-                        const subcityName = subcity?.[`name_${language}`];
-                        return (
-                          <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                            {subcityName}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
+                      {currentSubcity
+                        ? (() => {
+                            const id = currentSubcity.id;
+                            const subcityName = currentSubcity?.[`name_${language}`];
+                            return (
+                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                {subcityName}
+                              </SelectItem>
+                            );
+                          })()
+                        : subcities?.map((subcity) => {
+                            const id = subcity.id;
+                            const subcityName = subcity?.[`name_${language}`];
+                            return (
+                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                {subcityName}
+                              </SelectItem>
+                            );
+                          })}
+                    </SelectContent>{' '}
                   </Select>
                 )}
               />
@@ -423,16 +456,45 @@ export default function RatingsPage() {
                       <SelectValue placeholder={tr('ratings.form.selectSectorLeader')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {sectorLeaders.map((sectorLeader, index) => {
-                        const id = sectorLeader.id;
-                        const appointedPerson = sectorLeader[`appointed_person_${language}`];
-                        return (
-                          <SelectItem key={index} value={`${id} | ${appointedPerson}`}>
-                            {appointedPerson}
-                          </SelectItem>
-                        );
-                      })}{' '}
-                    </SelectContent>
+                      {Array.isArray(sectorLeaders) ? (
+                        subcity ? (
+                          (() => {
+                            console.log(subcityLeader);
+                            const firstLeader = subcityLeader;
+
+                            console.log('tehre is not firstLeader');
+                            if (!firstLeader) return null;
+                            console.log('tehre is firstLeader');
+
+                            const id = firstLeader.id;
+                            const appointedPerson = firstLeader[`appointed_person_${language}`];
+                            if (!id || !appointedPerson) return null;
+                            console.log('tehre is id and appointedPerson');
+                            return (
+                              <SelectItem key={id} value={`${id} | ${appointedPerson}`}>
+                                {appointedPerson}
+                              </SelectItem>
+                            );
+                          })()
+                        ) : (
+                          sectorLeaders
+                            .map((sectorLeader, index) => {
+                              const id = sectorLeader.id;
+                              const appointedPerson = sectorLeader[`appointed_person_${language}`];
+                              return (
+                                <SelectItem key={id ?? index} value={`${id} | ${appointedPerson}`}>
+                                  {appointedPerson}
+                                </SelectItem>
+                              );
+                            })
+                            .filter(Boolean)
+                        )
+                      ) : (
+                        <SelectItem disabled value="no-items">
+                          {loadingSectorLeaders ? 'Loading...' : 'No sector leaders found'}
+                        </SelectItem>
+                      )}
+                    </SelectContent>{' '}
                   </Select>
                 )}
               />
