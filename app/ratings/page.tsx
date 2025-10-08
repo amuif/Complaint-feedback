@@ -273,10 +273,10 @@ export default function RatingsPage() {
       const ratingData = {
         full_name: data.full_name,
         subcity_id: Number(subcity_id.trim()),
-        sector_leader_id: Number(sector_id.trim()),
+        sector_id: Number(sector_id.trim()),
         director_id: getIdFromValue(data.director || ''),
-        employee_id: getIdFromValue(data.teamLeader || ''),
-        expert_id: getIdFromValue(data.experstise || ''),
+        department_id: getIdFromValue(data.teamLeader || ''),
+        employee_id: getIdFromValue(data.experstise || ''),
         overall_rating: data.overAllRating,
         additional_comments: comments,
         courtesy: data.courtesy,
