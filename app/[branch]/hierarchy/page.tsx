@@ -29,7 +29,7 @@ export default function EmployeesPage() {
     if (currentSubcity) {
       loadSectorLeaders();
 
-  console.log(subcity)
+      console.log(subcity);
     }
   }, [currentSubcity]);
 

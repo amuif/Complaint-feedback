@@ -19,7 +19,7 @@ export default function DirectorsMenuPage() {
   const id = Number.parseInt(slug || '', 10);
 
   const handleMemberClick = (memberId: string) => {
-    router.push(`/organization/directors/${id}/teams/${memberId}`);
+    router.push(`/hierarchy/directors/${id}/teams/${memberId}`);
   };
 
   useEffect(() => {
@@ -67,7 +67,7 @@ export default function DirectorsMenuPage() {
 
                   <h2 className=" text-gray-600 font-semibold">{emp[`name_${language}`]}</h2>
                   <p className="text-sm ">
-                    {t('employees.office')} {emp.office_number}
+                    {t('employees.office')} {emp[`office_location_${language}`]}
                   </p>
                   <Button variant="link" size="sm" onClick={() => handleMemberClick(emp.id)}>
                     Members

@@ -19,7 +19,7 @@ export default function DepartmentMembersPage() {
   const teams = params.teams as string;
 
   const handleMemberClick = (memberId: string) => {
-    router.push(`/organization/directors/${id}/teams/${memberId}/employees/${memberId}`);
+    router.push(`/hierarchy/directors/${id}/teams/${memberId}/employees/${memberId}`);
   };
 
   useEffect(() => {
@@ -65,7 +65,7 @@ export default function DepartmentMembersPage() {
                   <h2 className="text-lg font-semibold">{emp[`name_${language}`]}</h2>
                   <p className="text-sm text-gray-600">{emp[`appointed_person_${language}`]}</p>
                   <p className="text-sm ">
-                    {t('employees.office')} {emp.office_number}
+                    {t('employees.office')} {emp[`office_location_${language}`]}
                   </p>
                   <Button variant="link" size="sm" onClick={() => handleMemberClick(emp.id)}>
                     Members

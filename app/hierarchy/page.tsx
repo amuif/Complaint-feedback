@@ -16,7 +16,7 @@ export default function EmployeesPage() {
   const pathName = useSubcityName();
 
   function handleClick(id: string) {
-    router.push(`/organization/hierarchy/${id}`);
+    router.push(`/hierarchy/directors/${id}`);
   }
   useEffect(() => {
     console.log(SectorLeaders);

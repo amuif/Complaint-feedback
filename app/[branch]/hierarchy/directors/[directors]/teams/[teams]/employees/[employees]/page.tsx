@@ -17,11 +17,11 @@ export default function EmployeesMembersPage() {
   const { language, t } = useLanguage();
   const [employees, setEmployees] = useState<Employee[]>([]);
   const teams = params.teams as string;
-  const employeesId = params.employees as string
+  const employeesId = params.employees as string;
 
   const loadEmployees = async (teamLeaderId: string) => {
     try {
-      console.log("teamLeaderId",teamLeaderId);
+      console.log('teamLeaderId', teamLeaderId);
       const data = await apiClient.getEmployeesByTeamLeader(teamLeaderId);
       console.log(data);
       setEmployees(data || []);
