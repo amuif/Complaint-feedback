@@ -1,0 +1,1162 @@
+{
+  "services": {
+    "1": {
+      "title": {
+        "en": "Road Event Permits and Renewal Services",
+        "am": "የመንገድ ላይ ኩነቶች ፈቃድና እድሳት አገልግሎት መስጠት",
+        "om": "Tajaajila Hayyama fi Haaromsa Taateewwan Daandii"
+      },
+      "description": {
+        "en": "Comprehensive permit services for various road events including loading/unloading, road closures, and construction activities",
+        "am": "ለተለያዩ የመንገድ ላይ ክስተቶች ማለትም መጫን/ማውረድ፣ መንገድ መዝጋት እና የግንባታ ስራዎች አጠቃላይ የፈቃድ አገልግሎቶች",
+        "om": "Tajaajiloota hayyama waliigalaa taateewwan daandii adda addaatiif kan akka fe'uu/buusuu, cufuu daandii fi sochiiwwan ijaarsa"
+      },
+      "requirements": {
+        "en": ["Application", "Business license", "Vehicle Libre", "Service fee", "ID card"],
+        "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የተሽከርካሪ ሊብሬ", "የአገልግሎት ክፍያ", "ፋይዳ መታወቂያ"],
+        "om": ["Iyyannoo", "Hayyama daldalaa", "Libre konkolaataa", "Kaffaltii tajaajilaa", "Eenyummaa"]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": { "service": "Varies by permit type" },
+        "am": { "አገልግሎት": "በፈቃድ አይነት ይለያያል" },
+        "om": { "tajaajila": "Akka gosa hayyamaatti garaagarummaa qaba" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "1.1": {
+      "title": {
+        "en": "20-Minute Loading/Unloading Permit in Restricted Areas",
+        "am": "በተከለከሉ ቦታዎች ለመጫንና ለማውረድ የ20 ደቂቃ ፈቃድ መስጠት",
+        "om": "Hayyama Daqiiqaa 20 Fe'uu fi Buusuu Bakka Dhorkameetti"
+      },
+      "description": {
+        "en": "Short-term permit for loading and unloading in restricted zones",
+        "am": "በተከለከሉ ቦታዎች ለመጫንና ለማውረድ የአጭር ጊዜ ፈቃድ",
+        "om": "Hayyama yeroo gabaabaa fe'uu fi buusuu naannoo dhorkameetti"
+      },
+      "requirements": {
+        "en": ["Application", "Business license", "Vehicle Libre", "Service fee 1000 ETB", "ID card"],
+        "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የተሽከርካሪ ሊብሬ", "የአገልግሎት ክፍያ 1000 ብር", "ፋይዳ መታወቂያ"],
+        "om": ["Iyyannoo", "Hayyama daldalaa", "Libre konkolaataa", "Kaffaltii tajaajilaa 1000 ETB", "Eenyummaa"]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": { "service": "1000 ETB" },
+        "am": { "አገልግሎት": "1000 ብር" },
+        "om": { "tajaajila": "1000 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "1.2": {
+      "title": {
+        "en": "Road Closure and Road Event Permit (Per Day)",
+        "am": "መንገድ ዘግቶ ለመጠቀምና የመንገድ ላይ ኩነት የሚሰጥ ፈቃድ",
+        "om": "Hayyama Cufuu Daandii fi Taatee Daandii (Guyyaatti)"
+      },
+      "description": {
+        "en": "Permit for road closure and conducting events on roads, charged per square meter per day",
+        "am": "መንገድ ለመዝጋት እና በመንገድ ላይ ክስተቶችን ለማካሄድ ፈቃድ፣ በካሬ ሜትር በቀን ይከፈላል",
+        "om": "Hayyama daandii cufuu fi taateewwan daandii irratti gaggeessuuf, meetira iskuweerii guyyaatti kaffalama"
+      },
+      "requirements": {
+        "en": ["Application", "Business license", "Service fee 2000 ETB per square meter per day", "ID card"],
+        "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የአገልግሎት ክፍያ በአንድ ካሬ ሜትር ለአንድ ቀን 2000 ብር", "ፋይዳ መታወቂያ"],
+        "om": [
+          "Iyyannoo",
+          "Hayyama daldalaa",
+          "Kaffaltii tajaajilaa meetira iskuweerii tokko guyyaa tokkoof 2000 ETB",
+          "Eenyummaa"
+        ]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": { "service": "2000 ETB per square meter per day" },
+        "am": { "አገልግሎት": "በአንድ ካሬ ሜትር ለአንድ ቀን 2000 ብር" },
+        "om": { "tajaajila": "Meetira iskuweerii tokko guyyaa tokkoof 2000 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "1.3": {
+      "title": {
+        "en": "Road Closure and Road Event Permit (Up to 10 Days)",
+        "am": "መንገድ ዘግቶ ለመጠቀምና የመንገድ ላይ ኩነት የሚሰጥ ፈቃድ (እስከ 10 ቀን)",
+        "om": "Hayyama Cufuu Daandii fi Taatee Daandii (Hanga Guyyaa 10)"
+      },
+      "description": {
+        "en": "Extended permit for road closure and events lasting up to 10 days",
+        "am": "እስከ 10 ቀን ለሚቆይ የመንገድ መዝጋት እና ክስተቶች የተራዘመ ፈቃድ",
+        "om": "Hayyama dheeratee cufuu daandii fi taateewwan hanga guyyaa 10 turuuf"
+      },
+      "requirements": {
+        "en": ["Application", "Business license", "Service fee 4000 ETB per square meter per day", "ID card"],
+        "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የአገልግሎት ክፍያ በአንድ ካሬ ሜትር ለአንድ ቀን 4000 ብር", "ፋይዳ መታወቂያ"],
+        "om": [
+          "Iyyannoo",
+          "Hayyama daldalaa",
+          "Kaffaltii tajaajilaa meetira iskuweerii tokko guyyaa tokkoof 4000 ETB",
+          "Eenyummaa"
+        ]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": { "service": "4000 ETB per square meter per day (up to 10 days)" },
+        "am": { "አገልግሎት": "በአንድ ካሬ ሜትር ለአንድ ቀን 4000 ብር (እስከ 10 ቀን)" },
+        "om": { "tajaajila": "Meetira iskuweerii tokko guyyaa tokkoof 4000 ETB (hanga guyyaa 10)" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "1.4": {
+      "title": {
+        "en": "Road Closure and Road Event Permit (Over 10 Days)",
+        "am": "መንገድ ዘግቶ ለመጠቀምና የመንገድ ላይ ኩነት የሚሰጥ ፈቃድ (ከ10 ቀን በላይ)",
+        "om": "Hayyama Cufuu Daandii fi Taatee Daandii (Guyyaa 10 Ol)"
+      },
+      "description": {
+        "en": "Long-term permit for road closure and events exceeding 10 days",
+        "am": "ከ10 ቀን በላይ ለሚቆይ የመንገድ መዝጋት እና ክስተቶች የረጅም ጊዜ ፈቃድ",
+        "om": "Hayyama yeroo dheeraa cufuu daandii fi taateewwan guyyaa 10 caalan"
+      },
+      "requirements": {
+        "en": ["Application", "Business license", "Service fee 5000 ETB per square meter per day", "ID card"],
+        "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የአገልግሎት ክፍያ በአንድ ካሬ ሜትር ለአንድ ቀን 5000 ብር", "ፋይዳ መታወቂያ"],
+        "om": [
+          "Iyyannoo",
+          "Hayyama daldalaa",
+          "Kaffaltii tajaajilaa meetira iskuweerii tokko guyyaa tokkoof 5000 ETB",
+          "Eenyummaa"
+        ]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": { "service": "5000 ETB per square meter per day (over 10 days)" },
+        "am": { "አገልግሎት": "በአንድ ካሬ ሜትር ለአንድ ቀን 5000 ብር (ከ10 ቀን በላይ)" },
+        "om": { "tajaajila": "Meetira iskuweerii tokko guyyaa tokkoof 5000 ETB (guyyaa 10 ol)" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "1.5": {
+      "title": {
+        "en": "Construction Materials and Waste Removal Permit",
+        "am": "የግንባታ ግብዓት እና ተረፈ ምርት ለማስገባትና ለማስወጣት የሚሰጥ ፈቃድ",
+        "om": "Hayyama Meeshaalee Ijaarsa fi Balfa Baasuu fi Galchuu"
+      },
+      "description": {
+        "en": "Permit for bringing in construction materials and removing waste products",
+        "am": "የግንባታ ቁሳቁሶችን ለማስገባት እና ቆሻሻ ምርቶችን ለማስወገድ ፈቃድ",
+        "om": "Hayyama meeshaalee ijaarsa galchuu fi balfa baasuu"
+      },
+      "requirements": {
+        "en": ["Application", "Business license", "Service fee 7000 ETB per day", "ID card"],
+        "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የአገልግሎት ክፍያ ለአንድ ቀን 7000 ብር", "ፋይዳ መታወቂያ"],
+        "om": ["Iyyannoo", "Hayyama daldalaa", "Kaffaltii tajaajilaa guyyaa tokkoof 7000 ETB", "Eenyummaa"]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": { "service": "7000 ETB per day" },
+        "am": { "አገልግሎት": "ለአንድ ቀን 7000 ብር" },
+        "om": { "tajaajila": "Guyyaa tokkoof 7000 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "1.6": {
+      "title": {
+        "en": "Road Closure Permit",
+        "am": "መንገድ ለመዝጋት የሚሰጥ ፈቃድ",
+        "om": "Hayyama Daandii Cufuu"
+      },
+      "description": {
+        "en": "General permit for closing roads for various purposes",
+        "am": "ለተለያዩ ዓላማዎች መንገዶችን ለመዝጋት አጠቃላይ ፈቃድ",
+        "om": "Hayyama waliigalaa kaayyoowwan adda addaatiif daandii cufuuf"
+      },
+      "requirements": {
+        "en": ["Application", "Business license", "Service fee 1500 ETB", "ID card"],
+        "am": ["ማመልከቻ", "ንግድ ፈቃድ", "የአገልግሎት ክፍያ 1500 ብር", "ፋይዳ መታወቂያ"],
+        "om": ["Iyyannoo", "Hayyama daldalaa", "Kaffaltii tajaajilaa 1500 ETB", "Eenyummaa"]
+      },
+      "timeline": {
+        "en": "0.5 hours",
+        "am": "0.5 ሰዓት",
+        "om": "Sa'aatii 0.5"
+      },
+      "fee": {
+        "en": { "service": "1500 ETB" },
+        "am": { "አገልግሎት": "1500 ብር" },
+        "om": { "tajaajila": "1500 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "0.5 hours",
+          "am": "0.5 ሰዓት",
+          "om": "0.5 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "2": {
+      "title": {
+        "en": "Traffic Violation Fine Collection for System Payment Failures",
+        "am": "በሲስተም መክፈል ያልቻሉ የትራፊክ ደንብ ተላላፊዎች የቅጣት ክፍያ ገንዘብ መሰብሰብ",
+        "om": "Walitti Qabuu Kaffaltii Adabbii Cabsitoota Seera Tiraafikii Sirna Kaffaltiidhaan Kaffaluu Hin Dandeenye"
+      },
+      "description": {
+        "en": "Collection service for traffic violation fines when system payment is not possible",
+        "am": "በስርዓት ክፍያ ሲቻል ላልሆነ ጊዜ የትራፊክ ጥሰት ቅጣቶችን የመሰብሰብ አገልግሎት",
+        "om": "Tajaajila walitti qabuu adabbii cabsuu tiraafikii yeroo kaffaltiin sirnaatiin hin danda'amne"
+      },
+      "requirements": {
+        "en": ["Traffic violation penalty receipt", "ID card", "Special circumstances only"],
+        "am": ["የደንብ ተላላፊ የቅጣት ደረሰኝ", "ፋይዳ መታወቂያ", "በልዩ ሁኔታ ለሚፈጠሩ ጉዳዮች ሲሆኑ"],
+        "om": ["Rasiiidii adabbii cabsuu seeraa", "Eenyummaa", "Haala addaa qofaaf"]
+      },
+      "timeline": {
+        "en": "0.37 hours",
+        "am": "0.37 ሰዓት",
+        "om": "Sa'aatii 0.37"
+      },
+      "fee": {
+        "en": { "service": "As per violation penalty" },
+        "am": { "አገልግሎት": "እንደ ጥሰት ቅጣት" },
+        "om": { "tajaajila": "Akka adabbii cabsuu seeraatti" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "0.37 hours",
+          "am": "0.37 ሰዓት",
+          "om": "0.37 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "3": {
+      "title": {
+        "en": "Traffic Control Records and Restriction Services",
+        "am": "የትራፊክ ቁጥጥር ሪከርድና እግድ አገልግሎት",
+        "om": "Tajaajiloota Galmee To'annoo Tiraafikii fi Dhorkaa"
+      },
+      "description": {
+        "en": "Comprehensive traffic control record verification and restriction services",
+        "am": "አጠቃላይ የትራፊክ ቁጥጥር መዝገብ ማረጋገጫ እና ገደብ አገልግሎቶች",
+        "om": "Tajaajiloota mirkaneessaa galmee to'annoo tiraafikii fi dhorkaa waliigalaa"
+      },
+      "requirements": {
+        "en": ["ID card", "Driving license", "Application form"],
+        "am": ["ፋይዳ መታወቂያ", "መንጃ ፈቃድ", "ማመልከቻ ቅጽ"],
+        "om": ["Eenyummaa", "Waraqaa konkolaachisaa", "Unka iyyannoo"]
+      },
+      "timeline": {
+        "en": "Varies by sub-service",
+        "am": "በንዑስ አገልግሎት ይለያያል",
+        "om": "Akka tajaajila xiqqaatti garaagarummaa qaba"
+      },
+      "fee": {
+        "en": { "service": "200 ETB" },
+        "am": { "አገልግሎት": "200 ብር" },
+        "om": { "tajaajila": "200 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "10 hours",
+          "am": "10 ሰዓት",
+          "om": "10 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "3.1": {
+      "title": {
+        "en": "Driving License Restriction Verification",
+        "am": "የመንጃ ፈቃድ እግድ ማጣራት",
+        "om": "Mirkaneessuu Dhorkaa Waraqaa Konkolaachisaa"
+      },
+      "description": {
+        "en": "Service to verify restrictions on driving licenses",
+        "am": "በመንጃ ፈቃዶች ላይ ያሉ ገደቦችን ለማረጋገጥ አገልግሎት",
+        "om": "Tajaajila dhorkaa waraqaa konkolaachisaa irratti jiru mirkaneessuuf"
+      },
+      "requirements": {
+        "en": [
+          "ID card",
+          "Driving license (for renewal)",
+          "Letter from Driver License Authority (for lost license)",
+          "Service fee 200 ETB"
+        ],
+        "am": ["ፋይዳ መታወቂያ", "መንጃ ፈቃድ (ለእድሳት)", "ከአሽከርካሪ ብቃት ማረጋገጫ ፈቃድ ሰጪ አካል የተጻፈ ደብዳቤ (ለጠፋበት)", "የአገልግሎት ክፍያ 200 ብር"],
+        "om": [
+          "Eenyummaa",
+          "Waraqaa konkolaachisaa (haaromsaaf)",
+          "Xalayaa Aangoo Hayyama Konkolaachisaa (waraqaa badeetiif)",
+          "Kaffaltii tajaajilaa 200 ETB"
+        ]
+      },
+      "timeline": {
+        "en": "10 hours",
+        "am": "10 ሰዓት",
+        "om": "Sa'aatii 10"
+      },
+      "fee": {
+        "en": { "service": "200 ETB" },
+        "am": { "አገልግሎት": "200 ብር" },
+        "om": { "tajaajila": "200 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "10 hours",
+          "am": "10 ሰዓት",
+          "om": "10 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "3.2": {
+      "title": {
+        "en": "Traffic Violation Point Record Verification",
+        "am": "የትራፊክ ደንብ ተላላፊዎች የነጥብ ሪኮርድ ማጣራት",
+        "om": "Mirkaneessuu Galmee Qabxii Cabsitoota Seera Tiraafikii"
+      },
+      "description": {
+        "en": "Service to verify point records for traffic law violators",
+        "am": "ለትራፊክ ህግ ጣሾች የነጥብ መዝገቦችን ለማረጋገጥ አገልግሎት",
+        "om": "Tajaajila galmee qabxii cabsitoota seera tiraafikii mirkaneessuuf"
+      },
+      "requirements": {
+        "en": ["ID card", "Driving license", "Service fee 200 ETB"],
+        "am": ["ፋይዳ መታወቂያ", "መንጃ ፈቃድ", "የአገልግሎት ክፍያ 200 ብር"],
+        "om": ["Eenyummaa", "Waraqaa konkolaachisaa", "Kaffaltii tajaajilaa 200 ETB"]
+      },
+      "timeline": {
+        "en": "9.27 hours",
+        "am": "9.27 ሰዓት",
+        "om": "Sa'aatii 9.27"
+      },
+      "fee": {
+        "en": { "service": "200 ETB" },
+        "am": { "አገልግሎት": "200 ብር" },
+        "om": { "tajaajila": "200 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "9.27 hours",
+          "am": "9.27 ሰዓት",
+          "om": "9.27 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "4": {
+      "title": {
+        "en": "Motorcycle Movement Permit Services",
+        "am": "የሞተር ብስክሌት የመንቀሳቀሻ ፈቃድ አገልግሎት",
+        "om": "Tajaajiloota Hayyama Sochii Biskileetii Mootoraa"
+      },
+      "description": {
+        "en": "Comprehensive motorcycle and e-bike movement permit services",
+        "am": "አጠቃላይ የሞተር ብስክሌት እና ኢ-ባይክ የመንቀሳቀሻ ፈቃድ አገልግሎቶች",
+        "om": "Tajaajiloota hayyama sochii biskileetii mootoraa fi e-bike waliigalaa"
+      },
+      "requirements": {
+        "en": ["Application", "Business license", "Insurance", "Libre", "Service fee"],
+        "am": ["ማመልከቻ", "ንግድ ፈቃድ", "ኢንሹራንስ", "ሊብሬ", "የአገልግሎት ክፍያ"],
+        "om": ["Iyyannoo", "Hayyama daldalaa", "Inshuraansii", "Libre", "Kaffaltii tajaajilaa"]
+      },
+      "timeline": {
+        "en": "5 hours",
+        "am": "5 ሰዓት",
+        "om": "Sa'aatii 5"
+      },
+      "fee": {
+        "en": { "service": "Varies by sub-service" },
+        "am": { "አገልግሎት": "በንዑስ አገልግሎት ይለያያል" },
+        "om": { "tajaajila": "Akka tajaajila xiqqaatti garaagarummaa qaba" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "5 hours",
+          "am": "5 ሰዓት",
+          "om": "5 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "4.1": {
+      "title": {
+        "en": "Motorcycle Movement Permit Renewal Service (E-bike)",
+        "am": "የሞተር ብስክሌት መንቀሳቀሻ ፈቃድ እድሳት አገልግሎት (ኢ.ባይክ)",
+        "om": "Tajaajila Haaromsa Hayyama Sochii Biskileetii Mootoraa (E-bike)"
+      },
+      "description": {
+        "en": "Renewal service for motorcycle and e-bike movement permits",
+        "am": "ለሞተር ብስክሌት እና ኢ-ባይክ የመንቀሳቀሻ ፈቃድ እድሳት አገልግሎት",
+        "om": "Tajaajila haaromsa hayyama sochii biskileetii mootoraa fi e-bike"
+      },
+      "requirements": {
+        "en": [
+          "Legal application",
+          "Service request form",
+          "Renewed business license",
+          "Bolo insurance",
+          "Libre",
+          "Previous movement permit",
+          "Motorcyclist profile",
+          "Driving license",
+          "GPS provider technical document",
+          "Service fee 600 ETB",
+          "ID card"
+        ],
+        "am": [
+          "ህጋዊ ማመልከቻ ማቅረብ",
+          "የአገልግሎት መጠየቂያ ቅጽ ሙላት",
+          "የታደሰ ንግድ ፈቃድ",
+          "ቦሎ ኢንሹራንስ",
+          "ሊብሬ",
+          "የበፊት መንቀሳቀሻ ፈቃድ",
+          "የሞተረኛው ፕሮፋይል",
+          "መንጃ ፈቃድ",
+          "ከጂፒኤስ አቅራቢ ድርጅት የተሰጠ ቴክኒካል ዶክመንት",
+          "የአገልግሎት ክፍያ 600 ብር",
+          "ፋይዳ መታወቂያ"
+        ],
+        "om": [
+          "Iyyannoo seeraa dhiyeessuu",
+          "Unka gaafii tajaajilaa guutuu",
+          "Hayyama daldalaa haaromfame",
+          "Inshuraansii bolo",
+          "Libre",
+          "Hayyama sochii duraa",
+          "Piroofaayilii ooftuu mootoraa",
+          "Waraqaa konkolaachisaa",
+          "Waraqaa teeknikaa dhaabbata dhiyeessaa GPS irraa kenname",
+          "Kaffaltii tajaajilaa 600 ETB",
+          "Eenyummaa"
+        ]
+      },
+      "timeline": {
+        "en": "4 hours",
+        "am": "4 ሰዓት",
+        "om": "Sa'aatii 4"
+      },
+      "fee": {
+        "en": { "service": "600 ETB" },
+        "am": { "አገልግሎት": "600 ብር" },
+        "om": { "tajaajila": "600 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "4 hours",
+          "am": "4 ሰዓት",
+          "om": "4 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "4.2": {
+      "title": {
+        "en": "Motorcycle Information/Evidence Service",
+        "am": "የሞተር ሳይክል መረጃ/ማስረጃ መስጠት አገልግሎት",
+        "om": "Tajaajila Kennuu Odeeffannoo/Ragaa Biskileetii Mootoraa"
+      },
+      "description": {
+        "en": "Service for providing motorcycle information and evidence documentation",
+        "am": "የሞተር ብስክሌት መረጃ እና የማስረጃ ሰነድ የመስጠት አገልግሎት",
+        "om": "Tajaajila odeeffannoo biskileetii mootoraa fi waraqaa ragaa kennuuf"
+      },
+      "requirements": {
+        "en": [
+          "ID card",
+          "Service request letter",
+          "Original Libre",
+          "Business license",
+          "Bolo",
+          "Third party insurance",
+          "Service fee 300 ETB",
+          "Letter from Transport Bureau if association"
+        ],
+        "am": [
+          "ፋይዳ መታወቂያ",
+          "የአገልግሎት መጠየቂያ ደብዳቤ ማምጣት ይኖርበታል",
+          "ኦሪጅናል ሊብሬ",
+          "ንግድ ፈቃድ",
+          "ቦሎ",
+          "3ኛወገን",
+          "የአገልግሎት ክፍያ 300 ብር",
+          "ማህበር ከሆነ ከትራንስፖርት ቢሮ ደብዳቤ ማምጣት"
+        ],
+        "om": [
+          "Eenyummaa",
+          "Xalayaa gaafii tajaajilaa fiduu qaba",
+          "Libre jalqabaa",
+          "Hayyama daldalaa",
+          "Bolo",
+          "Inshuraansii nama sadaffaa",
+          "Kaffaltii tajaajilaa 300 ETB",
+          "Yoo waldaa ta'e xalayaa Biiroo Geejjibaa fiduu"
+        ]
+      },
+      "timeline": {
+        "en": "1 hour",
+        "am": "1 ሰዓት",
+        "om": "Sa'aatii 1"
+      },
+      "fee": {
+        "en": { "service": "300 ETB" },
+        "am": { "አገልግሎት": "300 ብር" },
+        "om": { "tajaajila": "300 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "1 hour",
+          "am": "1 ሰዓት",
+          "om": "1 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "4.3": {
+      "title": {
+        "en": "Motorcycle Ownership Name Change",
+        "am": "የሞተርብስክሌት የባለቤትነት ስም ለውጥ",
+        "om": "Jijjiirraa Maqaa Abbummaa Biskileetii Mootoraa"
+      },
+      "description": {
+        "en": "Service for changing motorcycle ownership name registration",
+        "am": "የሞተር ብስክሌት የባለቤትነት ስም ምዝገባን ለመቀየር አገልግሎት",
+        "om": "Tajaajila galmee maqaa abbummaa biskileetii mootoraa jijjiiruuf"
+      },
+      "requirements": {
+        "en": [
+          "ID card",
+          "Original Libre",
+          "Renewed business license",
+          "Bolo",
+          "Third party insurance",
+          "Service fee 300 ETB"
+        ],
+        "am": ["ፋይዳ መታወቂያ", "ኦሪጅናል ሊብሬ", "የታደሰ ንግድ ፈቃድ", "ቦሎ", "3ኛ ወገን", "የአገልግሎት ክፍያ 300 ብር"],
+        "om": [
+          "Eenyummaa",
+          "Libre jalqabaa",
+          "Hayyama daldalaa haaromfame",
+          "Bolo",
+          "Inshuraansii nama sadaffaa",
+          "Kaffaltii tajaajilaa 300 ETB"
+        ]
+      },
+      "timeline": {
+        "en": "2 hours",
+        "am": "2 ሰዓት",
+        "om": "Sa'aatii 2"
+      },
+      "fee": {
+        "en": { "service": "300 ETB" },
+        "am": { "አገልግሎት": "300 ብር" },
+        "om": { "tajaajila": "300 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "2 hours",
+          "am": "2 ሰዓት",
+          "om": "2 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "5": {
+      "title": {
+        "en": "Road Traffic Infrastructure Damage Compensation Assessment and Payment Enforcement",
+        "am": "የመንገድ ትራፊክ መሰረተ ልማት ጉዳት የካሳ ግምት ማዘጋጀትና ፤ክፍያ ማስፈፀም",
+        "om": "Qopheessuu Tilmaama Beenyaa Miidhaa Bu'uura Misoomaa Tiraafikii Daandii fi Raawwii Kaffaltii"
+      },
+      "description": {
+        "en": "Service for assessing compensation for road traffic infrastructure damage and enforcing payment",
+        "am": "ለመንገድ ትራፊክ መሠረተ ልማት ጉዳት ካሳ ለመገምገም እና ክፍያን ለማስፈፀም አገልግሎት",
+        "om": "Tajaajila beenyaa miidhaa bu'uura misoomaa tiraafikii daandii madaaluu fi kaffaltii raawwachuuf"
+      },
+      "requirements": {
+        "en": ["Letter from police", "Service fee 500 ETB"],
+        "am": ["ከፖሊስ የሚመጣ ደብዳቤ", "500 ብር የአገልግሎት ክፍያ"],
+        "om": ["Xalayaa poolisii irraa dhufu", "Kaffaltii tajaajilaa 500 ETB"]
+      },
+      "timeline": {
+        "en": "16 hours",
+        "am": "16 ሰዓት",
+        "om": "Sa'aatii 16"
+      },
+      "fee": {
+        "en": { "service": "500 ETB" },
+        "am": { "አገልግሎት": "500 ብር" },
+        "om": { "tajaajila": "500 ETB" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርንጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "16 hours",
+          "am": "16 ሰዓት",
+          "om": "16 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "6": {
+      "title": {
+        "en": "Parking Service Permit",
+        "am": "የፓርኪንግ አገልግሎት ፈቃድ መስጠት",
+        "om": "Hayyama Tajaajila Paarkii"
+      },
+      "description": {
+        "en": "Permit service for establishing parking operations",
+        "am": "የፓርኪንግ ስራዎችን ለማቋቋም የፈቃድ አገልግሎት",
+        "om": "Tajaajila hayyama hojii paarkii hundeessuuf"
+      },
+      "requirements": {
+        "en": [
+          "Letter from Work and Skills confirming organization",
+          "TIN number",
+          "Business registration proof",
+          "Members' agreement and proof",
+          "Members' ID",
+          "Savings and credit institution account proof"
+        ],
+        "am": [
+          "የስራና ክህሎት የተደራጁ መሆናቸውን የሚገልጽ ደብዳቤ",
+          "ቲን ቁጥር",
+          "የንግድ ምዝገባ ማስረጃ",
+          "የአባላት የመተዳደሪያ ውልና ማስረጃ",
+          "የአባላት መታወቂያ",
+          "የብድርና ቁጠባ ተቋም የማህበሩ አካውንት ማስረጃ"
+        ],
+        "om": [
+          "Xalayaa Hojii fi Dandeettii gurmaa'uu isaanii ibsu",
+          "Lakkoofsa TIN",
+          "Ragaa galmee daldalaa",
+          "Waliigaltee fi ragaa miseensotaa",
+          "Eenyummaa miseensotaa",
+          "Ragaa akkaawuntii waldaa dhaabbata liqii fi qusannoo"
+        ]
+      },
+      "timeline": {
+        "en": "114 hours",
+        "am": "114 ሰዓት",
+        "om": "Sa'aatii 114"
+      },
+      "fee": {
+        "en": { "service": "As per regulation" },
+        "am": { "አገልግሎት": "እንደ ደንቡ" },
+        "om": { "tajaajila": "Akka dambii" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "114 hours",
+          "am": "114 ሰዓት",
+          "om": "114 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "7": {
+      "title": {
+        "en": "Parking Service Renewal",
+        "am": "የፓርኪንግ አገልግሎት እድሳት መስጠት",
+        "om": "Haaromsa Tajaajila Paarkii"
+      },
+      "description": {
+        "en": "Renewal service for existing parking operation permits",
+        "am": "ለነባር የፓርኪንግ ስራ ፈቃዶች የእድሳት አገልግሎት",
+        "om": "Tajaajila haaromsa hayyama hojii paarkii jiru"
+      },
+      "requirements": {
+        "en": [
+          "Renewed business registration proof",
+          "Members' agreement and proof",
+          "Leadership proof",
+          "Savings and credit institution savings proof"
+        ],
+        "am": ["የታደሰ የንግድ ምዝገባ ማስረጃ", "የአባላት የመተዳደሪያ ውልና ማስረጃ", "የአመራር ማስረጃ", "የብድርና ቁጠባ ተቋም የቁጠባ ማስረጃ"],
+        "om": [
+          "Ragaa galmee daldalaa haaromfame",
+          "Waliigaltee fi ragaa miseensotaa",
+          "Ragaa hoogganaa",
+          "Ragaa qusannoo dhaabbata liqii fi qusannoo"
+        ]
+      },
+      "timeline": {
+        "en": "114 hours",
+        "am": "114 ሰዓት",
+        "om": "Sa'aatii 114"
+      },
+      "fee": {
+        "en": { "service": "As per regulation" },
+        "am": { "አገልግሎት": "እንደ ደንቡ" },
+        "om": { "tajaajila": "Akka dambii" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "114 hours",
+          "am": "114 ሰዓት",
+          "om": "114 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "8": {
+      "title": {
+        "en": "Building Basement Parking Qualification Verification Service",
+        "am": "ህንፃ ስር ፓርኪንግ ብቃት ማረጋገጫ አገልግሎት",
+        "om": "Tajaajila Mirkaneessaa Dandeettii Paarkii Jala Gamoo"
+      },
+      "description": {
+        "en": "Service for verifying qualification of building basement parking facilities",
+        "am": "የህንፃ ቤዝመንት የፓርኪንግ ተቋማት ብቃትን ለማረጋገጥ አገልግሎት",
+        "om": "Tajaajila dandeettii dhaabbilee paarkii jala gamoo mirkaneessuuf"
+      },
+      "requirements": {
+        "en": [
+          "Property verification map",
+          "Building basement design",
+          "Building usage permit",
+          "Business license (for paid services)",
+          "Checklist information",
+          "Owner (manager) photograph"
+        ],
+        "am": [
+          "የይዞታ ማረጋገጫ ካርታ",
+          "የህንጻ ቤዝመንት ዲዛይን",
+          "የህንጻ መጠቀሚያ ፈቃድ",
+          "ንግድ ፈቃድ (በክፍያ ለሚያስጠቅሙ)",
+          "የቸክ ሊስት መረጃ",
+          "የባለቤት (ስራሰኪያጅ) ፎቶግራፍ"
+        ],
+        "om": [
+          "Kaartaa mirkaneessaa qabeenya",
+          "Dizaayinii jala gamoo",
+          "Hayyama itti fayyadama gamoo",
+          "Hayyama daldalaa (tajaajiloota kaffaltii qabaniif)",
+          "Odeeffannoo tarree sakatta'aa",
+          "Suuraa abbaa (bulchaa)"
+        ]
+      },
+      "timeline": {
+        "en": "9 hours",
+        "am": "9 ሰዓት",
+        "om": "Sa'aatii 9"
+      },
+      "fee": {
+        "en": { "service": "As per regulation" },
+        "am": { "አገልግሎት": "እንደ ደንቡ" },
+        "om": { "tajaajila": "Akka dambii" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "9 hours",
+          "am": "9 ሰዓት",
+          "om": "9 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    },
+    "9": {
+      "title": {
+        "en": "Building Basement Parking Qualification Renewal Service",
+        "am": "ህንፃ ስር ፓርኪንግ ብቃት ማረጋገጫ እድሳት አገልግሎት",
+        "om": "Tajaajila Haaromsa Mirkaneessaa Dandeettii Paarkii Jala Gamoo"
+      },
+      "description": {
+        "en": "Renewal service for building basement parking qualification verification",
+        "am": "ለህንፃ ቤዝመንት የፓርኪንግ ብቃት ማረጋገጫ የእድሳት አገልግሎት",
+        "om": "Tajaajila haaromsa mirkaneessaa dandeettii paarkii jala gamoo"
+      },
+      "requirements": {
+        "en": [
+          "Property verification map",
+          "Building basement design",
+          "Building usage permit",
+          "Renewed business license (for paid services)",
+          "Checklist information",
+          "Owner (manager) photograph",
+          "Permit certificate"
+        ],
+        "am": [
+          "የይዞታ ማረጋገጫ ካርታ",
+          "የህንጻ ቤዝመንት ዲዛይን",
+          "የህንጻ መጠቀሚያ ፈቃድ",
+          "የታደሰ ንግድ ፈቃድ (በክፍያ ለሚያስጠቅሙ)",
+          "የቸክ ሊስት መረጃ",
+          "የባለቤት (ስራሰኪያጅ) ፎቶግራፍ",
+          "የፈቃድ ሰርተፍኬት"
+        ],
+        "om": [
+          "Kaartaa mirkaneessaa qabeenya",
+          "Dizaayinii jala gamoo",
+          "Hayyama itti fayyadama gamoo",
+          "Hayyama daldalaa haaromfame (tajaajiloota kaffaltii qabaniif)",
+          "Odeeffannoo tarree sakatta'aa",
+          "Suuraa abbaa (bulchaa)",
+          "Waraqaa ragaa hayyamaa"
+        ]
+      },
+      "timeline": {
+        "en": "9 hours",
+        "am": "9 ሰዓት",
+        "om": "Sa'aatii 9"
+      },
+      "fee": {
+        "en": { "service": "As per regulation" },
+        "am": { "አገልግሎት": "እንደ ደንቡ" },
+        "om": { "tajaajila": "Akka dambii" }
+      },
+      "place": {
+        "en": "Branch Office",
+        "am": "በቅርጫፍ ጽ/ቤት",
+        "om": "Waajjira Damee"
+      },
+      "mode": {
+        "en": "In-person",
+        "am": "በአካል",
+        "om": "Nama dhuunfaa"
+      },
+      "standard": {
+        "time": {
+          "en": "9 hours",
+          "am": "9 ሰዓት",
+          "om": "9 sa'a"
+        },
+        "quality": {
+          "en": "100%",
+          "am": "100%",
+          "om": "100%"
+        }
+      }
+    }
+  }
+}
