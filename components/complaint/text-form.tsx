@@ -812,6 +812,25 @@ const TextForm = () => {
               <p className="text-xs text-muted-foreground">
                 {watch('complaintDetails')?.length || 0}/100 {t('complaints.form.characters.used')}
               </p>
+
+              <div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowAmharicKeyboard(!showAmharicKeyboard)}
+                  className="w-full"
+                >
+                  {showAmharicKeyboard
+                    ? t('feedback.form.hideKeyboard')
+                    : t('feedback.form.showKeyboard')}
+                </Button>
+
+                <div className="">
+                  {showAmharicKeyboard && (
+                    <AmharicKeyboard onInput={(text) => setValue('complaintDetails', text)} />
+                  )}
+                </div>
+              </div>
             </div>
             <div className="space-y-2">
               <Label htmlFor="attachment">{t('complaints.form.attachment')}</Label>
@@ -906,6 +925,8 @@ const TextForm = () => {
               <Textarea
                 id="actionRequired"
                 {...register('actionRequired')}
+                value={watch('actionRequired') || ''}
+                onChange={(e) => setValue('actionRequired', e.target.value)}
                 lang={language}
                 dir={language === 'am' ? 'ltr' : 'auto'}
                 inputMode="text"
@@ -921,14 +942,6 @@ const TextForm = () => {
                 {watch('actionRequired')?.length || 0}/100 {t('complaints.form.characters.used')}
               </p>
             </div>
-            {/* Agreement checkbox */}
-            <div className="flex items-center space-x-2">
-              <input type="checkbox" id="agreement" className="rounded border-gray-300" required />
-              <label htmlFor="agreement" className="text-sm font-normal">
-                {t('complaints.form.agreement')}
-              </label>
-            </div>
-            {/* Amharic keyboard toggle */}
             <div>
               <Button
                 type="button"
@@ -940,8 +953,20 @@ const TextForm = () => {
                   ? t('feedback.form.hideKeyboard')
                   : t('feedback.form.showKeyboard')}
               </Button>
-              <div className="">{showAmharicKeyboard && <AmharicKeyboard />}</div>
+              <div className="">
+                {showAmharicKeyboard && (
+                  <AmharicKeyboard onInput={(text) => setValue('actionRequired', text)} />
+                )}
+              </div>
             </div>
+            {/* Agreement checkbox */}
+            <div className="flex items-center space-x-2">
+              <input type="checkbox" id="agreement" className="rounded border-gray-300" required />
+              <label htmlFor="agreement" className="text-sm font-normal">
+                {t('complaints.form.agreement')}
+              </label>
+            </div>
+            {/* Amharic keyboard toggle */}
             {/* Submit button */}
             <Button
               type="submit"

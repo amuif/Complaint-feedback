@@ -6,10 +6,10 @@ import { useLanguage } from './language-provider';
 import { useTheme } from 'next-themes';
 
 interface AmharicKeyboardProps {
-  onCharacterClick?: (char: string) => void;
+  onInput: (text: string) => void;
 }
 
-export default function AmharicKeyboard({ onCharacterClick }: AmharicKeyboardProps) {
+export default function AmharicKeyboard({ onInput }: AmharicKeyboardProps) {
   const { t } = useLanguage();
   const { theme } = useTheme();
   const [input, setInput] = useState('');
@@ -22,14 +22,13 @@ export default function AmharicKeyboard({ onCharacterClick }: AmharicKeyboardPro
 
   const handleChange = (input: string) => {
     setInput(input);
-    if (onCharacterClick) {
-      onCharacterClick(input);
-    }
+    onInput(input);
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = event.target.value;
     setInput(value);
+    onInput(value);
     if (keyboard.current) {
       keyboard.current.setInput(value);
     }
@@ -136,14 +135,6 @@ export default function AmharicKeyboard({ onCharacterClick }: AmharicKeyboardPro
   return (
     <div className="p-4">
       <style>{customCss}</style>
-      <textarea
-        value={input}
-        onChange={handleInputChange}
-        rows={4}
-        placeholder={t('amharic.keyboard.placeholder')}
-        className="border p-2 w-full mb-2 rounded bg-white text-black dark:bg-gray-800 dark:text-white placeholder-gray-400 dark:placeholder-gray-400 transition-colors duration-200"
-      />
-
       <div className="w-full max-w-6xl mx-auto">
         <Keyboard
           keyboardRef={(r) => (keyboard.current = r)}
@@ -154,7 +145,6 @@ export default function AmharicKeyboard({ onCharacterClick }: AmharicKeyboardPro
           display={{
             '{space}': ' ',
           }}
-          // Update options when theme changes
           key={`keyboard-${isDarkMode ? 'dark' : 'light'}`}
         />
       </div>
