@@ -75,6 +75,11 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/departments/${teamLeaderId}/teams`);
     return handleDataResponse<Employee[]>(response);
   }
+  // Employee by subcity
+  async getEmployeesBySubcity(subcityId: string): Promise<Employee[]> {
+    const response = await fetch(`${this.baseUrl}/subcities/${subcityId}/employees`);
+    return await response.json();
+  }
 
   // Subcities
   async getSubcities(): Promise<Subcities[]> {

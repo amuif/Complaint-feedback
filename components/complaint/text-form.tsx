@@ -28,6 +28,7 @@ import { toGregorian, toEthiopian } from 'ethiopian-date';
 type ComplaintFormData = z.infer<typeof complaintSchema>;
 
 const TextForm = () => {
+  const { EmployeesBySubcity, setSubcityId } = useOrganization();
   const { t, language } = useLanguage();
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
@@ -43,7 +44,6 @@ const TextForm = () => {
   const [directors_id, setDirectors_id] = useState<string>('');
   const [team_id, setTeam_id] = useState<string>('');
   const [employee_id, setEmployee_id] = useState<string>('');
-
   const [directors, setDirectors] = useState<Director[]>([]);
   const [teamLeaders, setTeamLeaders] = useState<TeamLeader[]>([]);
   const [loadingSectorLeaders, setLoadingSectorLeaders] = useState(false);
@@ -51,7 +51,6 @@ const TextForm = () => {
   const [loadingTeamLeaders, setLoadingTeamLeaders] = useState(false);
   const [loadingEmployees, setLoadingEmployees] = useState(false);
   const [loadingSubcities, setLoadingSubcities] = useState(false);
-  const [selectedSectorLeaderName, setSelectedSectorLeaderName] = useState('');
   const [subcities, setSubcities] = useState<Subcities[]>([]);
   const [attachment, setAttachment] = useState<File | null>(null);
   const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
@@ -66,7 +65,15 @@ const TextForm = () => {
 
   useEffect(() => {
     setCurrentSubcity(currentSub);
+    if (currentSub) {
+      console.log(currentSub.id);
+      setSubcityId(currentSub.id);
+    }
   }, [currentSub]);
+
+  useEffect(() => {
+    console.log(EmployeesBySubcity);
+  }, [currentSub, EmployeesBySubcity]);
 
   useEffect(() => {
     loadSubcities();
@@ -89,6 +96,7 @@ const TextForm = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [showCalendar]);
+
   useEffect(() => {
     console.log(selectedDateDisplay);
   }, [selectedDateDisplay]);
@@ -992,6 +1000,7 @@ export default TextForm;
 import * as ethiopianDate from 'ethiopian-date';
 import { useCurrentSubcity, useSubcityAdmin } from '@/hooks/use-subcity';
 import { useSubcityName } from '@/hooks/use-subcity-name';
+import { useOrganization } from '@/hooks/use-organization';
 
 export const convertEthiopianToGregorian = (ethDate: string): string | null => {
   if (!ethDate) return null;

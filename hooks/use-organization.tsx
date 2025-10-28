@@ -15,6 +15,7 @@ export function useOrganization() {
   const [selectedSectorId, setSelectedSectorId] = useState<string>('');
   const [selectedDirectorId, setSelectedDirectorId] = useState<string>('');
   const [selectedDeparmentId, setSelectedDepartmentId] = useState<string>('');
+  const [subcityId, setSubcityId] = useState<string>('');
 
   const sectorsQuery = useQuery({
     queryKey: ['get-sector-leaders'],
@@ -51,21 +52,37 @@ export function useOrganization() {
     enabled: !!selectedDeparmentId,
   });
 
+  const employeesBySubcityQuery = useQuery({
+    queryKey: ['get-employees-by-subcity', subcityId],
+    queryFn: async () => {
+      const response = await apiClient.getEmployeesBySubcity(subcityId);
+      return response;
+    },
+  });
+
   return {
     SectorLeaders: sectorsQuery.data || [],
     Directors: directorsQuery.data || [],
     Teams: departmentsQuery.data || [],
     Employees: employeesQuery.data || [],
+    EmployeesBySubcity: employeesBySubcityQuery.data || [],
     setSelectedSectorId,
     selectedSectorId,
     setSelectedDirectorId,
     setSelectedDepartmentId,
+    setSubcityId,
+    subcityId,
     isLoading:
       sectorsQuery.isLoading ||
       directorsQuery.isLoading ||
       departmentsQuery.isLoading ||
-      employeesQuery.isLoading,
+      employeesQuery.isLoading ||
+      employeesBySubcityQuery.isLoading,
     error:
-      sectorsQuery.error || directorsQuery.error || departmentsQuery.error || employeesQuery.error,
+      sectorsQuery.error ||
+      directorsQuery.error ||
+      departmentsQuery.error ||
+      employeesQuery.error ||
+      employeesBySubcityQuery.isError,
   };
 }
