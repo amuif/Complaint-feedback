@@ -24,7 +24,6 @@ import { Textarea } from '../ui/textarea';
 import { Calendar } from '@dhis2/ui';
 import AmharicKeyboard from '../amharic-keyboard';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import Image from 'next/image';
 
 type ComplaintFormData = z.infer<typeof complaintSchema>;
 
@@ -53,6 +52,7 @@ const TextForm = () => {
   //employees
   const [employee_id, setEmployee_id] = useState<string>('');
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const [foundEmployees, setFoundEmployees] = useState<Employee[]>([]);
   //subcity
   const [subcities, setSubcities] = useState<Subcities[]>([]);
   const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
@@ -61,6 +61,7 @@ const TextForm = () => {
   //attachment
   const [attachment, setAttachment] = useState<File | null>(null);
   const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
+
   // Calendar states
   const [showCalendar, setShowCalendar] = useState(false);
   const [calendarType, setCalendarType] = useState<'am' | 'en' | 'af'>('en');
@@ -123,43 +124,53 @@ const TextForm = () => {
         employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
       ) || [];
     console.log('Found employees', employees);
-    setEmployees(employees);
+    setFoundEmployees(employees);
   };
+
   const handleSelect = async (employee: Employee) => {
-    console.log('Selected employee:', employee);
     try {
+      console.log('Selected employee:', employee);
       const employeeValue = `${employee.id} | ${employee[`first_name_${language}`]} ${employee[`middle_name_${language}`]} ${employee[`last_name_${language}`]}`;
+
       setValue('employee', employeeValue);
       setEmployee_id(employee.id.toString());
-
       setValue('office', employee.office_number || '');
       setValue('sectorLeader', '');
       setValue('director', '');
       setValue('teamLeader', '');
       setDirectors([]);
       setTeamLeaders([]);
-      if (employee.sector) {
-        const sectorValue = `${employee.sector.id} | ${employee.sector[`appointed_person_${language}`]}`;
-        setValue('sectorLeader', sectorValue);
-        setSector_id(employee.sector.id.toString());
-        await loadDirectors(sectorValue);
-        setTimeout(() => {
-          if (employee.division) {
-            const directorValue = `${employee.division.id} | ${employee.division[`appointed_person_${language}`]}`;
-            setValue('director', directorValue);
-            setDirectors_id(employee.division.id.toString());
-            loadTeamLeaders(directorValue).then(() => {
-              if (employee.department) {
-                const teamLeaderValue = `${employee.department.id} | ${employee.department[`appointed_person_${language}`]}`;
-                setValue('teamLeader', teamLeaderValue);
-                setTeam_id(employee.department.id.toString());
-              }
-            });
-          }
-        }, 300);
+
+      setEmployees([]);
+      setSearchQuery('');
+
+      if (!employee.sector) {
+        console.error('Employee has no sector data');
+        return;
       }
+
+      await loadSectorLeaders();
+      const sectorValue = `${employee.sector.id} | ${employee.sector[`appointed_person_${language}`]}`;
+      setValue('sectorLeader', sectorValue);
+
+      await loadDirectors(sectorValue);
+
+      if (employee.division) {
+        const directorValue = `${employee.division.id}|${employee.division[`appointed_person_${language}`]}`;
+        setValue('director', directorValue);
+
+        if (directors && directors.length > 0) {
+          await loadTeamLeaders(directorValue);
+        }
+      }
+      // if (employee.department) {
+      //   const teamLeaderValue = `${employee.department.id} | ${employee.department[`appointed_person_${language}`]}`;
+      //   setValue('teamLeader', teamLeaderValue);
+      // }
+
+      console.log('Employee selection completed successfully');
     } catch (error) {
-      console.error('Error handling employee selection:', error);
+      console.error('Error in handleSelect:', error);
       setErrorMessage('Failed to load employee organizational data. Please try again.');
     }
   };
@@ -279,29 +290,34 @@ const TextForm = () => {
       setLoadingSectorLeaders(false);
     }
   };
-  const loadDirectors = async (value: string) => {
-    const [id, name] = value.split('|');
+  const loadDirectors = async (value: string): Promise<Director[]> => {
+    const [id, _] = value.split('|');
     setSector_id(id);
     setLoadingDirectors(true);
     setErrorMessage(null);
+    let data: Director[] = [];
     try {
       if (currentSubcity && subcity) {
         console.log('going-subcity');
-        const data = await apiClient.getSubcityDirectors(id);
-        console.log(data);
+        data = await apiClient.getSubcityDirectors(id);
+        console.log('Loaded directors:', data);
         setDirectors(data || []);
       } else {
-        const data = await apiClient.getDirectorsBySectorLeader(id);
+        data = await apiClient.getDirectorsBySectorLeader(id);
+        console.log(data);
         setDirectors(data || []);
       }
+      return data;
     } catch (error) {
       console.error(`Failed to load directors for sector leader ${id}:`, error);
       setErrorMessage('Failed to load directors. Please try again.');
       setDirectors([]);
+      return [];
     } finally {
       setLoadingDirectors(false);
     }
   };
+
   const loadSubcities = async () => {
     setLoadingSubcities(true);
     setErrorMessage(null);
@@ -321,9 +337,8 @@ const TextForm = () => {
       setLoadingSubcities(false);
     }
   };
-  const loadTeamLeaders = async (directorId: string) => {
-    console.info(directorId);
-    const [id, name] = directorId.split('|');
+  const loadTeamLeaders = async (director: string) => {
+    const [id, _] = director.split('|');
     setDirectors_id(id);
     setLoadingTeamLeaders(true);
     setErrorMessage(null);
@@ -339,7 +354,7 @@ const TextForm = () => {
         setTeamLeaders(data || []);
       }
     } catch (error) {
-      console.error(`Failed to load team leaders for director ${directorId}:`, error);
+      console.error(`Failed to load team leaders for director ${director}:`, error);
       setErrorMessage('Failed to load team leaders. Please try again.');
       setTeamLeaders([]);
     } finally {
@@ -550,7 +565,6 @@ const TextForm = () => {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-            {/* Complainant's full-name */}
             <div className="space-y-1">
               <Label htmlFor="complainantName">{t('complaints.form.complainantName')} *</Label>
               <Input
@@ -567,7 +581,6 @@ const TextForm = () => {
                 {watch('complainantName')?.length || 0}/50 {t('complaints.form.characters.used')}
               </p>
             </div>
-            {/* Sub-city and Woreda */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
                 <Label htmlFor="subcity">{t('complaints.form.subcity')} *</Label>
@@ -669,10 +682,10 @@ const TextForm = () => {
                   </span>
                 </div>
               </div>
-              {employees.length !== 0 && (
+              {foundEmployees.length !== 0 && (
                 <ScrollArea className="h-[200px] w-full rounded-md border p-4 pt-6">
                   <div className="space-y-3 w-full">
-                    {employees.map((employee) => (
+                    {foundEmployees.map((employee) => (
                       <Card
                         key={employee.id}
                         className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4 p-4 rounded-xl shadow-sm "
@@ -789,7 +802,6 @@ const TextForm = () => {
                 )}
               />
             </div>
-            {/* Director - always visible, optional */}
             <div className="space-y-1">
               <Label htmlFor="director">{t('complaints.form.director')}</Label>
               <Controller
