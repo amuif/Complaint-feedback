@@ -23,8 +23,9 @@ import { Director, Employee, Sector, Subcities, TeamLeader } from '@/types/types
 import { Textarea } from '../ui/textarea';
 import { Calendar } from '@dhis2/ui';
 import AmharicKeyboard from '../amharic-keyboard';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import Image from 'next/image';
 
-import { toGregorian, toEthiopian } from 'ethiopian-date';
 type ComplaintFormData = z.infer<typeof complaintSchema>;
 
 const TextForm = () => {
@@ -34,31 +35,43 @@ const TextForm = () => {
   const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
   const currentSub = useCurrentSubcity();
   const subcity = useSubcityName();
-  const [employees, setEmployees] = useState<Employee[]>([]);
   const [showAmharicKeyboard, setShowAmharicKeyboard] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+
+  //leaders
   const [sectorLeaders, setSectorLeaders] = useState<Sector[]>([]);
-  const [subcityLeader, setSubcityLeader] = useState<Sector>();
+  const [directors, setDirectors] = useState<Director[]>([]);
+  const [teamLeaders, setTeamLeaders] = useState<TeamLeader[]>([]);
+
+  //id
   const [sector_id, setSector_id] = useState<string>('');
   const [directors_id, setDirectors_id] = useState<string>('');
   const [team_id, setTeam_id] = useState<string>('');
+
+  //employees
   const [employee_id, setEmployee_id] = useState<string>('');
-  const [directors, setDirectors] = useState<Director[]>([]);
-  const [teamLeaders, setTeamLeaders] = useState<TeamLeader[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  //subcity
+  const [subcities, setSubcities] = useState<Subcities[]>([]);
+  const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
+  const [subcityLeader, setSubcityLeader] = useState<Sector>();
+
+  //attachment
+  const [attachment, setAttachment] = useState<File | null>(null);
+  const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
+  // Calendar states
+  const [showCalendar, setShowCalendar] = useState(false);
+  const [calendarType, setCalendarType] = useState<'am' | 'en' | 'af'>('en');
+  const [selectedDateDisplay, setSelectedDateDisplay] = useState('');
+
+  //loading states
   const [loadingSectorLeaders, setLoadingSectorLeaders] = useState(false);
   const [loadingDirectors, setLoadingDirectors] = useState(false);
   const [loadingTeamLeaders, setLoadingTeamLeaders] = useState(false);
   const [loadingEmployees, setLoadingEmployees] = useState(false);
   const [loadingSubcities, setLoadingSubcities] = useState(false);
-  const [subcities, setSubcities] = useState<Subcities[]>([]);
-  const [attachment, setAttachment] = useState<File | null>(null);
-  const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
-  const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
-  // Calendar states
-  const [showCalendar, setShowCalendar] = useState(false);
-  const [calendarType, setCalendarType] = useState<'am' | 'en' | 'af'>('en');
-  const [selectedDateDisplay, setSelectedDateDisplay] = useState('');
 
   // Inside your component
   const calendarRef = useRef<HTMLDivElement | null>(null);
@@ -68,12 +81,14 @@ const TextForm = () => {
     if (currentSub) {
       console.log(currentSub.id);
       setSubcityId(currentSub.id);
+    } else {
+      setSubcityId('main');
     }
   }, [currentSub]);
 
   useEffect(() => {
-    console.log(EmployeesBySubcity);
-  }, [currentSub, EmployeesBySubcity]);
+    console.log('Employees', employees);
+  }, [employees]);
 
   useEffect(() => {
     loadSubcities();
@@ -97,10 +112,57 @@ const TextForm = () => {
     };
   }, [showCalendar]);
 
-  useEffect(() => {
-    console.log(selectedDateDisplay);
-  }, [selectedDateDisplay]);
+  const handleEmployeeBySubcitySearch = () => {
+    if (!EmployeesBySubcity || !searchQuery) {
+      console.log("Either searchQuery or employees bg subcity doesn't exit");
+      return;
+    }
+    console.log(EmployeesBySubcity);
+    const employees =
+      EmployeesBySubcity.filter((employee) =>
+        employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
+      ) || [];
+    console.log('Found employees', employees);
+    setEmployees(employees);
+  };
+  const handleSelect = async (employee: Employee) => {
+    console.log('Selected employee:', employee);
+    try {
+      const employeeValue = `${employee.id} | ${employee[`first_name_${language}`]} ${employee[`middle_name_${language}`]} ${employee[`last_name_${language}`]}`;
+      setValue('employee', employeeValue);
+      setEmployee_id(employee.id.toString());
 
+      setValue('office', employee.office_number || '');
+      setValue('sectorLeader', '');
+      setValue('director', '');
+      setValue('teamLeader', '');
+      setDirectors([]);
+      setTeamLeaders([]);
+      if (employee.sector) {
+        const sectorValue = `${employee.sector.id} | ${employee.sector[`appointed_person_${language}`]}`;
+        setValue('sectorLeader', sectorValue);
+        setSector_id(employee.sector.id.toString());
+        await loadDirectors(sectorValue);
+        setTimeout(() => {
+          if (employee.division) {
+            const directorValue = `${employee.division.id} | ${employee.division[`appointed_person_${language}`]}`;
+            setValue('director', directorValue);
+            setDirectors_id(employee.division.id.toString());
+            loadTeamLeaders(directorValue).then(() => {
+              if (employee.department) {
+                const teamLeaderValue = `${employee.department.id} | ${employee.department[`appointed_person_${language}`]}`;
+                setValue('teamLeader', teamLeaderValue);
+                setTeam_id(employee.department.id.toString());
+              }
+            });
+          }
+        }, 300);
+      }
+    } catch (error) {
+      console.error('Error handling employee selection:', error);
+      setErrorMessage('Failed to load employee organizational data. Please try again.');
+    }
+  };
   const handleDateSelect = (payload: any) => {
     console.log('Selected date payload:', payload);
 
@@ -142,9 +204,8 @@ const TextForm = () => {
 
     // Close calendar
     setShowCalendar(false);
-  }; // Toggle between Ethiopian and Gregorian calendars
+  };
 
-  // Get calendar props based on type
   const getCalendarProps = () => {
     const baseProps = {
       onDateSelect: handleDateSelect,
@@ -171,6 +232,7 @@ const TextForm = () => {
       };
     }
   };
+
   const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setAttachment(file);
@@ -188,14 +250,11 @@ const TextForm = () => {
       setAttachmentPreview(null);
     }
   };
-
-  // Remove attachment
   const removeAttachment = () => {
     setAttachment(null);
     setAttachmentPreview(null);
     setValue('attachment', undefined, { shouldValidate: true }); // Set to undefined
   };
-
   const loadSectorLeaders = async () => {
     if (sectorLeaders.length > 0) return;
     setLoadingSectorLeaders(true);
@@ -287,7 +346,6 @@ const TextForm = () => {
       setLoadingTeamLeaders(false);
     }
   };
-
   const loadEmployees = async (teamLeader: string) => {
     const [id, name] = teamLeader?.split('|');
     console.log(id);
@@ -306,7 +364,6 @@ const TextForm = () => {
       setLoadingEmployees(false);
     }
   };
-
   const handleSectorLeaderChange = (sectorLeaderId: string) => {
     setValue('director', '');
     setValue('teamLeader', '');
@@ -320,7 +377,6 @@ const TextForm = () => {
       loadDirectors(sectorLeaderId);
     }
   };
-
   const handleDirectorChange = (directorId: string) => {
     setValue('teamLeader', '');
     setValue('employee', '');
@@ -332,7 +388,6 @@ const TextForm = () => {
       loadTeamLeaders(directorId);
     }
   };
-
   const handleTeamLeaderChange = (teamLeaderId: string) => {
     setValue('employee', '');
     setValue('office', '');
@@ -443,7 +498,7 @@ const TextForm = () => {
   const director = watch('director');
   const teamLeader = watch('teamLeader');
   const complaintDate = watch('complaintDate');
-
+  const subcityId = watch('subcity_id');
   useEffect(() => {
     if (complaintDate) {
       console.log('Raw complaintDate:', complaintDate);
@@ -591,9 +646,88 @@ const TextForm = () => {
                 {watch('phone')?.length || 0}/10 {t('complaints.form.characters.used')}
               </p>
             </div>
-            {/* Sector Leader - always visible, optional */}
             <div className="space-y-1">
-              <Label htmlFor="sectorLeader">{t('complaints.form.sectorLeader')}</Label>
+              <Label>Quick search</Label>
+              <div className="flex-col gap-3">
+                <div className="flex gap-2">
+                  <Input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Enter employees name"
+                  />
+                  <Button
+                    type="button"
+                    onClick={handleEmployeeBySubcitySearch}
+                    disabled={!searchQuery.trim() || !subcityId}
+                  >
+                    Search
+                  </Button>
+                </div>
+                <div>
+                  <span className="text-sm">
+                    For quick employee search, you must select a sub city first
+                  </span>
+                </div>
+              </div>
+              {employees.length !== 0 && (
+                <ScrollArea className="h-[200px] w-full rounded-md border p-4 pt-6">
+                  <div className="space-y-3 w-full">
+                    {employees.map((employee) => (
+                      <Card
+                        key={employee.id}
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4 p-4 rounded-xl shadow-sm "
+                      >
+                        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                          <Avatar className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0">
+                            <AvatarImage
+                              src={
+                                employee.profile_picture instanceof File
+                                  ? URL.createObjectURL(employee.profile_picture)
+                                  : typeof employee.profile_picture === 'string'
+                                    ? `${PICTURE_URL}/Uploads/profile_pictures/${employee.profile_picture}`
+                                    : undefined
+                              }
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="text-base sm:text-lg">
+                              {employee[`first_name_${language}`] &&
+                              employee[`last_name_${language}`]
+                                ? `${employee[`first_name_${language}`][0]}${employee[`last_name_${language}`][0]}`
+                                : 'NA'}
+                            </AvatarFallback>
+                          </Avatar>
+
+                          <div className="flex flex-col text-center sm:text-left">
+                            <span className="text-sm sm:text-base font-medium ">
+                              {employee[`first_name_${language}`]}{' '}
+                              {employee[`middle_name_${language}`]}{' '}
+                              {employee[`last_name_${language}`]}
+                            </span>
+                            {employee.office_number && (
+                              <CardDescription className="text-xs sm:text-sm ">
+                                Office: {employee.office_number}
+                              </CardDescription>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end sm:justify-center pt-0">
+                          <Button
+                            type="button"
+                            onClick={() => handleSelect(employee)}
+                            className="w-full sm:w-auto"
+                          >
+                            Select
+                          </Button>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
+              )}
+              <Label className="pt-2" htmlFor="sectorLeader">
+                {t('complaints.form.sectorLeader')}
+              </Label>
               <Controller
                 name="sectorLeader"
                 control={control}
@@ -619,17 +753,13 @@ const TextForm = () => {
                       {Array.isArray(sectorLeaders) ? (
                         subcity ? (
                           (() => {
-                            console.log(subcityLeader);
                             const firstLeader = subcityLeader;
 
-                            console.log('tehre is not firstLeader');
                             if (!firstLeader) return null;
-                            console.log('tehre is firstLeader');
 
                             const id = firstLeader.id;
                             const appointedPerson = firstLeader[`appointed_person_${language}`];
                             if (!id || !appointedPerson) return null;
-                            console.log('tehre is id and appointedPerson');
                             return (
                               <SelectItem key={id} value={`${id} | ${appointedPerson}`}>
                                 {appointedPerson}
@@ -979,7 +1109,7 @@ const TextForm = () => {
             <Button
               type="submit"
               className="w-full bg-blue-600 hover:bg-blue-700"
-              disabled={isSubmitting}
+              disabled={isSubmitting || !sector_id}
             >
               {isSubmitting ? 'Submitting...' : t('complaints.form.submit')}
             </Button>
@@ -1001,6 +1131,8 @@ import * as ethiopianDate from 'ethiopian-date';
 import { useCurrentSubcity, useSubcityAdmin } from '@/hooks/use-subcity';
 import { useSubcityName } from '@/hooks/use-subcity-name';
 import { useOrganization } from '@/hooks/use-organization';
+import { PICTURE_URL } from '@/constants/base_url';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 
 export const convertEthiopianToGregorian = (ethDate: string): string | null => {
   if (!ethDate) return null;
