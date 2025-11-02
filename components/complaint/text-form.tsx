@@ -1035,7 +1035,6 @@ const TextForm = () => {
                     ? t('feedback.form.hideKeyboard')
                     : t('feedback.form.showKeyboard')}
                 </Button>
-
                 <div className="">
                   {showAmharicKeyboard && (
                     <AmharicKeyboard onInput={(text) => setValue('complaintDetails', text)} />

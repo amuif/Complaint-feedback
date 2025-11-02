@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Keyboard from 'react-simple-keyboard';
 import 'react-simple-keyboard/build/css/index.css';
-import { useLanguage } from './language-provider';
 import { useTheme } from 'next-themes';
 
 interface AmharicKeyboardProps {
@@ -10,17 +9,20 @@ interface AmharicKeyboardProps {
 }
 
 export default function AmharicKeyboard({ onInput }: AmharicKeyboardProps) {
-  const { t } = useLanguage();
   const { theme } = useTheme();
   const [input, setInput] = useState('');
   const [isDarkMode, setIsDarkMode] = useState(false);
   const keyboard = useRef<any>(null);
 
   useEffect(() => {
+    console.log(onInput);
+  }, [onInput]);
+  useEffect(() => {
     setIsDarkMode(theme === 'dark');
   }, [theme]);
 
   const handleChange = (input: string) => {
+    console.log(onInput);
     setInput(input);
     onInput(input);
   };

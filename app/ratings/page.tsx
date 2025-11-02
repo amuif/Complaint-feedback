@@ -622,13 +622,12 @@ export default function RatingsPage() {
                 lang={language}
                 dir={language === 'en' ? 'ltr' : 'auto'}
                 inputMode="text"
-                value={comments}
-                onChange={(e) => setComments(e.target.value)}
                 onFocus={() => focusField('comments')}
+                {...register('comment')}
               />
               {showAmharicKeyboard && (
                 <div className="mt-4 p-4 border rounded-md bg-muted">
-                  <AmharicKeyboard onCharacterClick={handleAmharicInput} />
+                  <AmharicKeyboard onInput={(text) => setValue('comment', text)} />
                 </div>
               )}
             </div>

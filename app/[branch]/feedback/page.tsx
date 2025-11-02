@@ -27,37 +27,26 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Sector, Subcities } from '@/types/types';
-import { useSubcityName } from '@/hooks/use-subcity-name';
-import { useCurrentSubcity, useSubcityAdmin } from '@/hooks/use-subcity';
 
 type FeedbackFormData = z.infer<typeof feedbackSchema>;
 type FeedbackStatus = z.infer<typeof feedbackStatus>;
 
 export default function FeedbackPage() {
   const { t, language } = useLanguage();
-  const subcity = useSubcityName();
-  const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
-  const currentSub = useCurrentSubcity();
   const [showAmharicKeyboard, setShowAmharicKeyboard] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
+  const [statusRef, setStatusRef] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
   const [sectorLeaders, setSectorLeaders] = useState<Sector[]>([]);
-  const [subcityLeader, setSubcityLeader] = useState<Sector>();
-  const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
 
   const loadSectorLeaders = async () => {
+    if (sectorLeaders.length > 0) return;
     try {
-      if (currentSubcity && subcity) {
-        console.log('Loading sector leaders for current subcity:', currentSubcity.id);
-        const response = await findCurrentAdmin(currentSubcity.id);
-        console.log(response);
-        setSubcityLeader(response);
-      } else {
-        console.log('Loading all sector leaders');
-        const response = await apiClient.getSectorLeaders();
-        setSectorLeaders(response);
-      }
+      const response = await apiClient.getSectorLeaders();
+      console.log(response);
+      // Provide a fallback empty array in case response.data is undefined
+      setSectorLeaders(response || []);
     } catch (error) {
       console.error('Failed to load sector leaders:', error);
       setSectorLeaders([]);
@@ -65,15 +54,8 @@ export default function FeedbackPage() {
   };
 
   useEffect(() => {
-    setCurrentSubcity(currentSub);
-    console.log(currentSubcity);
-  }, [currentSub]);
-
-  useEffect(() => {
-    if (currentSubcity) {
-      loadSectorLeaders();
-    }
-  }, [currentSubcity]);
+    loadSectorLeaders();
+  }, []);
   const {
     register,
     handleSubmit,
@@ -199,47 +181,16 @@ export default function FeedbackPage() {
                         <SelectValue placeholder={t('complaints.form.selectSectorLeader')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {Array.isArray(sectorLeaders) ? (
-                          subcity ? (
-                            (() => {
-                              console.log(subcityLeader);
-                              const firstLeader = subcityLeader;
-
-                              console.log('tehre is not firstLeader');
-                              if (!firstLeader) return null;
-                              console.log('tehre is firstLeader');
-
-                              const id = firstLeader.id;
-                              const appointedPerson = firstLeader[`appointed_person_${language}`];
-                              if (!id || !appointedPerson) return null;
-                              console.log('tehre is id and appointedPerson');
-                              return (
-                                <SelectItem key={id} value={`${id} | ${appointedPerson}`}>
-                                  {appointedPerson}
-                                </SelectItem>
-                              );
-                            })()
-                          ) : (
-                            sectorLeaders
-                              .map((sectorLeader, index) => {
-                                const id = sectorLeader.id;
-                                const appointedPerson =
-                                  sectorLeader[`appointed_person_${language}`];
-                                return (
-                                  <SelectItem
-                                    key={id ?? index}
-                                    value={`${id} | ${appointedPerson}`}
-                                  >
-                                    {appointedPerson}
-                                  </SelectItem>
-                                );
-                              })
-                              .filter(Boolean)
-                          )
-                        ) : (
-                          <SelectItem disabled value="no-items"></SelectItem>
-                        )}
-                      </SelectContent>{' '}
+                        {sectorLeaders.map((sectorLeader, index) => {
+                          const id = sectorLeader.id;
+                          const appointedPerson = sectorLeader[`appointed_person_${language}`];
+                          return (
+                            <SelectItem key={index} value={`${id}`}>
+                              {appointedPerson}
+                            </SelectItem>
+                          );
+                        })}{' '}
+                      </SelectContent>
                     </Select>
                   )}
                 />
@@ -287,7 +238,9 @@ export default function FeedbackPage() {
                     ? t('feedback.form.hideKeyboard')
                     : t('feedback.form.showKeyboard')}
                 </Button>
-                {showAmharicKeyboard && <AmharicKeyboard onCharacterClick={handleAmharicInput} />}
+                {showAmharicKeyboard && (
+                  <AmharicKeyboard onInput={(text) => setValue('feedback_text', text)} />
+                )}
               </div>
               <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? 'Submitting...' : t('feedback.form.submit')}

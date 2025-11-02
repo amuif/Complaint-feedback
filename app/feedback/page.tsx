@@ -238,7 +238,9 @@ export default function FeedbackPage() {
                     ? t('feedback.form.hideKeyboard')
                     : t('feedback.form.showKeyboard')}
                 </Button>
-                {showAmharicKeyboard && <AmharicKeyboard onCharacterClick={handleAmharicInput} />}
+                {showAmharicKeyboard && (
+                  <AmharicKeyboard onInput={(text) => setValue('feedback_text', text)} />
+                )}
               </div>
               <Button type="submit" className="w-full" disabled={isSubmitting}>
                 {isSubmitting ? 'Submitting...' : t('feedback.form.submit')}
