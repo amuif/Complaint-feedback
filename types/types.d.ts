@@ -128,7 +128,7 @@ export interface Employee {
   department: Department;
   sector: Sector;
   team: Department;
-  division?: Division;
+  division: Division;
   section: string;
   city: string | null;
   subcity: Subcities;
