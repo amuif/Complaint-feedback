@@ -105,6 +105,7 @@ const TextForm = () => {
     },
     mode: 'onChange',
   });
+
   useEffect(() => {
     setCurrentSubcity(currentSub);
     if (currentSub) {
@@ -114,10 +115,6 @@ const TextForm = () => {
       setSubcityId('main');
     }
   }, [currentSub]);
-
-  useEffect(() => {
-    console.log('Employees', employees);
-  }, [employees]);
 
   useEffect(() => {
     loadSubcities();
@@ -154,11 +151,18 @@ const TextForm = () => {
         const sectorId = selectedEmployee.sector?.id;
         const directorId = selectedEmployee.division?.id;
         const teamLeaderId = selectedEmployee.department?.id;
-
+        const appointedPerson = [
+          selectedEmployee?.[`first_name_${language}`],
+          selectedEmployee?.[`middle_name_${language}`],
+          selectedEmployee?.[`last_name_${language}`],
+        ]
+          .filter(Boolean)
+          .join(' ');
         // Build readable labels
         const sectorValue = `${sectorId} | ${selectedEmployee.sector?.[`appointed_person_${language}`] || ''}`;
         const directorValue = `${directorId} | ${selectedEmployee.division?.[`appointed_person_${language}`] || ''}`;
         const teamLeaderValue = `${teamLeaderId} | ${selectedEmployee.department?.[`appointed_person_${language}`] || ''}`;
+        const employeeValue = `${selectedEmployee.id} | ${appointedPerson}`;
 
         // Load sector leaders
         console.log(`[${new Date().toISOString()}] ▶ Loading sector leaders...`);
@@ -193,6 +197,7 @@ const TextForm = () => {
         );
         const employees = await loadEmployees(teamLeaderValue);
         console.log(`[${new Date().toISOString()}] Employees loaded: ${employees?.length ?? 0}`);
+        handleEmployeeChange(employeeValue);
 
         // Batch form updates
         setTimeout(() => {
@@ -222,6 +227,7 @@ const TextForm = () => {
     };
     loadHierarchy();
   }, [selectedEmployee, language, setValue]);
+
   useEffect(() => {
     console.log(
       '🔍 CURRENT STATE - Directors:',
@@ -232,6 +238,7 @@ const TextForm = () => {
       employees.length
     );
   }, [directors, teamLeaders, employees]);
+
   const handleEmployeeBySubcitySearch = () => {
     if (!EmployeesBySubcity || !searchQuery) {
       console.log("Either searchQuery or employees bg subcity doesn't exit");
@@ -365,7 +372,7 @@ const TextForm = () => {
   };
   const loadDirectors = async (value: string): Promise<Director[]> => {
     const [id, _] = value.split('|');
-    setSector_id(id);
+    setSector_id(id.trim());
     setLoadingDirectors(true);
     setErrorMessage(null);
     let data: Director[] = [];
@@ -390,7 +397,6 @@ const TextForm = () => {
       setLoadingDirectors(false);
     }
   };
-
   const loadSubcities = async () => {
     setLoadingSubcities(true);
     setErrorMessage(null);
@@ -412,7 +418,7 @@ const TextForm = () => {
   };
   const loadTeamLeaders = async (director: string) => {
     const [id, _] = director.split('|');
-    setDirectors_id(id);
+    setDirectors_id(id.trim());
     setLoadingTeamLeaders(true);
     setErrorMessage(null);
     let data: TeamLeader[];
@@ -439,7 +445,7 @@ const TextForm = () => {
   };
   const loadEmployees = async (teamLeader: string) => {
     const [id, _] = teamLeader?.split('|');
-    console.log(id);
+    console.log(id.trim());
     setTeam_id(id);
     setLoadingEmployees(true);
     setErrorMessage(null);
@@ -492,10 +498,9 @@ const TextForm = () => {
       loadEmployees(teamLeaderId);
     }
   };
-
   const handleEmployeeChange = (employeeId: string) => {
     const [id, _] = employeeId.split('|');
-    setEmployee_id(id);
+    setEmployee_id(id.trim());
     const selectedEmployee = employees.find((e) => String(e.id) === String(id));
     setValue('office', selectedEmployee?.office_number || '');
   };
@@ -519,14 +524,14 @@ const TextForm = () => {
 
       formData.append('complaint_name', data.complainantName);
       formData.append('phone_number', data.phone);
-      formData.append('subcity_id', subcity_id.toString());
+      formData.append('subcity_id', subcity_id.trim().toString());
       formData.append('woreda', data.woreda);
       formData.append('complaint_description', data.complaintDetails);
       formData.append('desired_action', data.actionRequired);
-      formData.append('sector_id', sector_id.toString());
-      formData.append('division_id', directors_id.toString());
-      formData.append('department_id', team_id.toString());
-      formData.append('employee_id', employee_id.toString());
+      formData.append('sector_id', sector_id.trim().toString());
+      formData.append('division_id', directors_id.trim().toString());
+      formData.append('department_id', team_id.trim().toString());
+      formData.append('employee_id', employee_id.trim().toString());
       formData.append('complaint_source', 'public_complaint');
       formData.append('complaint_date', complaintDate);
 
@@ -543,6 +548,8 @@ const TextForm = () => {
         );
         setAudioUrl(null);
         reset();
+        setSearchQuery('');
+        setFoundEmployees([]);
         setSelectedDateDisplay('');
         setAttachment(null);
       } else {

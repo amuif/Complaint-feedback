@@ -30,13 +30,18 @@ import {
 } from '@/types/types';
 import { useCurrentSubcity, useSubcityAdmin } from '@/hooks/use-subcity';
 import { useSubcityName } from '@/hooks/use-subcity-name';
+import { useOrganization } from '@/hooks/use-organization';
+import { ScrollArea } from '../ui/scroll-area';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { PICTURE_URL } from '@/constants/base_url';
 
 type ComplaintFormData = z.infer<typeof voiceComplaint>;
 
 const VoiceForm = () => {
   const { t, language } = useLanguage();
-  const subcity = useSubcityName();
+  const { EmployeesBySubcity, setSubcityId } = useOrganization();
   const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
+  const subcity = useSubcityName();
   const currentSub = useCurrentSubcity();
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -60,35 +65,210 @@ const VoiceForm = () => {
   const [attachment, setAttachment] = useState<File | null>(null);
   const [attachmentPreview, setAttachmentPreview] = useState<string | null>(null);
   const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
+  const [foundEmployees, setFoundEmployees] = useState<Employee[]>([]);
+  const [selectedEmployee, setSelectedEmployee] = useState<Employee | null>(null);
+  const [hierarchyLoading, setHierarchyLoading] = useState(false);
+  const [searchQuery, setSearchQuery] = useState<string>('');
+  const {
+    register,
+    handleSubmit,
+    control,
+    setValue,
+    watch,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<ComplaintFormData>({
+    resolver: zodResolver(voiceComplaint),
+    defaultValues: {
+      complaint_name: '',
+      subcity_id: '',
+      woreda: '',
+      phone_number: '',
+      complaintDetails: '',
+      sectorLeader: '',
+      director: '',
+      teamLeader: '',
+      employee: '',
+      office: '',
+      actionRequired: '',
+      complaintDate: '',
+      voice_file_path: '',
+      complaint_source: 'public_source',
+      attachment: null,
+    },
+    mode: 'onChange',
+  });
 
+  const sectorLeader = watch('sectorLeader');
+  const director = watch('director');
+  const teamLeader = watch('teamLeader');
+  const subcityId = watch('subcity_id');
   useEffect(() => {
     setCurrentSubcity(currentSub);
     console.log(currentSub);
   }, [currentSub]);
 
   useEffect(() => {
+    setCurrentSubcity(currentSub);
+    if (currentSub) {
+      console.log(currentSub.id);
+      setSubcityId(currentSub.id);
+    } else {
+      setSubcityId('main');
+    }
+  }, [currentSub]);
+  useEffect(() => {
     loadSubcities();
   }, []);
+  useEffect(() => {
+    if (!selectedEmployee) return;
 
-  const loadDirectors = async (value: string) => {
-    const [id, name] = value.split('|');
+    const loadHierarchy = async () => {
+      setHierarchyLoading(true);
+      try {
+        setErrorMessage(null);
+
+        console.log(`[${new Date().toISOString()}] 🧩 Selected employee:`, selectedEmployee);
+
+        const sectorId = selectedEmployee.sector?.id;
+        const directorId = selectedEmployee.division?.id;
+        const teamLeaderId = selectedEmployee.department?.id;
+        const appointedPerson = [
+          selectedEmployee?.[`first_name_${language}`],
+          selectedEmployee?.[`middle_name_${language}`],
+          selectedEmployee?.[`last_name_${language}`],
+        ]
+          .filter(Boolean)
+          .join(' ');
+        // Build readable labels
+        const sectorValue = `${sectorId} | ${selectedEmployee.sector?.[`appointed_person_${language}`] || ''}`;
+        const directorValue = `${directorId} | ${selectedEmployee.division?.[`appointed_person_${language}`] || ''}`;
+        const teamLeaderValue = `${teamLeaderId} | ${selectedEmployee.department?.[`appointed_person_${language}`] || ''}`;
+        const employeeValue = `${selectedEmployee.id} | ${appointedPerson}`;
+
+        // Load sector leaders
+        console.log(`[${new Date().toISOString()}] ▶ Loading sector leaders...`);
+        await loadSectorLeaders();
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // Load directors with error handling
+        console.log(`[${new Date().toISOString()}] ▶ Loading directors for sectorId=${sectorId}`);
+        const directors = await loadDirectors(sectorValue);
+        if (!directors || directors.length === 0) {
+          throw new Error('No directors found for the selected sector');
+        }
+        console.log(`[${new Date().toISOString()}] Directors loaded: ${directors?.length ?? 0}`);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // Load team leaders with error handling
+        console.log(
+          `[${new Date().toISOString()}] ▶ Loading team leaders for directorId=${directorId}`
+        );
+        const teamLeaders = await loadTeamLeaders(directorValue);
+        if (!teamLeaders || teamLeaders.length === 0) {
+          throw new Error('No team leaders found for the selected director');
+        }
+        console.log(
+          `[${new Date().toISOString()}] Team leaders loaded: ${teamLeaders?.length ?? 0}`
+        );
+        await new Promise((resolve) => setTimeout(resolve, 100));
+
+        // Load employees with error handling
+        console.log(
+          `[${new Date().toISOString()}] ▶ Loading employees for teamLeaderId=${teamLeaderId}`
+        );
+        const employees = await loadEmployees(teamLeaderValue);
+        console.log(`[${new Date().toISOString()}] Employees loaded: ${employees?.length ?? 0}`);
+        handleEmployeeChange(employeeValue);
+
+        // Batch form updates
+        setTimeout(() => {
+          setValue('sectorLeader', sectorValue);
+          setValue('director', directorValue);
+          setValue('teamLeader', teamLeaderValue);
+
+          const fullName = [
+            selectedEmployee[`first_name_${language}`],
+            selectedEmployee[`middle_name_${language}`],
+            selectedEmployee[`last_name_${language}`],
+          ]
+            .filter(Boolean)
+            .join(' ');
+
+          setValue('employee', `${selectedEmployee.id} | ${fullName}`);
+          setValue('office', selectedEmployee.office_number || '');
+        }, 0);
+
+        console.log(`[${new Date().toISOString()}] ✅ All hierarchy values populated successfully`);
+      } catch (err) {
+        console.error('❌ Error loading employee hierarchy:', err);
+        setErrorMessage(`Failed to load organizational data: ${err}`);
+      } finally {
+        setHierarchyLoading(false);
+      }
+    };
+    loadHierarchy();
+  }, [selectedEmployee, language, setValue]);
+
+  useEffect(() => {
+    console.log(
+      '🔍 CURRENT STATE - Directors:',
+      directors.length,
+      'TeamLeaders:',
+      teamLeaders.length,
+      'Employees:',
+      employees.length
+    );
+  }, [directors, teamLeaders, employees]);
+
+  const loadSectorLeaders = async () => {
+    if (sectorLeaders.length > 0) return;
+    setLoadingSectorLeaders(true);
+    setErrorMessage(null);
+    let response: Sector | Sector[];
+
+    try {
+      if (currentSubcity && subcity) {
+        console.log('Loading sector leaders for current subcity:', currentSubcity.id);
+        response = await findCurrentAdmin(currentSubcity.id);
+        console.log(response);
+        setSubcityLeader(response);
+      } else {
+        console.log('Loading all sector leaders');
+        response = await apiClient.getSectorLeaders();
+        setSectorLeaders(response);
+      }
+    } catch (error) {
+      console.error('Failed to load sector leaders:', error);
+      setErrorMessage('Failed to load sector leaders. Please try again.');
+      setSectorLeaders([]);
+    } finally {
+      setLoadingSectorLeaders(false);
+    }
+  };
+  const loadDirectors = async (value: string): Promise<Director[]> => {
+    const [id, _] = value.split('|');
     setSector_id(id);
     setLoadingDirectors(true);
     setErrorMessage(null);
+    let data: Director[] = [];
     try {
       if (currentSubcity && subcity) {
         console.log('going-subcity');
-        const data = await apiClient.getSubcityDirectors(id);
-        console.log(data);
+        data = await apiClient.getSubcityDirectors(id);
+        console.log('Loaded directors:', data);
         setDirectors(data || []);
       } else {
-        const data = await apiClient.getDirectorsBySectorLeader(id);
+        data = await apiClient.getDirectorsBySectorLeader(id);
+        console.log(data);
         setDirectors(data || []);
       }
+      return data;
     } catch (error) {
       console.error(`Failed to load directors for sector leader ${id}:`, error);
       setErrorMessage('Failed to load directors. Please try again.');
       setDirectors([]);
+      return [];
     } finally {
       setLoadingDirectors(false);
     }
@@ -112,139 +292,112 @@ const VoiceForm = () => {
       setLoadingSubcities(false);
     }
   };
-
-  const loadSectorLeaders = async () => {
-    if (sectorLeaders.length > 0) return;
-    setLoadingSectorLeaders(true);
-    setErrorMessage(null);
-
-    try {
-      if (currentSubcity && subcity) {
-        console.log('Loading sector leaders for current subcity:', currentSubcity.id);
-        const response = await findCurrentAdmin(currentSubcity.id);
-        console.log(response);
-        setSubcityLeader(response);
-      } else {
-        console.log('Loading all sector leaders');
-        const response = await apiClient.getSectorLeaders();
-        setSectorLeaders(response);
-      }
-    } catch (error) {
-      console.error('Failed to load sector leaders:', error);
-      setErrorMessage('Failed to load sector leaders. Please try again.');
-      setSectorLeaders([]);
-    } finally {
-      setLoadingSectorLeaders(false);
-    }
-  };
-
-  const loadTeamLeaders = async (directorId: string) => {
-    console.info(directorId);
-    const [id, name] = directorId.split('|');
+  const loadTeamLeaders = async (director: string) => {
+    const [id, _] = director.split('|');
     setDirectors_id(id);
     setLoadingTeamLeaders(true);
     setErrorMessage(null);
+    let data: TeamLeader[];
     try {
       if (currentSubcity && subcity) {
         console.log('going dteam sub');
-        const data = await apiClient.getTeamLeaderSubcityByDirector(id, currentSub?.id);
+        data = await apiClient.getTeamLeaderSubcityByDirector(id, currentSub?.id);
         console.log(data);
         setTeamLeaders(data || []);
       } else {
-        const data = await apiClient.getTeamLeadersByDirector(id);
+        data = await apiClient.getTeamLeadersByDirector(id);
         console.log(data);
         setTeamLeaders(data || []);
       }
+      return data;
     } catch (error) {
-      console.error(`Failed to load team leaders for director ${directorId}:`, error);
+      console.error(`Failed to load team leaders for director ${director}:`, error);
       setErrorMessage('Failed to load team leaders. Please try again.');
       setTeamLeaders([]);
+      return [];
     } finally {
       setLoadingTeamLeaders(false);
     }
   };
-
   const loadEmployees = async (teamLeader: string) => {
-    const [id, name] = teamLeader?.split('|');
+    const [id, _] = teamLeader?.split('|');
     console.log(id);
     setTeam_id(id);
     setLoadingEmployees(true);
     setErrorMessage(null);
+    let data: Employee[];
     try {
-      const data = await apiClient.getEmployeesByTeamLeader(id);
+      data = await apiClient.getEmployeesByTeamLeader(id);
       console.log(data);
       setEmployees(data || []);
+      return data;
     } catch (error) {
       console.error(`Failed to load employees for team leader ${id}:`, error);
       setErrorMessage('Failed to load employees. Please try again.');
       setEmployees([]);
+      return [];
     } finally {
       setLoadingEmployees(false);
     }
   };
-
-  const handleEmployeeChange = (employeeId: string) => {
-    const [id, name] = employeeId.split('|');
-    setEmployee_id(id);
-
-    // Ensure both sides are the same type for comparison
-    const selectedEmployee = employees.find((e) => String(e.id) === String(id));
-    setValue('office', selectedEmployee?.office_number || '');
-  };
-
   const handleSectorLeaderChange = (sectorLeaderId: string) => {
     setValue('director', '');
     setValue('teamLeader', '');
     setValue('employee', '');
     setValue('office', '');
-    setDirectors([]);
-    setTeamLeaders([]);
-    setEmployees([]);
+    // setDirectors([]);
+    // setTeamLeaders([]);
+    // setEmployees([]);
 
     if (sectorLeaderId) {
       loadDirectors(sectorLeaderId);
     }
   };
-
   const handleDirectorChange = (directorId: string) => {
     setValue('teamLeader', '');
     setValue('employee', '');
     setValue('office', '');
-    setTeamLeaders([]);
-    setEmployees([]);
+    // setTeamLeaders([]);
+    // setEmployees([]);
 
     if (directorId) {
       loadTeamLeaders(directorId);
     }
   };
-
   const handleTeamLeaderChange = (teamLeaderId: string) => {
     setValue('employee', '');
     setValue('office', '');
-    setEmployees([]);
+    // setEmployees([]);
 
     if (teamLeaderId) {
+      console.log('teamLeaderId', teamLeaderId);
       loadEmployees(teamLeaderId);
     }
+  };
+  const handleEmployeeChange = (employeeId: string) => {
+    const [id, _] = employeeId.split('|');
+    setEmployee_id(id.trim());
+    const selectedEmployee = employees.find((e) => String(e.id) === String(id));
+    setValue('office', selectedEmployee?.office_number || '');
   };
 
   const onSubmit = async (data: voiceComplaintData) => {
     setErrorMessage(null);
-    const [subcity_id, subcity_name] = data.subcity_id.split('|');
+    const [subcity_id, _] = data.subcity_id.split('|');
     try {
       const complaintData: voiceComplaintData = {
         complaint_name: data.complaint_name,
         phone_number: data.phone_number,
-        subcity_id: subcity_id,
+        subcity_id: subcity_id.trim().toString(),
         woreda: data.woreda,
         office: data.office || '',
         complaint_description: data.complaint_description,
         desired_action: data.desired_action,
         complaint_date: data.complaint_date,
-        sector_id: sector_id,
-        division_id: directors_id,
-        department_id: team_id,
-        employee_id: employee_id,
+        sector_id: sector_id.trim().toString(),
+        division_id: directors_id.trim().toString(),
+        department_id: team_id.trim().toString(),
+        employee_id: employee_id.trim().toString(),
         voice_file_path: audioUrl,
         complaint_source: 'public_complaint',
         attachment: attachment ?? null,
@@ -259,6 +412,8 @@ const VoiceForm = () => {
         );
         setAudioUrl('');
         reset();
+        setSearchQuery('');
+        setFoundEmployees([]);
       } else {
         throw new Error(response.message || 'Failed to submit complaint');
       }
@@ -268,7 +423,19 @@ const VoiceForm = () => {
       handleApiError(error, 'Failed to submit complaint. Please try again.');
     }
   };
-
+  const handleEmployeeBySubcitySearch = () => {
+    if (!EmployeesBySubcity || !searchQuery) {
+      console.log("Either searchQuery or employees bg subcity doesn't exit");
+      return;
+    }
+    console.log(EmployeesBySubcity);
+    const employees =
+      EmployeesBySubcity.filter((employee) =>
+        employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
+      ) || [];
+    console.log('Found employees', employees);
+    setFoundEmployees(employees);
+  };
   const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
     setAttachment(file);
@@ -292,40 +459,6 @@ const VoiceForm = () => {
     setAttachmentPreview(null);
     setValue('attachment', undefined, { shouldValidate: true }); // Set to undefined
   };
-
-  const {
-    register,
-    handleSubmit,
-    control,
-    setValue,
-    watch,
-    reset,
-    formState: { errors, isSubmitting, isValid },
-  } = useForm<ComplaintFormData>({
-    resolver: zodResolver(voiceComplaint),
-    defaultValues: {
-      complaint_name: '',
-      subcity_id: '',
-      woreda: '',
-      phone_number: '',
-      complaintDetails: '',
-      sectorLeader: '',
-      director: '',
-      teamLeader: '',
-      employee: '',
-      office: '',
-      actionRequired: '',
-      complaintDate: '',
-      voice_file_path: '',
-      complaint_source: 'public_source',
-      attachment: null,
-    },
-    mode: 'onChange',
-  });
-  const sectorLeader = watch('sectorLeader');
-  const director = watch('director');
-  const teamLeader = watch('teamLeader');
-
   return (
     <div>
       {' '}
@@ -355,7 +488,6 @@ const VoiceForm = () => {
                 {watch('complaint_name')?.length || 0}/50 {t('complaints.form.characters.used')}
               </p>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="voicePhone">{t('complaints.form.phone')} *</Label>
               <Input
@@ -374,6 +506,135 @@ const VoiceForm = () => {
               <p className="text-xs text-muted-foreground">
                 {watch('phone_number')?.length || 0}/10 {t('complaints.form.characters.used')}
               </p>
+            </div>
+            <div className="space-y-1">
+              <Label htmlFor="subcity">{t('complaints.form.subcity')} *</Label>
+              <Controller
+                name="subcity_id"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    value={field.value}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      loadSectorLeaders();
+                    }}
+                    disabled={loadingSubcities || !subcities || subcities.length === 0}
+                  >
+                    <SelectTrigger id="subcity">
+                      <SelectValue
+                        placeholder={
+                          loadingSubcities ? 'Loading subcities...' : t('select.form.subcity')
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {currentSubcity
+                        ? (() => {
+                            const id = currentSubcity.id;
+                            const subcityName = currentSubcity?.[`name_${language}`];
+                            return (
+                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                {subcityName}
+                              </SelectItem>
+                            );
+                          })()
+                        : subcities?.map((subcity) => {
+                            const id = subcity.id;
+                            const subcityName = subcity?.[`name_${language}`];
+                            return (
+                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                {subcityName}
+                              </SelectItem>
+                            );
+                          })}
+                    </SelectContent>{' '}
+                  </Select>
+                )}
+              />
+              {errors.subcity_id && (
+                <p className="text-sm text-red-500">{errors.subcity_id.message}</p>
+              )}
+            </div>{' '}
+            <div className="space-y-1">
+              <Label>Quick search</Label>
+              <div className="flex-col gap-3">
+                <div className="flex gap-2">
+                  <Input
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Enter employees name"
+                  />
+                  <Button
+                    type="button"
+                    onClick={handleEmployeeBySubcitySearch}
+                    disabled={!searchQuery.trim() || !subcityId}
+                  >
+                    Search
+                  </Button>
+                </div>
+                <div>
+                  <span className="text-sm">
+                    For quick employee search, you must select a sub city first
+                  </span>
+                </div>
+              </div>
+              {foundEmployees.length !== 0 && (
+                <ScrollArea className="h-[200px] w-full rounded-md border p-4 pt-6">
+                  <div className="space-y-3 w-full">
+                    {foundEmployees.map((employee) => (
+                      <Card
+                        key={employee.id}
+                        className="flex flex-col sm:flex-row sm:items-center sm:justify-between w-full gap-4 p-4 rounded-xl shadow-sm "
+                      >
+                        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                          <Avatar className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0">
+                            <AvatarImage
+                              src={
+                                employee.profile_picture instanceof File
+                                  ? URL.createObjectURL(employee.profile_picture)
+                                  : typeof employee.profile_picture === 'string'
+                                    ? `${PICTURE_URL}/Uploads/profile_pictures/${employee.profile_picture}`
+                                    : undefined
+                              }
+                              className="object-cover"
+                            />
+                            <AvatarFallback className="text-base sm:text-lg">
+                              {employee[`first_name_${language}`] &&
+                              employee[`last_name_${language}`]
+                                ? `${employee[`first_name_${language}`][0]}${employee[`last_name_${language}`][0]}`
+                                : 'NA'}
+                            </AvatarFallback>
+                          </Avatar>
+
+                          <div className="flex flex-col text-center sm:text-left">
+                            <span className="text-sm sm:text-base font-medium ">
+                              {employee[`first_name_${language}`]}{' '}
+                              {employee[`middle_name_${language}`]}{' '}
+                              {employee[`last_name_${language}`]}
+                            </span>
+                            {employee.office_number && (
+                              <CardDescription className="text-xs sm:text-sm ">
+                                Office: {employee.office_number}
+                              </CardDescription>
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex justify-end sm:justify-center pt-0">
+                          <Button
+                            type="button"
+                            onClick={() => setSelectedEmployee(employee)}
+                            className="w-full sm:w-auto"
+                          >
+                            Select
+                          </Button>
+                        </div>
+                      </Card>
+                    ))}
+                  </div>
+                </ScrollArea>
+              )}
             </div>
             <input type="hidden" {...register('complaint_source')} value="public_complaint" />
             <VoiceFeedback
@@ -424,57 +685,7 @@ const VoiceForm = () => {
                 <p className="text-sm text-red-500">{errors.attachment.message}</p>
               )}
             </div>
-
             <div className="grid grid-cols-1 gap-6 mt-8">
-              <div className="space-y-1">
-                <Label htmlFor="subcity">{t('complaints.form.subcity')} *</Label>
-                <Controller
-                  name="subcity_id"
-                  control={control}
-                  render={({ field }) => (
-                    <Select
-                      value={field.value}
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        loadSectorLeaders();
-                      }}
-                      disabled={loadingSubcities || !subcities || subcities.length === 0}
-                    >
-                      <SelectTrigger id="subcity">
-                        <SelectValue
-                          placeholder={
-                            loadingSubcities ? 'Loading subcities...' : t('select.form.subcity')
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {currentSubcity
-                          ? (() => {
-                              const id = currentSubcity.id;
-                              const subcityName = currentSubcity?.[`name_${language}`];
-                              return (
-                                <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                                  {subcityName}
-                                </SelectItem>
-                              );
-                            })()
-                          : subcities?.map((subcity) => {
-                              const id = subcity.id;
-                              const subcityName = subcity?.[`name_${language}`];
-                              return (
-                                <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                                  {subcityName}
-                                </SelectItem>
-                              );
-                            })}
-                      </SelectContent>{' '}
-                    </Select>
-                  )}
-                />
-                {errors.subcity_id && (
-                  <p className="text-sm text-red-500">{errors.subcity_id.message}</p>
-                )}
-              </div>{' '}
               <div className="space-y-1">
                 <Label htmlFor="sectorLeader">{t('complaints.form.sectorLeader')}</Label>
                 <Controller
@@ -593,39 +804,42 @@ const VoiceForm = () => {
                 <Controller
                   name="teamLeader"
                   control={control}
-                  render={({ field }) => (
-                    <Select
-                      value={field.value}
-                      onValueChange={(value) => {
-                        field.onChange(value);
-                        handleTeamLeaderChange(value);
-                      }}
-                      disabled={!director || loadingTeamLeaders}
-                    >
-                      <SelectTrigger id="teamLeader">
-                        <SelectValue
-                          placeholder={
-                            loadingTeamLeaders
-                              ? t('complaints.form.TeamLeaderLoading')
-                              : director
-                                ? t('complaints.form.selectTeamLeader')
-                                : t('complaints.form.selectDirectorfirst')
-                          }
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {teamLeaders.map((teamLeader) => {
-                          const id = teamLeader.id;
-                          const appointedPerson = teamLeader?.[`appointed_person_${language}`];
-                          return (
-                            <SelectItem key={teamLeader.id} value={`${id} | ${appointedPerson}`}>
-                              {appointedPerson}
-                            </SelectItem>
-                          );
-                        })}
-                      </SelectContent>
-                    </Select>
-                  )}
+                  render={({ field }) => {
+                    console.log('🔍 TeamLeader Field:', field.value);
+                    return (
+                      <Select
+                        value={field.value}
+                        onValueChange={(value) => {
+                          field.onChange(value);
+                          handleTeamLeaderChange(value);
+                        }}
+                        disabled={!director || loadingTeamLeaders}
+                      >
+                        <SelectTrigger id="teamLeader">
+                          <SelectValue
+                            placeholder={
+                              loadingTeamLeaders
+                                ? t('complaints.form.TeamLeaderLoading')
+                                : director
+                                  ? t('complaints.form.selectTeamLeader')
+                                  : t('complaints.form.selectDirectorfirst')
+                            }
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {teamLeaders.map((teamLeader) => {
+                            const id = teamLeader.id;
+                            const appointedPerson = teamLeader?.[`appointed_person_${language}`];
+                            return (
+                              <SelectItem key={teamLeader.id} value={`${id} | ${appointedPerson}`}>
+                                {appointedPerson}
+                              </SelectItem>
+                            );
+                          })}
+                        </SelectContent>
+                      </Select>
+                    );
+                  }}
                 />
               </div>
               {/* Expertise (Employees) - always visible, optional */}
@@ -646,22 +860,26 @@ const VoiceForm = () => {
                       <SelectTrigger id="employee">
                         <SelectValue
                           placeholder={
-                            loadingEmployees
-                              ? t('complaints.form.ExpertiseLoading')
-                              : teamLeader
-                                ? t('complaints.form.selectExpertise')
-                                : t('complaints.form.selectTeamleaderfirst')
+                            hierarchyLoading
+                              ? 'Loading employee data...'
+                              : loadingEmployees
+                                ? t('complaints.form.ExpertiseLoading')
+                                : teamLeader
+                                  ? t('complaints.form.selectExpertise')
+                                  : t('complaints.form.selectTeamleaderfirst')
                           }
                         />
                       </SelectTrigger>
                       <SelectContent>
                         {employees.map((employee) => {
                           const id = employee.id;
-                          const appointedPerson =
-                            employee?.[`first_name_${language}`] +
-                            ' ' +
-                            employee?.[`middle_name_${language}`];
-                          +' ' + employee?.[`last_name_${language}`];
+                          const appointedPerson = [
+                            employee?.[`first_name_${language}`],
+                            employee?.[`middle_name_${language}`],
+                            employee?.[`last_name_${language}`],
+                          ]
+                            .filter(Boolean)
+                            .join(' ');
                           return (
                             <SelectItem key={employee.id} value={`${id} | ${appointedPerson}`}>
                               {appointedPerson}
