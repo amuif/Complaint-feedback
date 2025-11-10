@@ -13,6 +13,7 @@ interface VoiceFeedbackProps {
   setAudioUrl: (url: string) => void;
   setAudioBlob: (blob: Blob | null) => void;
 }
+
 export const VoiceFeedback: React.FC<VoiceFeedbackProps> = ({
   register,
   audioUrl,
@@ -26,65 +27,73 @@ export const VoiceFeedback: React.FC<VoiceFeedbackProps> = ({
   const [error, setError] = useState<string | null>(null);
   const [isSupported, setIsSupported] = useState(true);
   const [permissionGranted, setPermissionGranted] = useState<boolean | null>(null);
+  const [isClient, setIsClient] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Check browser support and HTTPS
+  // Set client-side flag
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // Check if we're on HTTPS (or localhost)
-      const isSecure =
-        window.location.protocol === 'https:' ||
-        window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1';
-
-      if (!isSecure) {
-        setIsSupported(false);
-        setError(
-          "Voice recording requires a secure connection (HTTPS). This may be why recording isn't working on the Vercel deployment."
-        );
-        return;
-      }
-
-      // Log browser information to help with debugging
-      const userAgent = navigator.userAgent;
-      console.log('Browser User Agent:', userAgent);
-
-      // Check MediaRecorder API support
-      if (!navigator.mediaDevices || !window.MediaRecorder) {
-        setIsSupported(false);
-        setError(
-          "Your browser doesn't support voice recording. Please try using Chrome, Firefox, or Edge browser."
-        );
-        return;
-      }
-
-      // Check if permissions are already granted
-      navigator.permissions
-        ?.query({ name: 'microphone' as PermissionName })
-        .then((permissionStatus) => {
-          setPermissionGranted(permissionStatus.state === 'granted');
-
-          permissionStatus.onchange = () => {
-            setPermissionGranted(permissionStatus.state === 'granted');
-          };
-        })
-        .catch((err) => {
-          console.log('Permission query not supported, will check when recording starts', err);
-        });
-    }
+    setIsClient(true);
   }, []);
+
+  // Check browser support and HTTPS - only on client side
+  useEffect(() => {
+    if (!isClient) return;
+
+    // Check if we're on HTTPS (or localhost)
+    const isSecure =
+      window.location.protocol === 'https:' ||
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1';
+
+    if (!isSecure) {
+      setIsSupported(false);
+      setError(
+        "Voice recording requires a secure connection (HTTPS). This may be why recording isn't working on the Vercel deployment."
+      );
+      return;
+    }
+
+    // Log browser information to help with debugging
+    const userAgent = navigator.userAgent;
+    console.log('Browser User Agent:', userAgent);
+
+    // Check MediaRecorder API support
+    if (!navigator.mediaDevices || !window.MediaRecorder) {
+      setIsSupported(false);
+      setError(
+        "Your browser doesn't support voice recording. Please try using Chrome, Firefox, or Edge browser."
+      );
+      return;
+    }
+
+    // Check if permissions are already granted
+    navigator.permissions
+      ?.query({ name: 'microphone' as PermissionName })
+      .then((permissionStatus) => {
+        setPermissionGranted(permissionStatus.state === 'granted');
+
+        permissionStatus.onchange = () => {
+          setPermissionGranted(permissionStatus.state === 'granted');
+        };
+      })
+      .catch((err) => {
+        console.log('Permission query not supported, will check when recording starts', err);
+      });
+  }, [isClient]);
 
   useEffect(() => {
     return () => {
-      if (audioUrl) {
+      if (audioUrl && isClient) {
         URL.revokeObjectURL(audioUrl);
       }
     };
-  }, [audioUrl]);
+  }, [audioUrl, isClient]);
 
   const startRecording = async () => {
+    if (!isClient) return;
+
     setError(null);
     try {
       console.log('Requesting microphone access...');
@@ -138,9 +147,6 @@ export const VoiceFeedback: React.FC<VoiceFeedbackProps> = ({
               0
             )} bytes`
           );
-
-          // Don't create temporary blobs while recording to avoid memory issues
-          // We'll create the final blob when recording is stopped
         }
       };
 
@@ -236,6 +242,8 @@ export const VoiceFeedback: React.FC<VoiceFeedbackProps> = ({
   };
 
   const stopRecording = () => {
+    if (!isClient) return;
+
     console.log('Stopping recording...');
     if (mediaRecorderRef.current && isRecording) {
       try {
@@ -305,7 +313,7 @@ export const VoiceFeedback: React.FC<VoiceFeedbackProps> = ({
   };
 
   const togglePlayback = () => {
-    if (!audioRef.current) return;
+    if (!isClient || !audioRef.current) return;
 
     try {
       if (isPlaying) {
@@ -328,6 +336,18 @@ export const VoiceFeedback: React.FC<VoiceFeedbackProps> = ({
       );
     }
   };
+
+  // Show loading state until client-side
+  if (!isClient) {
+    return (
+      <div className="space-y-4 p-6 border rounded-lg bg-card shadow-sm">
+        <div className="flex justify-center items-center p-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <span className="ml-2">Loading voice recorder...</span>
+        </div>
+      </div>
+    );
+  }
 
   if (!isSupported) {
     return (
