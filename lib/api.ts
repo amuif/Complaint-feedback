@@ -23,7 +23,7 @@ class ApiClient {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl = 'http://196.189.94.178:4000/api';
+    this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://196.189.94.178:4000/api';
   }
 
   // Sector Leaders
