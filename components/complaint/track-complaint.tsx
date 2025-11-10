@@ -1,5 +1,5 @@
 import { trackComplaint } from '@/schema/complaint';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import z from 'zod';
 import { Label } from '../ui/label';
 import { useLanguage } from '../language-provider';
@@ -20,7 +20,6 @@ import AudioPlayer from '../audio-player';
 type trackComplaintType = z.infer<typeof trackComplaint>;
 const TrackComplaint = () => {
   const { t, language } = useLanguage();
-  const [showResponse, setShowResponse] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [complaints, setComplaints] = useState<ComplaintData[]>([]);
   const [hasSearched, setHasSearched] = useState(false);
