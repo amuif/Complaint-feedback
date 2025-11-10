@@ -1,8 +1,9 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import { useState, useEffect, Suspense } from 'react';
 import { useLanguage } from '@/components/language-provider';
-import { AlertTriangle, Mic, FileText, Eye } from 'lucide-react'; // Import icons
+import { AlertTriangle, Mic, FileText, Eye } from 'lucide-react';
 import { useSearchParams } from 'next/navigation';
 import Head from 'next/head';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -16,9 +17,16 @@ function ComplaintsContent() {
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSecureContext, setIsSecureContext] = useState(true);
-  const [activeTab, setActiveTab] = useState(''); // Set initial state to an empty string
+  const [activeTab, setActiveTab] = useState(''); 
   const { t, language } = useLanguage();
 
+
+const DynamicVoiceForm = dynamic(() => import('@/components/complaint/voice-form'), {
+  ssr: false
+});
+const DynamicTextForm = dynamic(() => import('@/components/complaint/text-form'), {
+  ssr: false
+});
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const isSecure =
@@ -95,12 +103,13 @@ function ComplaintsContent() {
           </button>
         </div>
 
-        {/* Show the active form based on the selected tab */}
-        <div className="w-full">
-          {activeTab === 'voice' && <VoiceForm />}
-          {activeTab === 'text' && <TextForm />}
-          {activeTab === 'track' && <TrackComplaint />}
-        </div>
+        
+<div className="w-full">
+  {activeTab === 'voice' && <DynamicVoiceForm />}
+  {activeTab === 'text' && <DynamicTextForm />}
+  {activeTab === 'track' && <TrackComplaint />}
+</div>
+
       </div>
 
       <Toaster />
