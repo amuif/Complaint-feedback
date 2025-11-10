@@ -747,6 +747,7 @@ const TextForm = () => {
                           <Avatar className="h-14 w-14 sm:h-16 sm:w-16 flex-shrink-0">
                             <AvatarImage
                               src={
+                                typeof window !== 'undefined' &&
                                 employee.profile_picture instanceof File &&
                                 typeof window !== 'undefined'
                                   ? URL.createObjectURL(employee.profile_picture)
