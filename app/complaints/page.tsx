@@ -9,24 +9,21 @@ import Head from 'next/head';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Toaster } from '@/components/ui/toaster';
 import { BackNavigation } from '@/components/back-navigation';
-import VoiceForm from '@/components/complaint/voice-form';
-import TextForm from '@/components/complaint/text-form';
 import TrackComplaint from '@/components/complaint/track-complaint';
 
 function ComplaintsContent() {
   const searchParams = useSearchParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSecureContext, setIsSecureContext] = useState(true);
-  const [activeTab, setActiveTab] = useState(''); 
-  const { t, language } = useLanguage();
+  const [activeTab, setActiveTab] = useState('');
+  const { t, } = useLanguage();
 
-
-const DynamicVoiceForm = dynamic(() => import('@/components/complaint/voice-form'), {
-  ssr: false
-});
-const DynamicTextForm = dynamic(() => import('@/components/complaint/text-form'), {
-  ssr: false
-});
+  const DynamicVoiceForm = dynamic(() => import('@/components/complaint/voice-form'), {
+    ssr: false,
+  });
+  const DynamicTextForm = dynamic(() => import('@/components/complaint/text-form'), {
+    ssr: false,
+  });
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const isSecure =
@@ -103,13 +100,11 @@ const DynamicTextForm = dynamic(() => import('@/components/complaint/text-form')
           </button>
         </div>
 
-        
-<div className="w-full">
-  {activeTab === 'voice' && <DynamicVoiceForm />}
-  {activeTab === 'text' && <DynamicTextForm />}
-  {activeTab === 'track' && <TrackComplaint />}
-</div>
-
+        <div className="w-full">
+          {activeTab === 'voice' && <DynamicVoiceForm />}
+          {activeTab === 'text' && <DynamicTextForm />}
+          {activeTab === 'track' && <TrackComplaint />}
+        </div>
       </div>
 
       <Toaster />
