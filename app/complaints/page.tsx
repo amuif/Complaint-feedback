@@ -24,6 +24,9 @@ function ComplaintsContent() {
   const DynamicTextForm = dynamic(() => import('@/components/complaint/text-form'), {
     ssr: false,
   });
+  const DynamicTrackComplaint = dynamic(() => import('@/components/complaint/track-complaint'), {
+    ssr: false,
+  });
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const isSecure =
@@ -103,7 +106,7 @@ function ComplaintsContent() {
         <div className="w-full">
           {activeTab === 'voice' && <DynamicVoiceForm />}
           {activeTab === 'text' && <DynamicTextForm />}
-          {activeTab === 'track' && <TrackComplaint />}
+          {activeTab === 'track' && <DynamicTrackComplaint />}
         </div>
       </div>
 
