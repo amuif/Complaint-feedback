@@ -102,7 +102,7 @@ function ComplaintsContent() {
 
         <div className="w-full">
           {activeTab === 'voice' && <DynamicVoiceForm />}
-          {/* {activeTab === 'text' && <DynamicTextForm />} */}
+          {activeTab === 'text' && <DynamicTextForm />}
           {/* {activeTab === 'track' && <TrackComplaint />} */}
         </div>
       </div>
