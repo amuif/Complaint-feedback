@@ -16,7 +16,7 @@ function ComplaintsContent() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isSecureContext, setIsSecureContext] = useState(true);
   const [activeTab, setActiveTab] = useState('');
-  const { t, } = useLanguage();
+  const { t } = useLanguage();
 
   const DynamicVoiceForm = dynamic(() => import('@/components/complaint/voice-form'), {
     ssr: false,

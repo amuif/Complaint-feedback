@@ -443,7 +443,7 @@ const VoiceForm = () => {
     setValue('attachment', file, { shouldValidate: true });
 
     // Create preview for image files
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith('image/') && typeof window !== 'undefined') {
       const reader = new FileReader();
       reader.onload = () => {
         setAttachmentPreview(reader.result as string);
