@@ -42,8 +42,10 @@ export default function EmployeesMembersPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Employees.map((emp) => {
             return (
-              <Card key={emp.id} className="overflow-hidden shadow rounded-lg">
-                <CardHeader className="bg-orange-500 h-16" />
+              <Card key={emp.id} className="overflow-hidden shadow rounded-lg flex flex-col h-72">
+                <CardHeader className="bg-orange-500 h-16 rounded-t-lg" />
+
+                {/* Avatar */}
                 <div className="flex justify-center -mt-12">
                   <Avatar className="h-20 w-20 border-4 border-white">
                     <AvatarImage
@@ -57,15 +59,27 @@ export default function EmployeesMembersPage() {
                     <AvatarFallback>{emp[`first_name_${language}`]}</AvatarFallback>
                   </Avatar>
                 </div>
-                <CardContent className="text-center">
+
+                {/* Card Content */}
+                <CardContent className="text-center flex-1">
                   <h2 className="text-lg font-semibold">
-                    {emp[`first_name_${language}`] + ' ' + emp[`middle_name_${language}`]}
+                    {emp[`first_name_${language}`]} {emp[`middle_name_${language}`]}
                   </h2>
                   <p className="text-sm text-gray-600">{emp[`position_${language}`]}</p>
-                  <p className="text-sm ">
+                  <p className="text-sm">
                     {t('employees.office')} {emp.office_number}
                   </p>
                 </CardContent>
+
+                {/* Optional Footer */}
+                {/* Uncomment if you want a Members button */}
+                {/* 
+  <CardFooter className="mt-auto flex justify-center">
+    <Button variant="link" size="sm" onClick={() => handleMemberClick(emp.id)}>
+      Members
+    </Button>
+  </CardFooter> 
+  */}
               </Card>
             );
           })}

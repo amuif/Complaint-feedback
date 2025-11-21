@@ -26,7 +26,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { Sector, Subcities } from '@/types/types';
+import { Sector } from '@/types/types';
+import { toast } from 'sonner';
 
 type FeedbackFormData = z.infer<typeof feedbackSchema>;
 type FeedbackStatus = z.infer<typeof feedbackStatus>;
@@ -35,7 +36,6 @@ export default function FeedbackPage() {
   const { t, language } = useLanguage();
   const [showAmharicKeyboard, setShowAmharicKeyboard] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
-  const [statusRef, setStatusRef] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
   const [sectorLeaders, setSectorLeaders] = useState<Sector[]>([]);
@@ -136,14 +136,14 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div className="container mx-auto py-12">
-      <div className="mb-6">
+    <div className="mx-auto py-3">
+      <div className="px-2 mb-6">
         <BackNavigation />
       </div>
       <h1 className="text-3xl font-bold text-center mb-8 text-primary">
         {t('feedback.form.title')}
       </h1>
-      <div className="grid ">
+      <div className=" ">
         <Card>
           <CardHeader>
             <CardTitle>{t('feedback.form.title')}</CardTitle>
@@ -231,7 +231,14 @@ export default function FeedbackPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setShowAmharicKeyboard(!showAmharicKeyboard)}
+                  onClick={() => {
+                    if (window.innerWidth < 768) {
+                      console.log(window.innerWidth);
+                      toast.error(t('error.showKeyboard'));
+                      return;
+                    }
+                    setShowAmharicKeyboard(!showAmharicKeyboard);
+                  }}
                   className="w-full"
                 >
                   {showAmharicKeyboard

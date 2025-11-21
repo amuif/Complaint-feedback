@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useLanguage } from '@/components/language-provider';
 import apiClient from '@/lib/api';
-import { toast } from '@/components/ui/use-toast';
 import { Toaster } from '@/components/ui/toaster';
 import { handleApiError, handleApiSuccess } from '@/lib/error-handler';
 import { Card } from '@/components/ui/card';
@@ -18,37 +17,19 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { motion } from 'framer-motion';
-import { Star } from 'lucide-react';
 import AmharicKeyboard from '@/components/amharic-keyboard';
-import {
-  SectorLeader,
-  Director,
-  TeamLeader,
-  Employee,
-  Person,
-  Sector,
-  Subcities,
-} from '@/types/types';
-import { amare_directors } from '@/hierarchy/Amare.json';
-import { elias_directors } from '@/hierarchy/Elias.json';
-import { hawa_directors } from '@/hierarchy/hawa.json';
-import { kibebew_directors } from '@/hierarchy/kibebew.json';
-import { full_list } from '@/hierarchy/full_list.json';
-import { subcity } from '@/components/sub-city.json';
-import { leaders } from '@/hierarchy/sector_leaders.json';
+import { Director, TeamLeader, Employee, Sector, Subcities } from '@/types/types';
 import z from 'zod';
 import { ratingSchema } from '@/schema/rating';
-import { Control, Controller, useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RatingStars } from '@/components/rating-stars';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 
 type ratingFormData = z.infer<typeof ratingSchema>;
-interface RatingProps {
-  name: string;
-  control: Control<any>;
-}
+
 export default function RatingsPage() {
   const { t, language } = useLanguage();
   const [loadingSectorLeaders, setLoadingSectorLeaders] = useState(false);
@@ -71,7 +52,7 @@ export default function RatingsPage() {
     setValue,
     watch,
     reset,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
   } = useForm<ratingFormData>({
     resolver: zodResolver(ratingSchema),
     defaultValues: {
@@ -168,7 +149,7 @@ export default function RatingsPage() {
     }
   };
   const loadDirectors = async (value: string) => {
-    const [id, name] = value.split('|');
+    const [id, _] = value.split('|');
     setSector_id(id);
     setLoadingDirectors(true);
     setErrorMessage(null);
@@ -186,7 +167,7 @@ export default function RatingsPage() {
 
   const loadTeamLeaders = async (directorId: string) => {
     console.info(directorId);
-    const [id, name] = directorId.split('|');
+    const [id, _] = directorId.split('|');
     setDirectors_id(id);
     setLoadingTeamLeaders(true);
     setErrorMessage(null);
@@ -204,7 +185,7 @@ export default function RatingsPage() {
   };
 
   const loadEmployees = async (teamLeader: string) => {
-    const [id, name] = teamLeader?.split('|');
+    const [id, _] = teamLeader?.split('|');
     console.log(id);
     setTeam_id(id);
     setLoadingEmployees(true);
@@ -259,11 +240,7 @@ export default function RatingsPage() {
   const onSubmit = async (data: ratingFormData) => {
     if (!selectedSectorLeader) {
       console.error('error at submitted rating');
-      toast({
-        title: tr('ratings.form.errorTitle'),
-        description: tr('ratings.form.errorBody'),
-        variant: 'destructive',
-      });
+      toast.error(tr('ratings.form.errorTitle'));
       return;
     }
     const [subcity_id, subcity_name] = data.subcity_id.split('|');
@@ -333,7 +310,7 @@ export default function RatingsPage() {
   const focusField = (fieldName: string) => setActiveField(fieldName);
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-3 py-3 lg:py-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -604,12 +581,19 @@ export default function RatingsPage() {
             {/* Comments Section */}
             <div>
               <div className="flex justify-between items-center mb-2">
-                <label className="text-sm font-medium">{tr('ratings.form.comments')}</label>
+                <label className="text-sm  font-medium">{tr('ratings.form.comments')}</label>
                 <Button
                   type="button"
                   variant="outline"
                   size="sm"
-                  onClick={() => setShowAmharicKeyboard(!showAmharicKeyboard)}
+                  onClick={() => {
+                    if (window.innerWidth < 768) {
+                      console.log(window.innerWidth);
+                      toast.error(t('error.showKeyboard'));
+                      return;
+                    }
+                    setShowAmharicKeyboard(!showAmharicKeyboard);
+                  }}
                 >
                   {showAmharicKeyboard
                     ? tr('ratings.form.hideAmhKbd')

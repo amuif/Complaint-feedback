@@ -27,6 +27,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Sector, Subcities } from '@/types/types';
+import { toast } from 'sonner';
 
 type FeedbackFormData = z.infer<typeof feedbackSchema>;
 type FeedbackStatus = z.infer<typeof feedbackStatus>;
@@ -136,7 +137,7 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div className="container mx-auto py-12">
+    <div className="container mx-auto py-3">
       <div className="mb-6">
         <BackNavigation />
       </div>
@@ -231,7 +232,14 @@ export default function FeedbackPage() {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setShowAmharicKeyboard(!showAmharicKeyboard)}
+                  onClick={() => {
+                    if (window.innerWidth < 768) {
+                      console.log(window.innerWidth);
+                      toast.error(t('error.showKeyboard'));
+                      return;
+                    }
+                    setShowAmharicKeyboard(!showAmharicKeyboard);
+                  }}
                   className="w-full"
                 >
                   {showAmharicKeyboard

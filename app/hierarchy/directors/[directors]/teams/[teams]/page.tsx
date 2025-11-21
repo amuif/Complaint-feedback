@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
 import { useLanguage } from '@/components/language-provider';
 import { ArrowLeft } from 'lucide-react';
-import { Card, CardHeader, CardContent } from '@/components/ui/card';
+import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useOrganization } from '@/hooks/use-organization';
@@ -46,8 +46,9 @@ export default function DepartmentMembersPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {Teams.map((emp) => {
             return (
-              <Card key={emp.id} className="overflow-hidden shadow rounded-lg">
-                <CardHeader className="bg-orange-500 h-16" />
+              <Card key={emp.id} className="overflow-hidden shadow rounded-lg flex flex-col h-72">
+                <CardHeader className="bg-orange-500 h-16 rounded-t-lg" />
+
                 <div className="flex justify-center -mt-12">
                   <Avatar className="h-20 w-20 border-4 border-white">
                     <AvatarImage
@@ -61,16 +62,20 @@ export default function DepartmentMembersPage() {
                     <AvatarFallback>{emp[`name_${language}`]}</AvatarFallback>
                   </Avatar>
                 </div>
-                <CardContent className="text-center">
+
+                <CardContent className="text-center flex-1">
                   <h2 className="text-lg font-semibold">{emp[`name_${language}`]}</h2>
                   <p className="text-sm text-gray-600">{emp[`appointed_person_${language}`]}</p>
-                  <p className="text-sm ">
+                  <p className="text-sm">
                     {t('employees.office')} {emp[`office_location_${language}`]}
                   </p>
+                </CardContent>
+
+                <CardFooter className="mt-auto flex justify-center">
                   <Button variant="link" size="sm" onClick={() => handleMemberClick(emp.id)}>
                     Members
                   </Button>
-                </CardContent>
+                </CardFooter>
               </Card>
             );
           })}

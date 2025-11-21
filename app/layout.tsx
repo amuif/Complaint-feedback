@@ -8,6 +8,7 @@ import Header from '@/components/header';
 import Footer from '@/components/footer';
 import IdleMediaPlayer from '@/components/idle-media-player';
 import { ReactQueryProvider } from '@/lib/react-query-provider';
+import { Toaster } from '@/components/ui/sonner';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -38,6 +39,7 @@ export default function RootLayout({
                 <Footer />
                 <IdleMediaPlayer />
               </div>
+              <Toaster />
             </LanguageProvider>
           </ThemeProvider>
         </ReactQueryProvider>

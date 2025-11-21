@@ -9,7 +9,7 @@ import Head from 'next/head';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Toaster } from '@/components/ui/toaster';
 import { BackNavigation } from '@/components/back-navigation';
-import TrackComplaint from '@/components/complaint/track-complaint';
+import { Button } from '@/components/ui/button';
 
 function ComplaintsContent() {
   const searchParams = useSearchParams();
@@ -37,6 +37,29 @@ function ComplaintsContent() {
     }
   }, [searchParams]);
 
+  const buttonOptions = [
+    {
+      id: 1,
+      text: t('submit.voice.complaint'),
+      value: 'voice',
+      icon: <Mic className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />,
+      handleClick: () => setActiveTab('voice'),
+    },
+    {
+      id: 2,
+      text: t('submit.text.complaint'),
+      value: 'text',
+      icon: <FileText className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />,
+      handleClick: () => setActiveTab('text'),
+    },
+    {
+      id: 3,
+      text: t('track.complaint'),
+      value: 'track',
+      icon: <Eye className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />,
+      handleClick: () => setActiveTab('track'),
+    },
+  ];
   return (
     <>
       <Head>
@@ -46,7 +69,7 @@ function ComplaintsContent() {
         />
       </Head>
 
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container mx-auto  px-3 py-8">
         <div className="mb-6">
           <BackNavigation />
         </div>
@@ -72,35 +95,20 @@ function ComplaintsContent() {
           </Alert>
         )}
 
-        {/* Buttons with icons */}
-        <div className="flex flex-wrap gap-2 sm:gap-4 mb-6">
-          <button
-            onClick={() => setActiveTab('voice')}
-            className={`flex items-center px-3 sm:px-4 py-2 rounded border hover:bg-gray-100 sm:text-base text-sm ${
-              activeTab === 'voice' ? 'bg-gray-200' : ''
-            }`}
-          >
-            <Mic className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-            {t('submit.voice.complaint')}
-          </button>
-          <button
-            onClick={() => setActiveTab('text')}
-            className={`flex items-center px-3 sm:px-4 py-2 rounded border hover:bg-gray-100 sm:text-base text-sm ${
-              activeTab === 'text' ? 'bg-gray-200' : ''
-            }`}
-          >
-            <FileText className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-            {t('submit.text.complaint')}
-          </button>
-          <button
-            onClick={() => setActiveTab('track')}
-            className={`flex items-center px-3 sm:px-4 py-2 rounded border hover:bg-gray-100 sm:text-base text-sm ${
-              activeTab === 'track' ? 'bg-gray-200' : ''
-            }`}
-          >
-            <Eye className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-            {t('track.complaint')}
-          </button>
+        <div className="flex w-full flex-wrap gap-2 sm:gap-4 mb-6">
+          {buttonOptions.map((option) => (
+            <Button
+              key={option.id}
+              onClick={option.handleClick}
+              className={`flex items-center justify-start w-full px-3 sm:px-4 py-2 rounded border hover:bg-gray-100 sm:text-base text-sm text-left 
+${activeTab === option.value ? 'bg-gray-200' : ''}
+`}
+              variant="outline"
+            >
+              {option.icon}
+              {option.text}
+            </Button>
+          ))}
         </div>
 
         <div className="w-full">

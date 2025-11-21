@@ -10,11 +10,10 @@ import { LanguageSelector } from '@/components/language-selector';
 import { Menu, X, HelpCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSubcityName } from '@/hooks/use-subcity-name';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 export default function Header() {
   const { t, language } = useLanguage();
-  const router = useRouter();
   const pathname = usePathname();
   const subcity = useSubcityName();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -62,13 +61,13 @@ export default function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+      className={`sticky top-0 z-50 p-2  w-full transition-all duration-300 ${
         scrolled
           ? 'bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60 header-shadow'
           : 'bg-transparent'
       }`}
     >
-      <div className="container flex h-16 items-center justify-between">
+      <div className="flex h-16 items-center justify-between">
         <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
@@ -130,7 +129,9 @@ export default function Header() {
           className="flex items-center gap-2"
         >
           <LanguageSelector />
-          <ModeToggle />
+          <div className="hidden lg:block">
+            <ModeToggle />
+          </div>
           <Button asChild variant="ghost" size="icon" className="hidden md:flex">
             <Link href="/help">
               <HelpCircle className="h-5 w-5 text-secondary" />
