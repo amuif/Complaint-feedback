@@ -39,7 +39,7 @@ type ComplaintFormData = z.infer<typeof voiceComplaint>;
 
 const VoiceForm = () => {
   const { t, language } = useLanguage();
-  const { EmployeesBySubcity, setSubcityId } = useOrganization();
+  const { EmployeesBySubcity, MainOfficeEmployees, setSubcityId } = useOrganization();
   const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
   const subcity = useSubcityName();
   const currentSub = useCurrentSubcity();
@@ -47,6 +47,7 @@ const VoiceForm = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [activeField, setActiveField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showNoData, setShowNoData] = useState<boolean>(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [sectorLeaders, setSectorLeaders] = useState<Sector[]>([]);
   const [subcityLeader, setSubcityLeader] = useState<Sector>();
@@ -424,17 +425,35 @@ const VoiceForm = () => {
     }
   };
   const handleEmployeeBySubcitySearch = () => {
-    if (!EmployeesBySubcity || !searchQuery) {
+    if (!searchQuery) {
       console.log("Either searchQuery or employees bg subcity doesn't exit");
       return;
     }
-    console.log(EmployeesBySubcity);
-    const employees =
-      EmployeesBySubcity.filter((employee) =>
-        employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
-      ) || [];
-    console.log('Found employees', employees);
-    setFoundEmployees(employees);
+    setShowNoData(false)
+    if (subcity) {
+      console.log("Subcity employees", EmployeesBySubcity);
+      const employees =
+        EmployeesBySubcity.filter((employee) =>
+          employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
+        ) || [];
+      console.log('Found employees', employees);
+      setFoundEmployees(employees);
+      if (employees.length === 0) {
+        setShowNoData(true)
+      }
+    } else {
+      const employees =
+        MainOfficeEmployees.filter((employee) =>
+          employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
+        ) || [];
+      console.log('main office employees', employees);
+      setFoundEmployees(employees);
+      if (employees.length === 0) {
+        setShowNoData(true)
+      }
+
+    }
+
   };
   const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -531,23 +550,23 @@ const VoiceForm = () => {
                     <SelectContent>
                       {currentSubcity
                         ? (() => {
-                            const id = currentSubcity.id;
-                            const subcityName = currentSubcity?.[`name_${language}`];
-                            return (
-                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                                {subcityName}
-                              </SelectItem>
-                            );
-                          })()
+                          const id = currentSubcity.id;
+                          const subcityName = currentSubcity?.[`name_${language}`];
+                          return (
+                            <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                              {subcityName}
+                            </SelectItem>
+                          );
+                        })()
                         : subcities?.map((subcity) => {
-                            const id = subcity.id;
-                            const subcityName = subcity?.[`name_${language}`];
-                            return (
-                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                                {subcityName}
-                              </SelectItem>
-                            );
-                          })}
+                          const id = subcity.id;
+                          const subcityName = subcity?.[`name_${language}`];
+                          return (
+                            <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                              {subcityName}
+                            </SelectItem>
+                          );
+                        })}
                     </SelectContent>{' '}
                   </Select>
                 )}
@@ -562,7 +581,10 @@ const VoiceForm = () => {
                 <div className="flex gap-2">
                   <Input
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setShowNoData(false)
+setSearchQuery(e.target.value)
+                    }}
                     placeholder="Enter employees name"
                   />
                   <Button
@@ -579,8 +601,9 @@ const VoiceForm = () => {
                   </span>
                 </div>
               </div>
+
               {foundEmployees.length !== 0 && (
-                <ScrollArea className="h-[200px] w-full rounded-md border p-4 pt-6">
+                <ScrollArea className="h-[400px] w-full rounded-md border p-4 pt-6">
                   <div className="space-y-3 w-full">
                     {foundEmployees.map((employee) => (
                       <Card
@@ -592,8 +615,8 @@ const VoiceForm = () => {
                             <AvatarImage
                               src={
                                 typeof window !== 'undefined' &&
-                                employee.profile_picture instanceof File &&
-                                typeof window !== 'undefined'
+                                  employee.profile_picture instanceof File &&
+                                  typeof window !== 'undefined'
                                   ? URL.createObjectURL(employee.profile_picture)
                                   : typeof employee.profile_picture === 'string'
                                     ? `${PICTURE_URL}/Uploads/profile_pictures/${employee.profile_picture}`
@@ -603,7 +626,7 @@ const VoiceForm = () => {
                             />
                             <AvatarFallback className="text-base sm:text-lg">
                               {employee[`first_name_${language}`] &&
-                              employee[`last_name_${language}`]
+                                employee[`last_name_${language}`]
                                 ? `${employee[`first_name_${language}`][0]}${employee[`last_name_${language}`][0]}`
                                 : 'NA'}
                             </AvatarFallback>
@@ -636,6 +659,12 @@ const VoiceForm = () => {
                     ))}
                   </div>
                 </ScrollArea>
+              )}
+
+              {searchQuery && showNoData && (
+                <div className='text-destructive'>
+                  {t('employees.noMembers')}
+                </div>
               )}
             </div>
             <input type="hidden" {...register('complaint_source')} value="public_complaint" />

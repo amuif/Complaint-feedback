@@ -95,13 +95,13 @@ function ComplaintsContent() {
           </Alert>
         )}
 
-        <div className="flex w-full flex-wrap gap-2 sm:gap-4 mb-6">
+        <div className="flex w-full flex-wrap md:flex-nowrap gap-2 sm:gap-4 mb-6">
           {buttonOptions.map((option) => (
             <Button
               key={option.id}
               onClick={option.handleClick}
-              className={`flex items-center justify-start w-full px-3 sm:px-4 py-2 rounded border hover:bg-gray-100 sm:text-base text-sm text-left 
-${activeTab === option.value ? 'bg-gray-200' : ''}
+              className={`flex items-center justify-start w-full px-3 sm:px-4 py-2 rounded border hover:bg-gray-100 hover:dark:bg-gray-600 sm:text-base text-sm text-left 
+${activeTab === option.value ? 'bg-gray-200 dark:bg-gray-800' : ''}
 `}
               variant="outline"
             >

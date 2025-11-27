@@ -28,7 +28,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 type ComplaintFormData = z.infer<typeof complaintSchema>;
 
 const TextForm = () => {
-  const { EmployeesBySubcity, setSubcityId } = useOrganization();
+  const { EmployeesBySubcity, MainOfficeEmployees, setSubcityId } = useOrganization();
   const { t, language } = useLanguage();
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
@@ -37,6 +37,7 @@ const TextForm = () => {
   const [showAmharicKeyboard, setShowAmharicKeyboard] = useState(false);
   const [activeField, setActiveField] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showNoData, setShowNoData] = useState<boolean>(false);
   const [searchQuery, setSearchQuery] = useState<string>('');
 
   //leaders
@@ -140,6 +141,7 @@ const TextForm = () => {
 
   useEffect(() => {
     if (!selectedEmployee) return;
+    console.log('selected', selectedEmployee)
 
     const loadHierarchy = async () => {
       setHierarchyLoading(true);
@@ -240,17 +242,35 @@ const TextForm = () => {
   }, [directors, teamLeaders, employees]);
 
   const handleEmployeeBySubcitySearch = () => {
-    if (!EmployeesBySubcity || !searchQuery) {
+    if (!searchQuery) {
       console.log("Either searchQuery or employees bg subcity doesn't exit");
       return;
     }
-    console.log(EmployeesBySubcity);
-    const employees =
-      EmployeesBySubcity.filter((employee) =>
-        employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
-      ) || [];
-    console.log('Found employees', employees);
-    setFoundEmployees(employees);
+    setShowNoData(false)
+    if (subcity) {
+      console.log("Subcity employees", EmployeesBySubcity);
+      const employees =
+        EmployeesBySubcity.filter((employee) =>
+          employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
+        ) || [];
+      console.log('Found employees', employees);
+      setFoundEmployees(employees);
+      if (employees.length === 0) {
+        setShowNoData(true)
+      }
+    } else {
+      const employees =
+        MainOfficeEmployees.filter((employee) =>
+          employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
+        ) || [];
+      console.log('main office employees', employees);
+      setFoundEmployees(employees);
+      if (employees.length === 0) {
+        setShowNoData(true)
+      }
+
+    }
+
   };
 
   const handleDateSelect = (payload: any) => {
@@ -377,16 +397,10 @@ const TextForm = () => {
     setErrorMessage(null);
     let data: Director[] = [];
     try {
-      if (currentSubcity && subcity) {
-        console.log('going-subcity');
-        data = await apiClient.getSubcityDirectors(id);
-        console.log('Loaded directors:', data);
-        setDirectors(data || []);
-      } else {
-        data = await apiClient.getDirectorsBySectorLeader(id);
-        console.log(data);
-        setDirectors(data || []);
-      }
+      data = await apiClient.getDirectorsBySectorLeader(id);
+      console.log(data);
+      setDirectors(data || []);
+
       return data;
     } catch (error) {
       console.error(`Failed to load directors for sector leader ${id}:`, error);
@@ -401,10 +415,13 @@ const TextForm = () => {
     setLoadingSubcities(true);
     setErrorMessage(null);
     try {
-      console.log(currentSubcity);
       if (subcity && currentSubcity) {
+        console.log('subcity', subcity, 'currentSubcity', currentSubcity)
         setSubcities([currentSubcity]);
+        console.log(currentSubcity);
       } else {
+
+        setSubcityId('main');
         const response = await apiClient.getSubcities();
         setSubcities(response || []);
       }
@@ -642,7 +659,7 @@ const TextForm = () => {
                   control={control}
                   render={({ field }) => (
                     <Select
-                      value={field.value}
+                      value={subcity ? subcityId : field.value}
                       onValueChange={(value) => {
                         field.onChange(value);
                         loadSectorLeaders();
@@ -661,23 +678,23 @@ const TextForm = () => {
                       <SelectContent>
                         {currentSubcity
                           ? (() => {
-                              const id = currentSubcity.id;
-                              const subcityName = currentSubcity?.[`name_${language}`];
-                              return (
-                                <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                                  {subcityName}
-                                </SelectItem>
-                              );
-                            })()
+                            const id = currentSubcity.id;
+                            const subcityName = currentSubcity?.[`name_${language}`];
+                            return (
+                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                {subcityName}
+                              </SelectItem>
+                            );
+                          })()
                           : subcities?.map((subcity) => {
-                              const id = subcity.id;
-                              const subcityName = subcity?.[`name_${language}`];
-                              return (
-                                <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                                  {subcityName}
-                                </SelectItem>
-                              );
-                            })}
+                            const id = subcity.id;
+                            const subcityName = subcity?.[`name_${language}`];
+                            return (
+                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                                {subcityName}
+                              </SelectItem>
+                            );
+                          })}
                       </SelectContent>{' '}
                     </Select>
                   )}
@@ -716,9 +733,13 @@ const TextForm = () => {
               <Label>Quick search</Label>
               <div className="flex-col gap-3">
                 <div className="flex gap-2">
-                  <Input
+                 
+<Input
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setShowNoData(false)
+setSearchQuery(e.target.value)
+                    }}
                     placeholder="Enter employees name"
                   />
                   <Button
@@ -735,8 +756,15 @@ const TextForm = () => {
                   </span>
                 </div>
               </div>
+              {searchQuery && showNoData && (
+                <div className='text-destructive'>
+                  {t('employees.noMembers')}
+                </div>
+              )}
+ 
+ 
               {foundEmployees.length !== 0 && (
-                <ScrollArea className="h-[200px] w-full rounded-md border p-4 pt-6">
+                <ScrollArea className="h-[400px] w-full rounded-md border p-4 pt-6">
                   <div className="space-y-3 w-full">
                     {foundEmployees.map((employee) => (
                       <Card
@@ -748,8 +776,8 @@ const TextForm = () => {
                             <AvatarImage
                               src={
                                 typeof window !== 'undefined' &&
-                                employee.profile_picture instanceof File &&
-                                typeof window !== 'undefined'
+                                  employee.profile_picture instanceof File &&
+                                  typeof window !== 'undefined'
                                   ? URL.createObjectURL(employee.profile_picture)
                                   : typeof employee.profile_picture === 'string'
                                     ? `${PICTURE_URL}/Uploads/profile_pictures/${employee.profile_picture}`
@@ -759,7 +787,7 @@ const TextForm = () => {
                             />
                             <AvatarFallback className="text-base sm:text-lg">
                               {employee[`first_name_${language}`] &&
-                              employee[`last_name_${language}`]
+                                employee[`last_name_${language}`]
                                 ? `${employee[`first_name_${language}`][0]}${employee[`last_name_${language}`][0]}`
                                 : 'NA'}
                             </AvatarFallback>
@@ -1030,7 +1058,14 @@ const TextForm = () => {
                 <Button
                   type="button"
                   variant="outline"
-                  onClick={() => setShowAmharicKeyboard(!showAmharicKeyboard)}
+                  onClick={() => {
+                    if (window.innerWidth < 768) {
+                      console.log(window.innerWidth);
+                      toast.error(t('error.showKeyboard'));
+                      return;
+                    }
+                    setShowAmharicKeyboard(!showAmharicKeyboard);
+                  }}
                   className="w-full"
                 >
                   {showAmharicKeyboard
@@ -1207,6 +1242,7 @@ import { useSubcityName } from '@/hooks/use-subcity-name';
 import { useOrganization } from '@/hooks/use-organization';
 import { PICTURE_URL } from '@/constants/base_url';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import { toast } from 'sonner';
 
 export const convertEthiopianToGregorian = (ethDate: string): string | null => {
   if (!ethDate) return null;

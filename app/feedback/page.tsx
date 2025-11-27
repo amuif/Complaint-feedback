@@ -137,7 +137,7 @@ export default function FeedbackPage() {
   };
 
   return (
-    <div className="container mx-auto py-3">
+    <div className="px-1 mx-auto py-3">
       <div className="mb-6">
         <BackNavigation />
       </div>

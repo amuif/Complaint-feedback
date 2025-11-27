@@ -23,9 +23,7 @@ class ApiClient {
   private baseUrl: string;
 
   constructor() {
-    this.baseUrl =
-      process.env.NEXT_PUBLIC_API_BASE_URL ||
-      'http://196.189.94.178:4000/api';
+    this.baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://196.189.94.178:4000/api';
   }
 
   // Sector Leaders
@@ -79,7 +77,11 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/subcities/${subcityId}/employees`);
     return await response.json();
   }
-
+ // Employee in main office 
+  async getEmployeesInMainOffice(): Promise<Employee[]> {
+    const response = await fetch(`${this.baseUrl}/main/employees`);
+    return await response.json();
+  }
   // Subcities
   async getSubcities(): Promise<Subcities[]> {
     try {

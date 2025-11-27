@@ -52,6 +52,14 @@ export function useOrganization() {
     enabled: !!selectedDeparmentId,
   });
 
+  const employeesInMainOffice = useQuery({
+    queryKey:['get-main-office-employees'],
+    queryFn: async()=>{
+      const response = await apiClient.getEmployeesInMainOffice()
+     return response
+    }
+  })
+
   const employeesBySubcityQuery = useQuery({
     queryKey: ['get-employees-by-subcity', subcityId],
     queryFn: async () => {
@@ -65,6 +73,7 @@ export function useOrganization() {
     Directors: directorsQuery.data || [],
     Teams: departmentsQuery.data || [],
     Employees: employeesQuery.data || [],
+    MainOfficeEmployees:employeesInMainOffice.data || [],
     EmployeesBySubcity: employeesBySubcityQuery.data || [],
     setSelectedSectorId,
     selectedSectorId,
