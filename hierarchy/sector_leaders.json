@@ -1,0 +1,64 @@
+{
+  "leaders": [
+    {
+      "id": "1",
+      "name": "Ato Kibebew Mideksa Gutema",
+      "name_am": "አቶ ክበበው ሚደቅሳ ጉተማ",
+      "name_om": "Obbo Kibebew Mideqsa Gutamaa",
+      "position": "General Director",
+      "position_am": "ዋና ዳይሬክተር",
+      "position_om": "Daayrektara Olmaa",
+      "department": "General Director",
+      "department_am": "ዋና ዳይሬክተር",
+      "department_om": "Daayrektara Olmaa",
+      "officeNumber": "1",
+      "image": "/images/kibebew.jpg",
+      "memberIds": [2, 29, 30, 23, 74, 75, 76]
+    },
+    {
+      "id": "2",
+      "name": "Ms. Hawa Wabi Abdirahman",
+      "name_am": "ወ/ሮ ሃዋ ዋቢ አብድርሃማን",
+      "name_om": "Ad/ti Hawaa Waabii Abdirahmaan",
+      "position": "Head of Administration and Finance Office",
+      "position_am": "የአስተዳደርና ፋይናንስ ጽ/ቤት ኃላፊ",
+      "position_om": "I/tu Waajjira Bulchiinsaa fi Faayinaansii",
+      "department": "Administration and Finance Office",
+      "department_am": "የአስተዳደርና ፋይናንስ ጽ/ቤት",
+      "department_om": "Waajjira Bulchiinsaa fi Faayinaansii",
+      "officeNumber": "12th floor 05",
+      "image": "/images/hawa.jpg",
+      "memberIds": [3, 23, 31, 43, 59]
+    },
+    {
+      "id": "3",
+      "name": "Elias Zerga Melka E/R",
+      "name_am": "ኢ/ር ኤልያስ ዘርጋ መልካ ",
+      "name_om": "Injinar Eliyas Zargaa Mal'akaa",
+      "position": "Deputy Director",
+      "position_am": "የመንገድ ደህንነት ምህንድስና እና ፓርኪንግ ዘርፍ ም/ ዋና ዳይሬክተር ",
+      "position_om": "Itti aanaa Daayrektara Olmaa, Damee Injinariingii fi Paarkingii Nageenya Daandii",
+      "department": "Road Safety Engineering and Parking Sector",
+      "department_am": "የመንገድ ደህንነት ምህንድስና እና ፓርኪንግ ዘርፍ",
+      "department_om": "Damee Injinariingii fi Paarkingii Nageenya Daandii",
+      "officeNumber": "11th floor 02",
+      "image": "/images/elias.jpg",
+      "memberIds": [3, 10]
+    },
+    {
+      "id": "4",
+      "leaderId": 1,
+      "name": "Ato Amare Tarekegn Metekiya",
+      "name_am": "አቶ አማረ ታረቀኝ መተኪያ",
+      "name_om": "Obbo Amaree Tarraqany Meetekiyaa",
+      "position": "Deputy Director, Road Safety Awareness… Fund Sector",
+      "position_am": "የተከታዩ ዳይሬክተር",
+      "position_om": "Daayrektara Itti Aanaa, Kutaa Beeksisawwanii… Mallaqaa",
+      "department": "General Director",
+      "department_am": "ዋና ዳይሬክተር",
+      "department_om": "Daayrektara Olmaa",
+      "officeNumber": "9th floor 02",
+      "image": "/images/amare.jpg"
+    }
+  ]
+}
