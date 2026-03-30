@@ -42,7 +42,7 @@ export default function RatingsPage() {
   const [selectedSectorLeaderName, setSelectedSectorLeaderName] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const currentSubcity = useCurrentSubcity()
+  const currentSubcity = useCurrentSubcity();
 
   const suffix = language === 'en' ? '_en' : language === 'am' ? '_am' : '_om';
   const tr = (key: string) => t(`${key}${suffix}`);
@@ -402,15 +402,17 @@ export default function RatingsPage() {
                       <SelectValue placeholder={tr('ratings.form.selectSectorLeader')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {sectorLeaders.filter((sector)=>sector?.subcity?.name_en == currentSubcity?.name_en).map((sectorLeader, index) => {
-                        const id = sectorLeader.id;
-                        const appointedPerson = sectorLeader[`appointed_person_${language}`];
-                        return (
-                          <SelectItem key={index} value={`${id} | ${appointedPerson}`}>
-                            {appointedPerson}
-                          </SelectItem>
-                        );
-                      })}{' '}
+                      {sectorLeaders
+                        .filter((sector) => sector?.subcity?.name_en == currentSubcity?.name_en)
+                        .map((sectorLeader, index) => {
+                          const id = sectorLeader.id;
+                          const appointedPerson = sectorLeader[`appointed_person_${language}`];
+                          return (
+                            <SelectItem key={index} value={`${id} | ${appointedPerson}`}>
+                              {appointedPerson}
+                            </SelectItem>
+                          );
+                        })}{' '}
                     </SelectContent>
                   </Select>
                 )}

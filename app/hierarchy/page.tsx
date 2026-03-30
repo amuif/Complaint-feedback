@@ -30,7 +30,7 @@ export default function EmployeesPage() {
       <h1 className="text-3xl font-bold mb-6">{t('employees.title')}</h1>
 
       <div className="flex flex-col md:flex-row  items-center justify-center gap-3 mb-8">
-        {SectorLeaders.filter((sector)=>sector.subcity_id === null).map((leader) => (
+        {SectorLeaders.filter((sector) => sector.subcity_id === null).map((leader) => (
           <Card key={leader.id} className="w-full m-3 text-center  h-72 rounded-lg flex flex-col">
             <CardHeader className="bg-orange-500 rounded-t-lg" />
 

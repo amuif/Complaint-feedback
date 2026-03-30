@@ -19,10 +19,12 @@ export default function DirectorsMenuPage() {
   const { Directors, setSelectedSectorId } = useOrganization();
   const slug = Array.isArray(directors) ? directors[0] : directors;
   const id = Number.parseInt(slug || '', 10);
-  const currentSubcity = useCurrentSubcity()
+  const currentSubcity = useCurrentSubcity();
 
   const handleMemberClick = (memberId: string) => {
-    router.push(`/${currentSubcity?.name_en.replace(' ','-').toLowerCase()}/hierarchy/directors/${id}/teams/${memberId}`);
+    router.push(
+      `/${currentSubcity?.name_en.replace(' ', '-').toLowerCase()}/hierarchy/directors/${id}/teams/${memberId}`
+    );
   };
 
   useEffect(() => {

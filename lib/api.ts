@@ -77,7 +77,7 @@ class ApiClient {
     const response = await fetch(`${this.baseUrl}/subcities/${subcityId}/employees`);
     return await response.json();
   }
- // Employee in main office 
+  // Employee in main office
   async getEmployeesInMainOffice(): Promise<Employee[]> {
     const response = await fetch(`${this.baseUrl}/main/employees`);
     return await response.json();

@@ -141,7 +141,7 @@ const TextForm = () => {
 
   useEffect(() => {
     if (!selectedEmployee) return;
-    console.log('selected', selectedEmployee)
+    console.log('selected', selectedEmployee);
 
     const loadHierarchy = async () => {
       setHierarchyLoading(true);
@@ -246,9 +246,9 @@ const TextForm = () => {
       console.log("Either searchQuery or employees bg subcity doesn't exit");
       return;
     }
-    setShowNoData(false)
+    setShowNoData(false);
     if (subcity) {
-      console.log("Subcity employees", EmployeesBySubcity);
+      console.log('Subcity employees', EmployeesBySubcity);
       const employees =
         EmployeesBySubcity.filter((employee) =>
           employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
@@ -256,7 +256,7 @@ const TextForm = () => {
       console.log('Found employees', employees);
       setFoundEmployees(employees);
       if (employees.length === 0) {
-        setShowNoData(true)
+        setShowNoData(true);
       }
     } else {
       const employees =
@@ -266,11 +266,9 @@ const TextForm = () => {
       console.log('main office employees', employees);
       setFoundEmployees(employees);
       if (employees.length === 0) {
-        setShowNoData(true)
+        setShowNoData(true);
       }
-
     }
-
   };
 
   const handleDateSelect = (payload: any) => {
@@ -422,11 +420,10 @@ const TextForm = () => {
     setErrorMessage(null);
     try {
       if (subcity && currentSubcity) {
-        console.log('subcity', subcity, 'currentSubcity', currentSubcity)
+        console.log('subcity', subcity, 'currentSubcity', currentSubcity);
         setSubcities([currentSubcity]);
         console.log(currentSubcity);
       } else {
-
         setSubcityId('main');
         const response = await apiClient.getSubcities();
         setSubcities(response || []);
@@ -729,12 +726,11 @@ const TextForm = () => {
               <Label>Quick search</Label>
               <div className="flex-col gap-3">
                 <div className="flex gap-2">
-
                   <Input
                     value={searchQuery}
                     onChange={(e) => {
-                      setShowNoData(false)
-                      setSearchQuery(e.target.value)
+                      setShowNoData(false);
+                      setSearchQuery(e.target.value);
                     }}
                     placeholder="Enter employees name"
                   />
@@ -753,11 +749,8 @@ const TextForm = () => {
                 </div>
               </div>
               {searchQuery && showNoData && (
-                <div className='text-destructive'>
-                  {t('employees.noMembers')}
-                </div>
+                <div className="text-destructive">{t('employees.noMembers')}</div>
               )}
-
 
               {foundEmployees.length !== 0 && (
                 <ScrollArea className="h-[400px] w-full rounded-md border p-4 pt-6">
@@ -772,8 +765,8 @@ const TextForm = () => {
                             <AvatarImage
                               src={
                                 typeof window !== 'undefined' &&
-                                  employee.profile_picture instanceof File &&
-                                  typeof window !== 'undefined'
+                                employee.profile_picture instanceof File &&
+                                typeof window !== 'undefined'
                                   ? URL.createObjectURL(employee.profile_picture)
                                   : typeof employee.profile_picture === 'string'
                                     ? `${PICTURE_URL}/Uploads/profile_pictures/${employee.profile_picture}`
@@ -783,7 +776,7 @@ const TextForm = () => {
                             />
                             <AvatarFallback className="text-base sm:text-lg">
                               {employee[`first_name_${language}`] &&
-                                employee[`last_name_${language}`]
+                              employee[`last_name_${language}`]
                                 ? `${employee[`first_name_${language}`][0]}${employee[`last_name_${language}`][0]}`
                                 : 'NA'}
                             </AvatarFallback>
@@ -859,7 +852,8 @@ const TextForm = () => {
                             );
                           })()
                         ) : (
-                          sectorLeaders.filter((sector) => sector.subcity == null)
+                          sectorLeaders
+                            .filter((sector) => sector.subcity == null)
                             .map((sectorLeader, index) => {
                               const id = sectorLeader.id;
                               const appointedPerson = sectorLeader[`appointed_person_${language}`];

@@ -18,10 +18,12 @@ export default function DepartmentMembersPage() {
   const { Teams, setSelectedDirectorId } = useOrganization();
   const id = params.directors as string;
   const teams = params.teams as string;
-  const currentSubcity = useCurrentSubcity()
+  const currentSubcity = useCurrentSubcity();
 
   const handleMemberClick = (memberId: string) => {
-    router.push(`/${currentSubcity?.name_en.replace(' ','-').toLowerCase()}/hierarchy/directors/${id}/teams/${memberId}/employees/${memberId}`);
+    router.push(
+      `/${currentSubcity?.name_en.replace(' ', '-').toLowerCase()}/hierarchy/directors/${id}/teams/${memberId}/employees/${memberId}`
+    );
   };
 
   useEffect(() => {

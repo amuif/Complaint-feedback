@@ -429,9 +429,9 @@ const VoiceForm = () => {
       console.log("Either searchQuery or employees bg subcity doesn't exit");
       return;
     }
-    setShowNoData(false)
+    setShowNoData(false);
     if (subcity) {
-      console.log("Subcity employees", EmployeesBySubcity);
+      console.log('Subcity employees', EmployeesBySubcity);
       const employees =
         EmployeesBySubcity.filter((employee) =>
           employee[`first_name_${language}`].toLowerCase().includes(searchQuery)
@@ -439,7 +439,7 @@ const VoiceForm = () => {
       console.log('Found employees', employees);
       setFoundEmployees(employees);
       if (employees.length === 0) {
-        setShowNoData(true)
+        setShowNoData(true);
       }
     } else {
       const employees =
@@ -449,11 +449,9 @@ const VoiceForm = () => {
       console.log('main office employees', employees);
       setFoundEmployees(employees);
       if (employees.length === 0) {
-        setShowNoData(true)
+        setShowNoData(true);
       }
-
     }
-
   };
   const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0] || null;
@@ -548,15 +546,15 @@ const VoiceForm = () => {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      { subcities?.map((subcity) => {
-                          const id = subcity.id;
-                          const subcityName = subcity?.[`name_${language}`];
-                          return (
-                            <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                              {subcityName}
-                            </SelectItem>
-                          );
-                        })}
+                      {subcities?.map((subcity) => {
+                        const id = subcity.id;
+                        const subcityName = subcity?.[`name_${language}`];
+                        return (
+                          <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                            {subcityName}
+                          </SelectItem>
+                        );
+                      })}
                     </SelectContent>{' '}
                   </Select>
                 )}
@@ -572,8 +570,8 @@ const VoiceForm = () => {
                   <Input
                     value={searchQuery}
                     onChange={(e) => {
-                      setShowNoData(false)
-setSearchQuery(e.target.value)
+                      setShowNoData(false);
+                      setSearchQuery(e.target.value);
                     }}
                     placeholder="Enter employees name"
                   />
@@ -605,8 +603,8 @@ setSearchQuery(e.target.value)
                             <AvatarImage
                               src={
                                 typeof window !== 'undefined' &&
-                                  employee.profile_picture instanceof File &&
-                                  typeof window !== 'undefined'
+                                employee.profile_picture instanceof File &&
+                                typeof window !== 'undefined'
                                   ? URL.createObjectURL(employee.profile_picture)
                                   : typeof employee.profile_picture === 'string'
                                     ? `${PICTURE_URL}/Uploads/profile_pictures/${employee.profile_picture}`
@@ -616,7 +614,7 @@ setSearchQuery(e.target.value)
                             />
                             <AvatarFallback className="text-base sm:text-lg">
                               {employee[`first_name_${language}`] &&
-                                employee[`last_name_${language}`]
+                              employee[`last_name_${language}`]
                                 ? `${employee[`first_name_${language}`][0]}${employee[`last_name_${language}`][0]}`
                                 : 'NA'}
                             </AvatarFallback>
@@ -652,9 +650,7 @@ setSearchQuery(e.target.value)
               )}
 
               {searchQuery && showNoData && (
-                <div className='text-destructive'>
-                  {t('employees.noMembers')}
-                </div>
+                <div className="text-destructive">{t('employees.noMembers')}</div>
               )}
             </div>
             <input type="hidden" {...register('complaint_source')} value="public_complaint" />
@@ -753,7 +749,8 @@ setSearchQuery(e.target.value)
                             })()
                           ) : (
                             sectorLeaders
-                             .filter((sector)=>sector.subcity == null ) .map((sectorLeader, index) => {
+                              .filter((sector) => sector.subcity == null)
+                              .map((sectorLeader, index) => {
                                 const id = sectorLeader.id;
                                 const appointedPerson =
                                   sectorLeader[`appointed_person_${language}`];
