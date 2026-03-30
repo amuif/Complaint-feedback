@@ -27,6 +27,7 @@ import { RatingStars } from '@/components/rating-stars';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { useCurrentSubcity } from '@/hooks/use-subcity';
 
 type ratingFormData = z.infer<typeof ratingSchema>;
 
@@ -41,6 +42,7 @@ export default function RatingsPage() {
   const [selectedSectorLeaderName, setSelectedSectorLeaderName] = useState('');
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
+  const currentSubcity = useCurrentSubcity()
 
   const suffix = language === 'en' ? '_en' : language === 'am' ? '_am' : '_om';
   const tr = (key: string) => t(`${key}${suffix}`);
@@ -400,7 +402,7 @@ export default function RatingsPage() {
                       <SelectValue placeholder={tr('ratings.form.selectSectorLeader')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {sectorLeaders.map((sectorLeader, index) => {
+                      {sectorLeaders.filter((sector)=>sector?.subcity?.name_en == currentSubcity?.name_en).map((sectorLeader, index) => {
                         const id = sectorLeader.id;
                         const appointedPerson = sectorLeader[`appointed_person_${language}`];
                         return (

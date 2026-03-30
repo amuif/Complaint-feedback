@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { useOrganization } from '@/hooks/use-organization';
 import { PICTURE_URL } from '@/constants/base_url';
 import { BackNavigation } from '@/components/back-navigation';
+import { useCurrentSubcity } from '@/hooks/use-subcity';
 
 export default function DirectorsMenuPage() {
   const router = useRouter();
@@ -18,9 +19,10 @@ export default function DirectorsMenuPage() {
   const { Directors, setSelectedSectorId } = useOrganization();
   const slug = Array.isArray(directors) ? directors[0] : directors;
   const id = Number.parseInt(slug || '', 10);
+  const currentSubcity = useCurrentSubcity()
 
   const handleMemberClick = (memberId: string) => {
-    router.push(`/hierarchy/directors/${id}/teams/${memberId}`);
+    router.push(`/${currentSubcity?.name_en.replace(' ','-').toLowerCase()}/hierarchy/directors/${id}/teams/${memberId}`);
   };
 
   useEffect(() => {

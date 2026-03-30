@@ -28,6 +28,7 @@ import {
 } from '@/components/ui/select';
 import { Sector } from '@/types/types';
 import { toast } from 'sonner';
+import { useCurrentSubcity } from '@/hooks/use-subcity';
 
 type FeedbackFormData = z.infer<typeof feedbackSchema>;
 type FeedbackStatus = z.infer<typeof feedbackStatus>;
@@ -39,6 +40,7 @@ export default function FeedbackPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isChecking, setIsChecking] = useState(false);
   const [sectorLeaders, setSectorLeaders] = useState<Sector[]>([]);
+  const currentSubcity = useCurrentSubcity()
 
   const loadSectorLeaders = async () => {
     if (sectorLeaders.length > 0) return;
@@ -181,7 +183,7 @@ export default function FeedbackPage() {
                         <SelectValue placeholder={t('complaints.form.selectSectorLeader')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {sectorLeaders.map((sectorLeader, index) => {
+                        {sectorLeaders.filter((sector)=>sector?.subcity?.name_en == currentSubcity?.name_en).map((sectorLeader, index) => {
                           const id = sectorLeader.id;
                           const appointedPerson = sectorLeader[`appointed_person_${language}`];
                           return (

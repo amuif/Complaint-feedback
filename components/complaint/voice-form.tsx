@@ -548,17 +548,7 @@ const VoiceForm = () => {
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {currentSubcity
-                        ? (() => {
-                          const id = currentSubcity.id;
-                          const subcityName = currentSubcity?.[`name_${language}`];
-                          return (
-                            <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                              {subcityName}
-                            </SelectItem>
-                          );
-                        })()
-                        : subcities?.map((subcity) => {
+                      { subcities?.map((subcity) => {
                           const id = subcity.id;
                           const subcityName = subcity?.[`name_${language}`];
                           return (
@@ -763,7 +753,7 @@ setSearchQuery(e.target.value)
                             })()
                           ) : (
                             sectorLeaders
-                              .map((sectorLeader, index) => {
+                             .filter((sector)=>sector.subcity == null ) .map((sectorLeader, index) => {
                                 const id = sectorLeader.id;
                                 const appointedPerson =
                                   sectorLeader[`appointed_person_${language}`];

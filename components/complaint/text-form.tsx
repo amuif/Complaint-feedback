@@ -392,15 +392,21 @@ const TextForm = () => {
   };
   const loadDirectors = async (value: string): Promise<Director[]> => {
     const [id, _] = value.split('|');
-    setSector_id(id.trim());
+    setSector_id(id);
     setLoadingDirectors(true);
     setErrorMessage(null);
     let data: Director[] = [];
     try {
-      data = await apiClient.getDirectorsBySectorLeader(id);
-      console.log(data);
-      setDirectors(data || []);
-
+      if (currentSubcity && subcity) {
+        console.log('going-subcity');
+        data = await apiClient.getSubcityDirectors(id);
+        console.log('Loaded directors:', data);
+        setDirectors(data || []);
+      } else {
+        data = await apiClient.getDirectorsBySectorLeader(id);
+        console.log(data);
+        setDirectors(data || []);
+      }
       return data;
     } catch (error) {
       console.error(`Failed to load directors for sector leader ${id}:`, error);
@@ -676,25 +682,15 @@ const TextForm = () => {
                         />
                       </SelectTrigger>
                       <SelectContent>
-                        {currentSubcity
-                          ? (() => {
-                            const id = currentSubcity.id;
-                            const subcityName = currentSubcity?.[`name_${language}`];
-                            return (
-                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                                {subcityName}
-                              </SelectItem>
-                            );
-                          })()
-                          : subcities?.map((subcity) => {
-                            const id = subcity.id;
-                            const subcityName = subcity?.[`name_${language}`];
-                            return (
-                              <SelectItem key={id} value={`${id} | ${subcityName}`}>
-                                {subcityName}
-                              </SelectItem>
-                            );
-                          })}
+                        {subcities?.map((subcity) => {
+                          const id = subcity.id;
+                          const subcityName = subcity?.[`name_${language}`];
+                          return (
+                            <SelectItem key={id} value={`${id} | ${subcityName}`}>
+                              {subcityName}
+                            </SelectItem>
+                          );
+                        })}
                       </SelectContent>{' '}
                     </Select>
                   )}
@@ -733,12 +729,12 @@ const TextForm = () => {
               <Label>Quick search</Label>
               <div className="flex-col gap-3">
                 <div className="flex gap-2">
-                 
-<Input
+
+                  <Input
                     value={searchQuery}
                     onChange={(e) => {
                       setShowNoData(false)
-setSearchQuery(e.target.value)
+                      setSearchQuery(e.target.value)
                     }}
                     placeholder="Enter employees name"
                   />
@@ -761,8 +757,8 @@ setSearchQuery(e.target.value)
                   {t('employees.noMembers')}
                 </div>
               )}
- 
- 
+
+
               {foundEmployees.length !== 0 && (
                 <ScrollArea className="h-[400px] w-full rounded-md border p-4 pt-6">
                   <div className="space-y-3 w-full">
@@ -863,7 +859,7 @@ setSearchQuery(e.target.value)
                             );
                           })()
                         ) : (
-                          sectorLeaders
+                          sectorLeaders.filter((sector) => sector.subcity == null)
                             .map((sectorLeader, index) => {
                               const id = sectorLeader.id;
                               const appointedPerson = sectorLeader[`appointed_person_${language}`];

@@ -9,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useOrganization } from '@/hooks/use-organization';
 import { PICTURE_URL } from '@/constants/base_url';
+import { useCurrentSubcity } from '@/hooks/use-subcity';
 
 export default function DepartmentMembersPage() {
   const router = useRouter();
@@ -17,9 +18,10 @@ export default function DepartmentMembersPage() {
   const { Teams, setSelectedDirectorId } = useOrganization();
   const id = params.directors as string;
   const teams = params.teams as string;
+  const currentSubcity = useCurrentSubcity()
 
   const handleMemberClick = (memberId: string) => {
-    router.push(`/hierarchy/directors/${id}/teams/${memberId}/employees/${memberId}`);
+    router.push(`/${currentSubcity?.name_en.replace(' ','-').toLowerCase()}/hierarchy/directors/${id}/teams/${memberId}/employees/${memberId}`);
   };
 
   useEffect(() => {

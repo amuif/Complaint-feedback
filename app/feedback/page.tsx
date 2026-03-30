@@ -182,7 +182,7 @@ export default function FeedbackPage() {
                         <SelectValue placeholder={t('complaints.form.selectSectorLeader')} />
                       </SelectTrigger>
                       <SelectContent>
-                        {sectorLeaders.map((sectorLeader, index) => {
+                        {sectorLeaders.filter((sector)=>sector.subcity_id == null).map((sectorLeader, index) => {
                           const id = sectorLeader.id;
                           const appointedPerson = sectorLeader[`appointed_person_${language}`];
                           return (

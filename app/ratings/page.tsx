@@ -400,7 +400,7 @@ export default function RatingsPage() {
                       <SelectValue placeholder={tr('ratings.form.selectSectorLeader')} />
                     </SelectTrigger>
                     <SelectContent>
-                      {sectorLeaders.map((sectorLeader, index) => {
+                      {sectorLeaders.filter((sector)=>sector.subcity == null ).map((sectorLeader, index) => {
                         const id = sectorLeader.id;
                         const appointedPerson = sectorLeader[`appointed_person_${language}`];
                         return (

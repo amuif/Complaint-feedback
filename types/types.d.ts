@@ -25,6 +25,8 @@ export interface Sector {
   office_location_af: string;
   profile_picture: string;
   created_at: string;
+  subcity_id:string;
+  subcity:Subcities
 }
 export interface Division {
   id: string;
