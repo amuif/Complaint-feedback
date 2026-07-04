@@ -16,6 +16,7 @@ import { AlertCircle, Building, Calendar, CheckCircle, Clock, FileText, User } f
 import { Separator } from '../ui/separator';
 import { format, parseISO, isValid } from 'date-fns';
 import AudioPlayer from '../audio-player';
+import { PICTURE_URL } from '@/constants/base_url';
 
 type trackComplaintType = z.infer<typeof trackComplaint>;
 
@@ -165,7 +166,7 @@ const TrackComplaint = () => {
 
                         {complaint.voice_note && (
                           <AudioPlayer
-                            audioUrl={`${process.env.NEXT_PUBLIC_API_AUDIO_URL}/${complaint.voice_note.replace(/\\/g, '/')}`}
+                            audioUrl={`${PICTURE_URL}/${complaint.voice_note.replace(/\\/g, '/')}`}
                           />
                         )}
                       </div>
