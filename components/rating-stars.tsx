@@ -1,21 +1,21 @@
 import { Star } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useController, Control } from 'react-hook-form';
+import { useController, Control, FieldValues, Path } from 'react-hook-form';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';
 
-interface RatingProps {
-  name: string;
-  control: Control<any>;
+interface RatingProps<T extends FieldValues = any> {
+  name: Path<T>;
+  control: Control<T>;
 }
 
-export function RatingStars({ name, control }: RatingProps) {
+export function RatingStars<T extends FieldValues>({ name, control }: RatingProps<T>) {
   const {
     field: { value = 0, onChange },
   } = useController({
     name,
     control,
-    defaultValue: 0,
+    defaultValue: 0 as any,
   });
 
   const [hoverValue, setHoverValue] = useState(0);
