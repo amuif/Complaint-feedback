@@ -839,7 +839,7 @@ const TextForm = () => {
                         subcity ? (
                           (() => {
                             const firstLeader = subcityLeader;
-                            console.log("Subcity")
+                            console.log('Subcity');
                             if (!firstLeader) return null;
 
                             const id = firstLeader.id;
