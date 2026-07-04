@@ -20,6 +20,7 @@ export function useCurrentSubcity(): Subcities | null {
             .replace(/[\u0300-\u036f]/g, '');
 
         const found = subcities.find((branch) => nameToSlug(branch.name_en) === subcityName);
+        console.log('Found Subcity:', found);
         setCurrentSubcity(found || null);
       } catch (error) {
         console.error('Failed to load current subcity:', error);

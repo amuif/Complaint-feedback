@@ -749,7 +749,7 @@ const VoiceForm = () => {
                             })()
                           ) : (
                             sectorLeaders
-                              .filter((sector) => sector.subcity == null)
+                              .filter((sector) => sector.subcity_id == null)
                               .map((sectorLeader, index) => {
                                 const id = sectorLeader.id;
                                 const appointedPerson =

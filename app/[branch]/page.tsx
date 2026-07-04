@@ -8,23 +8,22 @@ interface SubcityPageProps {
 
 export default async function SubcityPage({ params }: SubcityPageProps) {
   const { branch } = await params;
-
+  console.log('Branch:', branch);
   const validBranches = [
     'addis-ketema',
     'akaki-kaliti',
     'arada',
     'bole',
-    'gulele',
     'kirkos',
-    'kolfe-keranio',
     'lideta',
-    'lemi-kura',
     'nifas-silk-lafto',
     'yeka',
+    'lemi-kura',
+    'gulele',
+    'kolfe-keranio',
   ];
 
   const isValid = validBranches.some((valid) => valid.toLowerCase() === branch.toLowerCase());
-
   if (!isValid) {
     notFound();
   }

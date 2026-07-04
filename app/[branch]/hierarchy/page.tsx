@@ -25,10 +25,12 @@ export default function EmployeesPage() {
     router.push(`hierarchy/directors/${id}`);
   }
   useEffect(() => {
+    console.log("Curent Subcity", currentSubcity);
     console.log(SectorLeaders);
     console.log('PathName', pathName);
   }, [SectorLeaders, pathName]);
   if (!subcitySector) return;
+
   return (
     <div className="mx-auto p-3">
       <BackNavigation />
