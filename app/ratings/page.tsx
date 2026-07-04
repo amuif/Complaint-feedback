@@ -401,7 +401,7 @@ export default function RatingsPage() {
                     </SelectTrigger>
                     <SelectContent>
                       {sectorLeaders
-                        .filter((sector) => sector.subcity == null)
+                        .filter((sector) => sector.subcity_id == null)
                         .map((sectorLeader, index) => {
                           const id = sectorLeader.id;
                           const appointedPerson = sectorLeader[`appointed_person_${language}`];
