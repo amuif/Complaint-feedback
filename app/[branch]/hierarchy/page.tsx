@@ -65,7 +65,7 @@ export default function EmployeesPage() {
 
             <CardFooter className="mt-auto flex items-center justify-center">
               <Button variant="link" onClick={() => handleClick(leader.id)}>
-                Members
+                {t('employees.members')}
               </Button>
             </CardFooter>
           </Card>

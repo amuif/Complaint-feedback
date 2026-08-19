@@ -104,6 +104,7 @@ const VoiceForm = () => {
   const director = watch('director');
   const teamLeader = watch('teamLeader');
   const subcityId = watch('subcity_id');
+
   useEffect(() => {
     setCurrentSubcity(currentSub);
     console.log(currentSub);
@@ -118,6 +119,7 @@ const VoiceForm = () => {
       setSubcityId('main');
     }
   }, [currentSub]);
+
   useEffect(() => {
     loadSubcities();
   }, []);

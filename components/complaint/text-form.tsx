@@ -21,7 +21,8 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Director, Employee, Sector, Subcities, TeamLeader } from '@/types/types';
 import { Textarea } from '../ui/textarea';
-import { Calendar } from '@dhis2/ui';
+import { EthiopianCalendar } from '@/components/ui/ethiopian-calendar';
+import { Calendar as GregorianCalendar } from '@/components/ui/calendar';
 import AmharicKeyboard from '../amharic-keyboard';
 import { ScrollArea } from '@/components/ui/scroll-area';
 
@@ -268,76 +269,6 @@ const TextForm = () => {
       if (employees.length === 0) {
         setShowNoData(true);
       }
-    }
-  };
-
-  const handleDateSelect = (payload: any) => {
-    console.log('Selected date payload:', payload);
-
-    // Extract the date from the correct property
-    let dateValue: string;
-
-    if (payload && typeof payload === 'object') {
-      if (payload.calendarDateString) {
-        dateValue = payload.calendarDateString;
-      } else if (payload.value) {
-        dateValue = payload.value;
-      } else if (payload.date) {
-        dateValue = payload.date;
-      } else {
-        console.error('Unexpected payload format:', payload);
-        return;
-      }
-    } else if (typeof payload === 'string') {
-      dateValue = payload;
-    } else {
-      console.error('Invalid payload:', payload);
-      return;
-    }
-
-    if (calendarType === 'am') {
-      // Ensure format is dd/mm/yyyy
-      const parts = dateValue.split('-'); // Some calendars may give yyyy-mm-dd
-      if (parts.length === 3) {
-        dateValue = `${parts[2]}/${parts[1]}/${parts[0]}`; // convert yyyy-mm-dd => dd/mm/yyyy
-      }
-    }
-    console.log('Selected date value:', dateValue);
-
-    // Set the form value
-    setValue('complaintDate', dateValue, { shouldValidate: true });
-
-    // Update display value based on calendar type
-    // updateDateDisplay(dateValue);
-
-    // Close calendar
-    setShowCalendar(false);
-  };
-
-  const getCalendarProps = () => {
-    const baseProps = {
-      onDateSelect: handleDateSelect,
-      onClose: () => setShowCalendar(false),
-      selectedDate: watch('complaintDate'),
-      locale: language === 'am' ? 'am-ET' : 'en',
-    };
-
-    if (calendarType === 'am') {
-      return {
-        ...baseProps,
-        calendar: 'ethiopic' as const,
-        locale: 'am-ET',
-        numberingSystem: 'ethi',
-        timeZone: 'Africa/Addis_Ababa',
-        weekDayFormat: 'narrow' as const,
-      };
-    } else {
-      return {
-        ...baseProps,
-        calendar: 'gregory' as const,
-        timeZone: 'Africa/Addis_Ababa',
-        weekDayFormat: 'narrow' as const,
-      };
     }
   };
 
@@ -1140,13 +1071,38 @@ const TextForm = () => {
                     />
                   </div>
 
-                  {/* DHIS2 Calendar */}
+                  {/* Calendar Picker */}
                   {showCalendar && (
                     <div
                       ref={calendarRef}
                       className="absolute z-50 mt-2 border rounded-lg shadow-lg bg-white"
                     >
-                      <Calendar {...getCalendarProps()} />
+                      {calendarType === 'am' ? (
+                        <EthiopianCalendar
+                          selectedDate={watch('complaintDate')}
+                          onSelectDate={(date) => {
+                            setValue('complaintDate', date, { shouldValidate: true });
+                            setShowCalendar(false);
+                          }}
+                          lang={language as 'am' | 'en' | 'af'}
+                        />
+                      ) : (
+                        <GregorianCalendar
+                          mode="single"
+                          selected={
+                            watch('complaintDate') ? new Date(watch('complaintDate')) : undefined
+                          }
+                          onSelect={(date) => {
+                            if (date) {
+                              const y = date.getFullYear();
+                              const m = String(date.getMonth() + 1).padStart(2, '0');
+                              const d = String(date.getDate()).padStart(2, '0');
+                              setValue('complaintDate', `${y}-${m}-${d}`, { shouldValidate: true });
+                              setShowCalendar(false);
+                            }
+                          }}
+                        />
+                      )}
                     </div>
                   )}
                 </div>

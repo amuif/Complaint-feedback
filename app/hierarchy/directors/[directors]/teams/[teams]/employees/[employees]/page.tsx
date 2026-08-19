@@ -36,7 +36,7 @@ export default function EmployeesMembersPage() {
 
       {Employees.length === 0 ? (
         <div className="p-6 text-center  rounded-lg">
-          <p>There are no employees</p>
+          <p>{t('employees.noEmployees')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

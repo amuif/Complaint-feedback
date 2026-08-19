@@ -72,7 +72,7 @@ export default function DirectorsMenuPage() {
 
                 <CardFooter className="mt-auto flex justify-center">
                   <Button variant="link" size="sm" onClick={() => handleMemberClick(emp.id)}>
-                    Members
+                    {t('employees.members')}
                   </Button>
                 </CardFooter>
               </Card>
