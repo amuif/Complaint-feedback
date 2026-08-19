@@ -4,66 +4,74 @@ import { useRouter } from 'next/navigation';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useOrganization } from '@/hooks/use-organization';
+import { useSectorLeadersQuery } from '@/hooks/use-organization';
 import { PICTURE_URL } from '@/constants/base_url';
-import { useEffect } from 'react';
-import { useSubcityName } from '@/hooks/use-subcity-name';
 import { BackNavigation } from '@/components/back-navigation';
+import HierarchySkeleton from '@/components/hierarchy/hierarchy-skeleton';
 
 export default function EmployeesPage() {
   const router = useRouter();
   const { language, t } = useLanguage();
-  const { SectorLeaders } = useOrganization();
-  const pathName = useSubcityName();
+  const { data: SectorLeaders = [], isLoading } = useSectorLeadersQuery();
 
   function handleClick(id: string) {
     router.push(`/hierarchy/directors/${id}`);
   }
-  useEffect(() => {
-    console.log(SectorLeaders);
-    console.log(pathName);
-  }, [SectorLeaders, pathName]);
+
+  if (isLoading) {
+    return <HierarchySkeleton count={3} showTitle={true} />;
+  }
+
+  const mainSectorLeaders = SectorLeaders.filter((sector) => sector.subcity_id === null);
 
   return (
-    <div className="mx-auto p-3">
-      <BackNavigation />
+    <div className="container mx-auto py-8">
+      <div className="flex items-center mb-6">
+        <BackNavigation />
+      </div>
       <h1 className="text-3xl font-bold mb-6">{t('employees.title')}</h1>
 
-      <div className="flex flex-col md:flex-row  items-center justify-center gap-3 mb-8">
-        {SectorLeaders.filter((sector) => sector.subcity_id === null).map((leader) => (
-          <Card key={leader.id} className="w-full m-3 text-center  h-72 rounded-lg flex flex-col">
-            <CardHeader className="bg-orange-500 rounded-t-lg" />
+      {mainSectorLeaders.length === 0 ? (
+        <div className="p-6 text-center bg-gray-100 dark:bg-gray-800 rounded-lg">
+          <p>{t('employees.noMembers')}</p>
+        </div>
+      ) : (
+        <div className="flex flex-col md:flex-row items-center justify-center gap-3 mb-8">
+          {mainSectorLeaders.map((leader) => (
+            <Card key={leader.id} className="w-full max-w-sm m-3 text-center h-72 rounded-lg flex flex-col shadow">
+              <CardHeader className="bg-orange-500 rounded-t-lg h-16" />
 
-            <div className="flex justify-center -mt-10">
-              <Avatar className="h-20 w-20 border-4 border-white">
-                <AvatarImage
-                  src={
-                    leader.profile_picture
-                      ? `${PICTURE_URL}${leader.profile_picture}`
-                      : '/placeholder.svg'
-                  }
-                  alt={leader.name_en}
-                />
-                <AvatarFallback>{leader.name_en}</AvatarFallback>
-              </Avatar>
-            </div>
+              <div className="flex justify-center -mt-10">
+                <Avatar className="h-20 w-20 border-4 border-white">
+                  <AvatarImage
+                    src={
+                      leader.profile_picture
+                        ? `${PICTURE_URL}${leader.profile_picture}`
+                        : '/placeholder.svg'
+                    }
+                    alt={leader.name_en}
+                  />
+                  <AvatarFallback>{leader.name_en ? leader.name_en.slice(0, 2).toUpperCase() : 'SL'}</AvatarFallback>
+                </Avatar>
+              </div>
 
-            <CardContent className="p-0 my-auto">
-              <h2 className="text-lg font-semibold line-clamp-2">
-                {leader[`appointed_person_${language}`]}
-              </h2>
-              <p>{leader[`office_location_${language}`]}</p>
-              <div className="text-gray-500 line-clamp-2">{leader[`name_${language}`]}</div>
-            </CardContent>
+              <CardContent className="p-0 my-auto">
+                <h2 className="text-lg font-semibold line-clamp-2">
+                  {leader[`appointed_person_${language}`]}
+                </h2>
+                <p className="text-sm text-muted-foreground">{leader[`office_location_${language}`]}</p>
+                <div className="text-gray-500 text-sm line-clamp-2">{leader[`name_${language}`]}</div>
+              </CardContent>
 
-            <CardFooter className="mt-auto flex items-center justify-center">
-              <Button variant="link" onClick={() => handleClick(leader.id)}>
-                {t('employees.members')}
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
-      </div>
+              <CardFooter className="mt-auto flex items-center justify-center">
+                <Button variant="link" onClick={() => handleClick(leader.id)}>
+                  {t('employees.members')}
+                </Button>
+              </CardFooter>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

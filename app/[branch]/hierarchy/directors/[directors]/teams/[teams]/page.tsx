@@ -7,30 +7,30 @@ import { ArrowLeft } from 'lucide-react';
 import { Card, CardHeader, CardContent, CardFooter } from '@/components/ui/card';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { useOrganization } from '@/hooks/use-organization';
 import { PICTURE_URL } from '@/constants/base_url';
-import { useCurrentSubcity } from '@/hooks/use-subcity';
+import { useCurrentSubcity, useSubcityTeamLeadersQuery } from '@/hooks/use-subcity';
+import HierarchySkeleton from '@/components/hierarchy/hierarchy-skeleton';
 
 export default function DepartmentMembersPage() {
   const router = useRouter();
   const params = useParams();
   const { language, t } = useLanguage();
-  const { Teams, setSelectedDirectorId } = useOrganization();
   const id = params.directors as string;
-  const teams = params.teams as string;
+  const directorId = params.teams as string;
   const currentSubcity = useCurrentSubcity();
+  const targetSubcityId = currentSubcity?.id || id;
+  const { data: teamsList = [], isLoading } = useSubcityTeamLeadersQuery(targetSubcityId, directorId);
 
-  const handleMemberClick = (memberId: string) => {
+  const handleMemberClick = (memberId: string | number) => {
+    const branchName = currentSubcity?.name_en.toLowerCase().replace(/\s+/g, '-') || (params.branch as string) || '';
     router.push(
-      `/${currentSubcity?.name_en.replace(' ', '-').toLowerCase()}/hierarchy/directors/${id}/teams/${memberId}/employees/${memberId}`
+      `/${branchName}/hierarchy/directors/${id}/teams/${directorId}/employees/${memberId}`
     );
   };
 
-  useEffect(() => {
-    setSelectedDirectorId(teams?.toString());
-    console.log(teams);
-    console.log(params);
-  }, [teams]);
+  if (isLoading) {
+    return <HierarchySkeleton count={3} showTitle={false} />;
+  }
 
   return (
     <div className="container mx-auto py-8">
@@ -39,18 +39,42 @@ export default function DepartmentMembersPage() {
           <ArrowLeft className="h-4 w-4 mr-1" />
           {t('navigation.back')}
         </Button>
-        {/* <h1 className="text-2xl font-bold">{leaderName}</h1> */}
       </div>
 
-      {Teams.length === 0 ? (
-        <div className="p-6 text-center bg-gray-100 rounded-lg">
+      {teamsList.length === 0 ? (
+        <div className="p-6 text-center bg-gray-100 dark:bg-gray-800 rounded-lg">
           <p>{t('employees.noMembers')}</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Teams.map((emp) => {
+          {teamsList.map((emp, index) => {
+            const appointedPerson =
+              (emp as any)[`appointed_person_${language}`] ||
+              (emp as any)[`appointed_person_af`] ||
+              (emp as any)[`appointed_person_om`] ||
+              (emp as any)[`appointed_person_am`] ||
+              (emp as any)[`appointed_person_en`] ||
+              (emp as any)[`name_${language}`] ||
+              (emp as any)[`name_en`] ||
+              '';
+            const name =
+              (emp as any)[`name_${language}`] ||
+              (emp as any)[`name_af`] ||
+              (emp as any)[`name_om`] ||
+              (emp as any)[`name_am`] ||
+              (emp as any)[`name_en`] ||
+              '';
+            const officeLocation =
+              (emp as any)[`office_location_${language}`] ||
+              (emp as any)[`office_location_af`] ||
+              (emp as any)[`office_location_om`] ||
+              (emp as any)[`office_location_am`] ||
+              (emp as any)[`office_location_en`] ||
+              (emp as any).office_number ||
+              '';
+
             return (
-              <Card key={emp.id} className="overflow-hidden shadow rounded-lg flex flex-col h-72">
+              <Card key={emp.id ?? index} className="overflow-hidden shadow rounded-lg flex flex-col h-72">
                 <CardHeader className="bg-orange-500 h-16 rounded-t-lg" />
 
                 <div className="flex justify-center -mt-12">
@@ -61,18 +85,22 @@ export default function DepartmentMembersPage() {
                           ? `${PICTURE_URL}${emp.profile_picture}`
                           : '/placeholder.svg'
                       }
-                      alt={emp[`name_${language}`] as string}
+                      alt={name || appointedPerson || 'Team Leader'}
                     />
-                    <AvatarFallback>{emp[`name_${language}`]}</AvatarFallback>
+                    <AvatarFallback>{name ? name.slice(0, 2).toUpperCase() : 'TL'}</AvatarFallback>
                   </Avatar>
                 </div>
 
-                <CardContent className="text-center flex-1">
-                  <h2 className="text-lg font-semibold">{emp[`name_${language}`]}</h2>
-                  <p className="text-sm text-gray-600">{emp[`appointed_person_${language}`]}</p>
-                  <p className="text-sm">
-                    {t('employees.office')} {emp[`office_location_${language}`]}
-                  </p>
+                <CardContent className="text-center flex-1 my-auto">
+                  <h2 className="text-lg font-semibold line-clamp-2">{name}</h2>
+                  {appointedPerson && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-1">{appointedPerson}</p>
+                  )}
+                  {officeLocation && (
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {t('employees.office')} {officeLocation}
+                    </p>
+                  )}
                 </CardContent>
 
                 <CardFooter className="mt-auto flex justify-center">

@@ -1,3 +1,5 @@
+import HierarchySkeleton from '@/components/hierarchy/hierarchy-skeleton';
+
 export default function Loading() {
-  return null;
+  return <HierarchySkeleton count={3} showTitle={false} />;
 }
