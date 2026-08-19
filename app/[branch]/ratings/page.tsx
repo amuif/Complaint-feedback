@@ -27,22 +27,27 @@ import { RatingStars } from '@/components/rating-stars';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
-import { useCurrentSubcity } from '@/hooks/use-subcity';
+import { useCurrentSubcity, useSubcityAdmin } from '@/hooks/use-subcity';
+import { useSubcityName } from '@/hooks/use-subcity-name';
 
 type ratingFormData = z.infer<typeof ratingSchema>;
 
 export default function RatingsPage() {
   const { t, language } = useLanguage();
+  const { mutateAsync: findCurrentAdmin } = useSubcityAdmin();
+  const currentSub = useCurrentSubcity();
+  const subcity = useSubcityName();
+
   const [loadingSectorLeaders, setLoadingSectorLeaders] = useState(false);
   const [loadingDirectors, setLoadingDirectors] = useState(false);
   const [loadingTeamLeaders, setLoadingTeamLeaders] = useState(false);
   const [loadingEmployees, setLoadingEmployees] = useState(false);
   const [loadingSubcities, setLoadingSubcities] = useState(false);
   const [subcities, setSubcities] = useState<Subcities[]>([]);
-  const [selectedSectorLeaderName, setSelectedSectorLeaderName] = useState('');
+  const [currentSubcity, setCurrentSubcity] = useState<Subcities | null>(null);
+  const [subcityLeader, setSubcityLeader] = useState<Sector | Sector[] | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [employees, setEmployees] = useState<Employee[]>([]);
-  const currentSubcity = useCurrentSubcity();
 
   const suffix = language === 'en' ? '_en' : language === 'am' ? '_am' : '_om';
   const tr = (key: string) => t(`${key}${suffix}`);
@@ -54,7 +59,7 @@ export default function RatingsPage() {
     setValue,
     watch,
     reset,
-    formState: { errors, isSubmitting, isValid },
+    formState: { errors, isSubmitting },
   } = useForm<ratingFormData>({
     resolver: zodResolver(ratingSchema),
     defaultValues: {
@@ -107,30 +112,46 @@ export default function RatingsPage() {
   const [selectedExpert, setSelectedExpert] = useState<string>('');
 
   useEffect(() => {
-    loadSectorLeaders();
     loadSubcities();
   }, []);
 
-  const loadSectorLeaders = async () => {
-    if (sectorLeaders.length > 0) return;
+  useEffect(() => {
+    setCurrentSubcity(currentSub);
+    if (currentSub && subcity) {
+      loadSectorLeaders(currentSub.id);
+    }
+  }, [currentSub, subcity]);
+
+  const loadSectorLeaders = async (subcityParamId?: string) => {
     setLoadingSectorLeaders(true);
     setErrorMessage(null);
     try {
-      const response = await apiClient.getSectorLeaders();
-      console.log(response);
-
-      // Extract the data from the API response
-      if (response && typeof response === 'object' && 'data' in response) {
-        setSectorLeaders(response || []);
-      } else if (Array.isArray(response)) {
-        setSectorLeaders(response);
+      const targetSubcityId = subcityParamId || currentSubcity?.id;
+      if (targetSubcityId && subcity) {
+        console.log('Loading sector leaders for current subcity:', targetSubcityId);
+        const response = await findCurrentAdmin(targetSubcityId);
+        console.log('Subcity leader response:', response);
+        const leaderData =
+          response && typeof response === 'object' && 'data' in response
+            ? (response as any).data
+            : response;
+        setSubcityLeader(leaderData);
       } else {
-        setSectorLeaders([]);
+        console.log('Loading all sector leaders');
+        const response = await apiClient.getSectorLeaders();
+        if (response && typeof response === 'object' && 'data' in response) {
+          setSectorLeaders((response as any).data || []);
+        } else if (Array.isArray(response)) {
+          setSectorLeaders(response);
+        } else {
+          setSectorLeaders([]);
+        }
       }
     } catch (error) {
       console.error('Failed to load sector leaders:', error);
       setErrorMessage('Failed to load sector leaders. Please try again.');
       setSectorLeaders([]);
+      setSubcityLeader(null);
     } finally {
       setLoadingSectorLeaders(false);
     }
@@ -151,15 +172,23 @@ export default function RatingsPage() {
     }
   };
   const loadDirectors = async (value: string) => {
-    const [id, name] = value.split('|');
-    setSector_id(id);
+    const [id] = value.split('|');
+    const trimmedId = id.trim();
+    setSector_id(trimmedId);
     setLoadingDirectors(true);
     setErrorMessage(null);
     try {
-      const data = await apiClient.getDirectorsBySectorLeader(id);
-      setDirectors(data || []);
+      let data: Director[] = [];
+      if (currentSubcity && subcity) {
+        data = await apiClient.getSubcityDirectors(trimmedId);
+      } else {
+        data = await apiClient.getDirectorsBySectorLeader(trimmedId);
+      }
+      const directorsList =
+        data && typeof data === 'object' && 'data' in data ? (data as any).data : data;
+      setDirectors(Array.isArray(directorsList) ? directorsList : []);
     } catch (error) {
-      console.error(`Failed to load directors for sector leader ${id}:`, error);
+      console.error(`Failed to load directors for sector leader ${trimmedId}:`, error);
       setErrorMessage('Failed to load directors. Please try again.');
       setDirectors([]);
     } finally {
@@ -168,17 +197,23 @@ export default function RatingsPage() {
   };
 
   const loadTeamLeaders = async (directorId: string) => {
-    console.info(directorId);
-    const [id, name] = directorId.split('|');
-    setDirectors_id(id);
+    const [id] = directorId.split('|');
+    const trimmedId = id.trim();
+    setDirectors_id(trimmedId);
     setLoadingTeamLeaders(true);
     setErrorMessage(null);
     try {
-      const data = await apiClient.getTeamLeadersByDirector(id);
-      console.log(data);
-      setTeamLeaders(data || []);
+      let data: TeamLeader[] = [];
+      if (currentSubcity && subcity) {
+        data = await apiClient.getTeamLeaderSubcityByDirector(trimmedId, currentSubcity?.id);
+      } else {
+        data = await apiClient.getTeamLeadersByDirector(trimmedId);
+      }
+      const teamLeadersList =
+        data && typeof data === 'object' && 'data' in data ? (data as any).data : data;
+      setTeamLeaders(Array.isArray(teamLeadersList) ? teamLeadersList : []);
     } catch (error) {
-      console.error(`Failed to load team leaders for director ${directorId}:`, error);
+      console.error(`Failed to load team leaders for director ${trimmedId}:`, error);
       setErrorMessage('Failed to load team leaders. Please try again.');
       setTeamLeaders([]);
     } finally {
@@ -187,19 +222,20 @@ export default function RatingsPage() {
   };
 
   const loadEmployees = async (teamLeader: string) => {
-    const [id, name] = teamLeader?.split('|');
-    console.log(id);
-    setTeam_id(id);
+    const [id] = teamLeader?.split('|');
+    const trimmedId = id.trim();
+    setTeam_id(trimmedId);
     setLoadingEmployees(true);
     setErrorMessage(null);
     try {
-      const data = await apiClient.getEmployeesByTeamLeader(id);
-      console.log(data);
-      setExperts(data || []);
+      const data = await apiClient.getEmployeesByTeamLeader(trimmedId);
+      const employeesList =
+        data && typeof data === 'object' && 'data' in data ? (data as any).data : data;
+      setExperts(Array.isArray(employeesList) ? employeesList : []);
     } catch (error) {
-      console.error(`Failed to load employees for team leader ${id}:`, error);
+      console.error(`Failed to load employees for team leader ${trimmedId}:`, error);
       setErrorMessage('Failed to load employees. Please try again.');
-      setEmployees([]);
+      setExperts([]);
     } finally {
       setLoadingEmployees(false);
     }
@@ -210,6 +246,9 @@ export default function RatingsPage() {
     setSelectedDirector('');
     setSelectedTeamLeader('');
     setSelectedExpert('');
+    setValue('director', '');
+    setValue('teamLeader', '');
+    setValue('experstise', '');
     setDirectors([]);
     setTeamLeaders([]);
     setExperts([]);
@@ -220,6 +259,8 @@ export default function RatingsPage() {
     setSelectedDirector(value);
     setSelectedTeamLeader('');
     setSelectedExpert('');
+    setValue('teamLeader', '');
+    setValue('experstise', '');
     setTeamLeaders([]);
     setExperts([]);
     if (value) loadTeamLeaders(value);
@@ -228,25 +269,25 @@ export default function RatingsPage() {
   const handleTeamLeaderChange = (value: string) => {
     setSelectedTeamLeader(value);
     setSelectedExpert('');
+    setValue('experstise', '');
     setExperts([]);
     if (value) loadEmployees(value);
   };
-  const handleEmployeeChange = (employeeId: string) => {
-    const [id, name] = employeeId.split('|');
-    setEmployee_id(id);
 
-    // Ensure both sides are the same type for comparison
-    const selectedEmployee = employees.find((e) => String(e.id) === String(id));
-    // setValue('office', selectedEmployee?.office_number || '');
+  const handleEmployeeChange = (employeeId: string) => {
+    const [id] = employeeId.split('|');
+    setEmployee_id(id.trim());
+    setSelectedExpert(employeeId);
   };
+
   const onSubmit = async (data: ratingFormData) => {
     if (!selectedSectorLeader) {
       console.error('error at submitted rating');
       toast.error(tr('ratings.form.errorTitle'));
       return;
     }
-    const [subcity_id, subcity_name] = data.subcity_id.split('|');
-    const [sector_id, sector_name] = data.sectorLeader.split('|');
+    const [subcity_id] = data.subcity_id.split('|');
+    const [sector_id] = data.sectorLeader.split('|');
 
     try {
       const ratingData = {
@@ -271,7 +312,9 @@ export default function RatingsPage() {
         // Reset all form fields
         reset({
           full_name: '',
-          subcity_id: '',
+          subcity_id: currentSubcity
+            ? `${currentSubcity.id} | ${currentSubcity[`name_${language}`]}`
+            : '',
           sectorLeader: '',
           director: '',
           teamLeader: '',
@@ -282,10 +325,6 @@ export default function RatingsPage() {
           knowledge: 0,
           courtesy: 0,
         });
-        setOverallRating(0);
-        setCourtesyRating(0);
-        setTimelinessRating(0);
-        setKnowledgeRating(0);
         setComments('');
         setSelectedSectorLeader('');
         setSelectedDirector('');
@@ -299,7 +338,6 @@ export default function RatingsPage() {
       }
     } catch (error) {
       handleApiError(error, tr('ratings.form.errorBody'));
-    } finally {
     }
   };
 
@@ -360,14 +398,16 @@ export default function RatingsPage() {
                     <SelectTrigger id="subcity">
                       <SelectValue
                         placeholder={
-                          loadingSubcities ? 'Loading subcities...' : t('select.form.subcity')
+                          loadingSubcities
+                            ? t('select.form.subcityLoading')
+                            : t('select.form.subcity')
                         }
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {subcities?.map((subcity) => {
-                        const id = subcity.id;
-                        const subcityName = subcity?.[`name_${language}`];
+                      {subcities?.map((subcityItem) => {
+                        const id = subcityItem.id;
+                        const subcityName = subcityItem?.[`name_${language}`];
                         return (
                           <SelectItem key={id} value={`${id} | ${subcityName}`}>
                             {subcityName}
@@ -381,7 +421,8 @@ export default function RatingsPage() {
               {errors.subcity_id && (
                 <p className="text-sm text-red-500">{errors.subcity_id.message}</p>
               )}
-            </div>{' '}
+            </div>
+
             {/* Sector Leader Selection */}
             <div>
               <label className="text-sm font-medium mb-2 block">
@@ -397,22 +438,73 @@ export default function RatingsPage() {
                       field.onChange(value);
                       handleSectorLeaderChange(value);
                     }}
+                    disabled={loadingSectorLeaders}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder={tr('ratings.form.selectSectorLeader')} />
+                      <SelectValue
+                        placeholder={
+                          loadingSectorLeaders
+                            ? t('complaints.form.selectSectorLeaderLoading')
+                            : tr('ratings.form.selectSectorLeader')
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent>
-                      {sectorLeaders
-                        .filter((sector) => sector?.subcity?.name_en == currentSubcity?.name_en)
-                        .map((sectorLeader, index) => {
-                          const id = sectorLeader.id;
-                          const appointedPerson = sectorLeader[`appointed_person_${language}`];
-                          return (
-                            <SelectItem key={index} value={`${id} | ${appointedPerson}`}>
-                              {appointedPerson}
-                            </SelectItem>
-                          );
-                        })}{' '}
+                      {subcity ? (
+                        (() => {
+                          const leaders = Array.isArray(subcityLeader)
+                            ? subcityLeader
+                            : subcityLeader
+                              ? [subcityLeader]
+                              : [];
+                          if (leaders.length === 0) {
+                            return (
+                              <SelectItem disabled value="no-items">
+                                {loadingSectorLeaders ? 'Loading...' : 'No sector leaders found'}
+                              </SelectItem>
+                            );
+                          }
+                          return leaders
+                            .map((leader, index) => {
+                              const id = leader.id;
+                              const appointedPerson =
+                                leader[`appointed_person_${language}`] ||
+                                leader[`appointed_person_en`] ||
+                                leader[`name_${language}`] ||
+                                leader[`name_en`];
+                              if (!id || !appointedPerson) return null;
+                              return (
+                                <SelectItem key={id ?? index} value={`${id} | ${appointedPerson}`}>
+                                  {appointedPerson}
+                                </SelectItem>
+                              );
+                            })
+                            .filter(Boolean);
+                        })()
+                      ) : (
+                        Array.isArray(sectorLeaders) && sectorLeaders.length > 0 ? (
+                          sectorLeaders
+                            .filter((sector) => sector.subcity_id == null)
+                            .map((sectorLeader, index) => {
+                              const id = sectorLeader.id;
+                              const appointedPerson =
+                                sectorLeader[`appointed_person_${language}`] ||
+                                sectorLeader[`appointed_person_en`] ||
+                                sectorLeader[`name_${language}`] ||
+                                sectorLeader[`name_en`];
+                              return (
+                                <SelectItem key={id ?? index} value={`${id} | ${appointedPerson}`}>
+                                  {appointedPerson}
+                                </SelectItem>
+                              );
+                            })
+                            .filter(Boolean)
+                        ) : (
+                          <SelectItem disabled value="no-items">
+                            {loadingSectorLeaders ? 'Loading...' : 'No sector leaders found'}
+                          </SelectItem>
+                        )
+                      )}
                     </SelectContent>
                   </Select>
                 )}
@@ -421,6 +513,7 @@ export default function RatingsPage() {
                 <p className="text-sm text-red-500">{errors.sectorLeader?.message}</p>
               )}
             </div>
+
             {/* Director Selection */}
             <div>
               <label className="text-sm font-medium mb-2 block">
@@ -436,23 +529,29 @@ export default function RatingsPage() {
                       field.onChange(value);
                       handleDirectorChange(value);
                     }}
-                    disabled={!selectedSectorLeader}
+                    disabled={!selectedSectorLeader || loadingDirectors}
                   >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
-                          selectedSectorLeader
-                            ? tr('ratings.form.selectDirector')
-                            : tr('ratings.form.selectSectorLeaderFirst')
+                          loadingDirectors
+                            ? t('complaints.form.DirectorLoading')
+                            : selectedSectorLeader
+                              ? tr('ratings.form.selectDirector')
+                              : tr('ratings.form.selectSectorLeaderFirst')
                         }
                       />
                     </SelectTrigger>
                     <SelectContent>
                       {directors.map((director, index) => {
                         const id = director.id;
-                        const appointedPerson = director?.[`appointed_person_${language}`];
+                        const appointedPerson =
+                          director?.[`appointed_person_${language}`] ||
+                          director?.[`appointed_person_en`] ||
+                          director?.[`name_${language}`] ||
+                          director?.[`name_en`];
                         return (
-                          <SelectItem key={index} value={`${id} | ${appointedPerson}`}>
+                          <SelectItem key={id ?? index} value={`${id} | ${appointedPerson}`}>
                             {appointedPerson}
                           </SelectItem>
                         );
@@ -462,6 +561,7 @@ export default function RatingsPage() {
                 )}
               />
             </div>
+
             {/* Team Leader Selection */}
             <div>
               <label className="text-sm font-medium mb-2 block">
@@ -477,23 +577,29 @@ export default function RatingsPage() {
                       field.onChange(value);
                       handleTeamLeaderChange(value);
                     }}
-                    disabled={!selectedDirector}
+                    disabled={!selectedDirector || loadingTeamLeaders}
                   >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
-                          selectedDirector
-                            ? tr('ratings.form.selectTeamLeader')
-                            : tr('ratings.form.selectDirectorFirst')
+                          loadingTeamLeaders
+                            ? t('complaints.form.TeamLeaderLoading')
+                            : selectedDirector
+                              ? tr('ratings.form.selectTeamLeader')
+                              : tr('ratings.form.selectDirectorFirst')
                         }
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {teamLeaders.map((teamLeader) => {
+                      {teamLeaders.map((teamLeader, index) => {
                         const id = teamLeader.id;
-                        const appointedPerson = teamLeader?.[`appointed_person_${language}`];
+                        const appointedPerson =
+                          teamLeader?.[`appointed_person_${language}`] ||
+                          teamLeader?.[`appointed_person_en`] ||
+                          teamLeader?.[`name_${language}`] ||
+                          teamLeader?.[`name_en`];
                         return (
-                          <SelectItem key={teamLeader.id} value={`${id} | ${appointedPerson}`}>
+                          <SelectItem key={id ?? index} value={`${id} | ${appointedPerson}`}>
                             {appointedPerson}
                           </SelectItem>
                         );
@@ -503,6 +609,7 @@ export default function RatingsPage() {
                 )}
               />
             </div>
+
             {/* Expert Selection */}
             <div>
               <label className="text-sm font-medium mb-2 block">{tr('ratings.form.expert')}</label>
@@ -514,28 +621,34 @@ export default function RatingsPage() {
                     value={field.value}
                     onValueChange={(value) => {
                       field.onChange(value);
+                      handleEmployeeChange(value);
                     }}
-                    disabled={!selectedTeamLeader}
+                    disabled={!selectedTeamLeader || loadingEmployees}
                   >
                     <SelectTrigger>
                       <SelectValue
                         placeholder={
-                          selectedTeamLeader
-                            ? tr('ratings.form.selectExpert')
-                            : tr('ratings.form.selectTeamLeaderFirst')
+                          loadingEmployees
+                            ? t('complaints.form.ExpertiseLoading')
+                            : selectedTeamLeader
+                              ? tr('ratings.form.selectExpert')
+                              : tr('ratings.form.selectTeamLeaderFirst')
                         }
                       />
                     </SelectTrigger>
                     <SelectContent>
-                      {experts.map((employee) => {
+                      {experts.map((employee, index) => {
                         const id = employee.id;
-                        const appointedPerson =
-                          employee?.[`first_name_${language}`] +
-                          ' ' +
-                          employee?.[`last_name_${language}`];
+                        const fullName = [
+                          employee?.[`first_name_${language}`] || employee?.first_name_en,
+                          employee?.[`middle_name_${language}`] || employee?.middle_name_en,
+                          employee?.[`last_name_${language}`] || employee?.last_name_en,
+                        ]
+                          .filter(Boolean)
+                          .join(' ');
                         return (
-                          <SelectItem key={employee.id} value={`${id} | ${appointedPerson}`}>
-                            {appointedPerson}
+                          <SelectItem key={id ?? index} value={`${id} | ${fullName}`}>
+                            {fullName}
                           </SelectItem>
                         );
                       })}

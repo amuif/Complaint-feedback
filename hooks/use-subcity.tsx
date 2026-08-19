@@ -12,16 +12,18 @@ export function useCurrentSubcity(): Subcities | null {
     const fetchSubcity = async () => {
       try {
         const subcities = await apiClient.getSubcities();
-        const nameToSlug = (name: string) =>
-          name
-            .toLowerCase()
-            .replace(/\s+/g, '-')
-            .normalize('NFD')
-            .replace(/[\u0300-\u036f]/g, '');
+        if (subcities) {
+          const nameToSlug = (name: string) =>
+            name
+              .toLowerCase()
+              .replace(/\s+/g, '-')
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '');
 
-        const found = subcities.find((branch) => nameToSlug(branch.name_en) === subcityName);
-        console.log('Found Subcity:', found);
-        setCurrentSubcity(found || null);
+          console.log('Found Subcity:', subcities);
+          const found = subcities.find((branch) => nameToSlug(branch.name_en) === subcityName);
+          setCurrentSubcity(found || null);
+        }
       } catch (error) {
         console.error('Failed to load current subcity:', error);
         setCurrentSubcity(null);

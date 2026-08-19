@@ -1075,7 +1075,7 @@ const TextForm = () => {
                   {showCalendar && (
                     <div
                       ref={calendarRef}
-                      className="absolute z-50 mt-2 border rounded-lg shadow-lg bg-white"
+                      className="absolute z-50 mt-2 border border-border rounded-lg shadow-lg bg-popover text-popover-foreground"
                     >
                       {calendarType === 'am' ? (
                         <EthiopianCalendar
@@ -1085,6 +1085,7 @@ const TextForm = () => {
                             setShowCalendar(false);
                           }}
                           lang={language as 'am' | 'en' | 'af'}
+                          className="border-0 shadow-none"
                         />
                       ) : (
                         <GregorianCalendar
@@ -1101,6 +1102,7 @@ const TextForm = () => {
                               setShowCalendar(false);
                             }
                           }}
+                          className="rounded-md"
                         />
                       )}
                     </div>

@@ -122,7 +122,7 @@ export function EthiopianCalendar({
   };
 
   return (
-    <div className={cn('p-3 bg-white rounded-lg shadow-md border w-[280px]', className)}>
+    <div className={cn('p-3 bg-popover text-popover-foreground rounded-lg shadow-md border border-border w-[280px]', className)}>
       {/* Header with Month/Year and navigation */}
       <div className="flex items-center justify-between mb-3 px-1">
         <button
@@ -130,7 +130,7 @@ export function EthiopianCalendar({
           onClick={handlePrevMonth}
           className={cn(
             buttonVariants({ variant: 'outline', size: 'icon' }),
-            'h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100'
+            'h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100 text-foreground'
           )}
           aria-label="Previous month"
         >
@@ -141,10 +141,10 @@ export function EthiopianCalendar({
           <select
             value={viewMonth}
             onChange={(e) => setViewMonth(Number(e.target.value))}
-            className="text-sm font-medium bg-transparent cursor-pointer rounded px-1 py-0.5 border border-transparent hover:border-gray-300 focus:outline-none"
+            className="text-sm font-medium bg-transparent text-foreground cursor-pointer rounded px-1.5 py-0.5 border border-transparent hover:border-border hover:bg-accent focus:outline-none focus:ring-1 focus:ring-ring transition-colors"
           >
             {ETHIOPIAN_MONTHS.map((m) => (
-              <option key={m.value} value={m.value}>
+              <option key={m.value} value={m.value} className="bg-popover text-popover-foreground">
                 {lang === 'am' ? m.name : m.enName}
               </option>
             ))}
@@ -153,10 +153,10 @@ export function EthiopianCalendar({
           <select
             value={viewYear}
             onChange={(e) => setViewYear(Number(e.target.value))}
-            className="text-sm font-medium bg-transparent cursor-pointer rounded px-1 py-0.5 border border-transparent hover:border-gray-300 focus:outline-none"
+            className="text-sm font-medium bg-transparent text-foreground cursor-pointer rounded px-1.5 py-0.5 border border-transparent hover:border-border hover:bg-accent focus:outline-none focus:ring-1 focus:ring-ring transition-colors"
           >
             {Array.from({ length: 40 }, (_, i) => todayEth.year - 30 + i).map((y) => (
-              <option key={y} value={y}>
+              <option key={y} value={y} className="bg-popover text-popover-foreground">
                 {y}
               </option>
             ))}
@@ -168,7 +168,7 @@ export function EthiopianCalendar({
           onClick={handleNextMonth}
           className={cn(
             buttonVariants({ variant: 'outline', size: 'icon' }),
-            'h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100'
+            'h-7 w-7 bg-transparent p-0 opacity-70 hover:opacity-100 text-foreground'
           )}
           aria-label="Next month"
         >
@@ -217,8 +217,8 @@ export function EthiopianCalendar({
                 isSelected
                   ? 'bg-primary text-primary-foreground font-semibold shadow-sm'
                   : isToday
-                  ? 'border border-primary text-primary font-medium hover:bg-accent'
-                  : 'hover:bg-accent hover:text-accent-foreground text-gray-800'
+                  ? 'border border-primary text-primary font-medium hover:bg-accent hover:text-accent-foreground'
+                  : 'hover:bg-accent hover:text-accent-foreground text-foreground'
               )}
             >
               {day}
